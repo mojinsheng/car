@@ -1,54 +1,54 @@
 # 汽车维修app端接口文档
 ## 目录
  1. [登陆验证机制](#login)
- - [*登陆](#login_login)
- - [*刷新token](#login_refresh)
+ - [用户注册](#login_register)
+ - [司机端用户注册](#login_register_driver)
+ - [登陆](#login_login)
+ - [刷新token](#login_refresh)
  2. [个人中心](#user)
  - [用户信息](#user_user)
-    * [*用户注册](#user_user_list_post)
-    * [*司机端用户注册](#user_user_driver_list_post)
-    * [*查询自身信息](#user_user_get)
-    * [*修改自身信息](#user_user_put)
+    * [查询自身信息](#user_user_get)
+    * [修改自身信息](#user_user_put)
  - [车辆信息](#user_car)
-    * [*查询所有车辆信息](#user_car_list_get)
-    * [*添加车辆信息](#user_car_list_post)
-    * [*查询车辆信息](#user_car_get)
-    * [*修改车辆信息](#user_car_put)
-    * [*删除车辆信息](#user_car_delete)
+    * [查询所有车辆信息](#user_car_list_get)
+    * [添加车辆信息](#user_car_list_post)
+    * [查询车辆信息](#user_car_get)
+    * [修改车辆信息](#user_car_put)
+    * [删除车辆信息](#user_car_delete)
  - [地址信息](#user_address)
-    * [*查询地址列表信息](#user_address_list_get)
-    * [*添加地址信息](#user_address_list_post)
-    * [*查询地址信息](#user_address_get)
-    * [*修改地址信息](#user_address_put)
-    * [*删除地址信息](#user_address_delete)
+    * [查询地址列表信息](#user_address_list_get)
+    * [添加地址信息](#user_address_list_post)
+    * [查询地址信息](#user_address_get)
+    * [修改地址信息](#user_address_put)
+    * [删除地址信息](#user_address_delete)
  3. [服务](#service)
  - [分类信息](#service_catalog)
-    * [*查询分类列表信息](#service_catalog_list_get)
-    * [*查询分类信息](#service_catalog_get)
+    * [查询分类列表信息](#service_catalog_list_get)
+    * [查询分类信息](#service_catalog_get)
  - [物品信息](#service_product)
-    * [*查询物品列表信息](#service_product_list_get)
-    * [*查询物品信息](#service_product_get)
+    * [查询物品列表信息](#service_product_list_get)
+    * [查询物品信息](#service_product_get)
  - [购物车信息](#service_ordercar)
-    * [*查询购物车物品列表信息](#service_ordercar_list_get)
+    * [查询购物车物品列表信息](#service_ordercar_list_get)
     * [*添加购物车物品信息](#service_ordercar_list_post)
-    * [*查询购物车物品信息](#service_ordercar_get)
+    * [查询购物车物品信息](#service_ordercar_get)
     * [*修改购物车物品信息](#service_ordercar_put)
-    * [*删除购物车物品信息](#service_ordercar_delete)
+    * [删除购物车物品信息](#service_ordercar_delete)
  - [订单信息](#service_order)
-    * [*查询订单列表信息](#service_order_list_get)
+    * [查询订单列表信息](#service_order_list_get)
     * [*生成订单](#service_order_list_post)
-    * [*查询订单信息](#service_order_get)
-    * [*删除订单信息](#service_order_delete)
-    * [*付款、完成订单信息](#service_order_method_post)
+    * [查询订单信息](#service_order_get)
+    * [删除订单信息](#service_order_delete)
+    * [付款、完成订单信息](#service_order_method_post)
  - [违章记录信息](#service_rules)
-    * [*查询违章记录列表信息](#service_rules_list_get)
-    * [*查询违章记录信息](#service_rules_get)
+    * [查询违章记录列表信息](#service_rules_list_get)
+    * [查询违章记录信息](#service_rules_get)
  - [资讯分类信息](#service_newscatalog)
-    * [*查询资讯分类列表信息](#service_newscatalog_list_get)
-    * [*查询资讯分类信息](#service_newscatalog_get)
+    * [查询资讯分类列表信息](#service_newscatalog_list_get)
+    * [查询资讯分类信息](#service_newscatalog_get)
  - [资讯信息](#service_news)
-    * [*查询资讯列表信息](#service_news_list_get)
-    * [*查询资讯信息](#service_news_get)
+    * [查询资讯列表信息](#service_news_list_get)
+    * [查询资讯信息](#service_news_get)
  4. [维修厂](#maintain)
   - [汽修厂](#maintain_garage)
     * [*查询汽修厂列表信息](#maintain_garage_list_get)
@@ -114,6 +114,49 @@ or
 |200|失败|  
 |999|未开发|  
 
+<h4 id="login_register">用户注册</h3>
+
+url:/api/login/register/  
+method:post  
+param:   
+
+|参数|类型|说明|备注|例子|  
+|---|---|---|---|---|  
+|phone|char(20)|电话号码|作为账号|12345678998|  
+|password|char(20)|密码|6-20，字母、数字、符号|123456789qwer|  
+|name|char(20)|昵称|无|张三|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+```
+{
+    data:{}
+}
+```
+
+<h4 id="login_register_driver">司机端用户注册</h3>
+
+url:/api/login/register_driver/  
+method:post  
+param:   
+
+|参数|类型|说明|备注|例子|  
+|---|---|---|---|---|  
+|phone|char(20)|电话号码|作为账号|12345678998|  
+|password|char(20)|密码|6-20，字母、数字、符号|123456789qwer|  
+|name|char(20)|昵称|无|张三|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+```
+{
+    data:{}
+}
+```
 
 <h2 id="login">登陆验证机制</h2>
 
@@ -190,50 +233,6 @@ return:
 
 <h3 id="user_user">用户信息</h3>
 
-<h4 id="user_user_list_post">用户注册</h3>
-
-url:/api/user/user/  
-method:post  
-param:   
-
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|phone|char(20)|电话号码|作为账号|12345678998|  
-|password|char(20)|密码|6-20，字母、数字、符号|123456789qwer|  
-|name|char(20)|昵称|无|张三|  
-
-return:  
-
-|参数|类型|说明|备注|  
-|---|---|---|---|  
-```
-{
-    data:{}
-}
-```
-
-<h4 id="user_user_driver_list_post">司机端用户注册</h3>
-
-url:/api/user/user_driver/  
-method:post  
-param:   
-
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|phone|char(20)|电话号码|作为账号|12345678998|  
-|password|char(20)|密码|6-20，字母、数字、符号|123456789qwer|  
-|name|char(20)|昵称|无|张三|  
-
-return:  
-
-|参数|类型|说明|备注|  
-|---|---|---|---|  
-```
-{
-    data:{}
-}
-```
-
 <h4 id="user_user_get">查询自身信息</h3>
 
 url:/api/user/user/  
@@ -241,7 +240,7 @@ method:get
 param:   
 
 |参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
+|---|---|---|---|---|    
 |id|int|id|无|1|   
 
 return:  
@@ -251,7 +250,7 @@ return:
 |id|int|id|无|  
 |phone|char(20)|电话号码|无|  
 |name|char(10)|昵称|无|  
-|pic_url|char(50)|照片url|http://host:port/url/,获取图片|  
+|pic_url|char(50)|照片url|/url/,获取图片|  
 |point|int|积分|无|  
 ```
 {
@@ -276,7 +275,7 @@ param:
 |id|int|id|无|1|   
 |phone|char(20)|电话号码|作为账号|12345678998|  
 |name|char(10)|昵称|无|admin|  
-|pic|文件流|照片文件|无|(文件流)|  
+|pic|文件流|照片文件|无|(文件流，base64)|  
 
 return:  
 
@@ -308,7 +307,9 @@ return:
 |update_time|datetime|修改时间|无|  
 |brand|char(20)|品牌|无|  
 |buy_time|datetime|购车时间|无|  
+|engine|char(100)|发动机|无|  
 |code|char(10)|车牌号码|无|  
+|mileage|float|里程|无|  
 ```
 {
     'data':
@@ -318,7 +319,9 @@ return:
         'update_time':'2018-07-08 12:23:34',
         'brand':'玛萨拉蒂',
         'buy_time':'2018-03-20 12:23:34',
-        'code':'粤A24351'
+        'engine':'TX21',
+        'code':'粤A24351',
+        'mileage':'12'
     }]
 }
 ```
@@ -333,7 +336,9 @@ param:
 |---|---|---|---|---|  
 |brand|char(20)|品牌|无|玛萨拉蒂|  
 |buy_time|datetime|购车时间|无|2018-03-20 12:23:34|  
+|engine|char(100)|发动机|无|TX21|  
 |code|char(10)|车牌号码|无|粤A24351|  
+|mileage|float|里程|无|12|  
 
 return:  
 
@@ -364,7 +369,9 @@ return:
 |update_time|datetime|修改时间|无|  
 |brand|char(20)|品牌|无|  
 |buy_time|datetime|购车时间|无|  
+|engine|char(100)|发动机|无|  
 |code|char(10)|车牌号码|无|  
+|mileage|float|里程|无|  
 ```
 {
     'data':
@@ -374,7 +381,9 @@ return:
         'update_time':'2018-07-08 12:23:34',
         'brand':'玛萨拉蒂',
         'buy_time':'2018-03-20 12:23:34',
-        'code':'粤A24351'
+        'engine':'TX21',
+        'code':'粤A24351',
+        'mileage':'12'
     }
 }
 ```
@@ -390,7 +399,9 @@ param:
 |id|int|id|无|1|   
 |brand|char(20)|品牌|无|玛萨拉蒂|  
 |buy_time|datetime|购车时间|无|2018-03-20 12:23:34|  
+|engine|char(100)|发动机|无|TX21|  
 |code|char(10)|车牌号码|无|粤A24351|  
+|mileage|float|里程|无|12|  
 
 return:  
 
@@ -926,7 +937,7 @@ return:
 |phone|char(15)|联系电话|来源于所选地址|  
 |city|char(50)|省市区|来源于所选地址|  
 |address|char(100)|收货地址|来源于所选地址|  
-|status|int|状态|0:未下单，1:已删除，2:待付款，2:待发货，3:待收货，4:已完成|  
+|status|int|状态|0:未下单，1:已删除，2:待付款，3:待发货，4:待收货，5:已完成|  
 |order_time|datetime|下单时间|无|  
 |wait_time|datetime|付款时间|无|  
 |send_time|datetime|发货时间|无|  
@@ -1032,7 +1043,7 @@ return:
 |phone|char(15)|联系电话|来源于所选地址|  
 |city|char(50)|省市区|来源于所选地址|  
 |address|char(100)|收货地址|来源于所选地址|  
-|status|int|状态|0:未下单，1:已删除，2:待付款，2:待发货，3:待收货，4:已完成|  
+|status|int|状态|0:未下单，1:已删除，2:待付款，3:待发货，4:待收货，5:已完成|  
 |order_time|datetime|下单时间|无|  
 |wait_time|datetime|付款时间|无|  
 |send_time|datetime|发货时间|无|  
