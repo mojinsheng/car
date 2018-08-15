@@ -3,12 +3,12 @@
  1. [登陆验证机制](#login)
  - [用户注册](#login_register)
  - [司机端用户注册](#login_register_driver)
- - [登陆](#login_login)
+ - [登陆](#login_login)
  - [*发送用户登陆验证短信](#login_message_get)
  - [*用户短信登陆（自带注册）](#login_message_post)
  - [*发送司机登陆验证短信](#login_message_driver_get)
  - [*司机短信登陆（自带注册）](#login_message_driver_post)
- - [刷新token](#login_refresh)
+ - [刷新token](#login_refresh)
  2. [个人中心](#user)
  - [用户信息](#user_user)
     * [查询自身信息](#user_user_get)
@@ -67,13 +67,13 @@
     * [*生成保养订单信息](#maintain_upkeep_list_post)
     * [*查询保养信息](#maintain_upkeep_get)
     * [*删除保养订单信息](#maintain_upkeep_delete)
-    * [*付款、评价保养订单信息](#maintain_upkeep_method_post)
+    * [*付款、评论保养订单信息](#maintain_upkeep_method_post)
   - [维修](#maintain_maintain)
     * [*查询维修列表信息](#maintain_maintain_list_get)
     * [*生成维修订单信息](#maintain_maintain_list_post)
     * [*查询维修信息](#maintain_maintain_get)
     * [*删除维修订单信息](#maintain_maintain_delete)
-    * [*付款、完成、评论维修订单信息](#maintain_maintain_method_post)
+    * [*付款、评论维修订单信息](#maintain_maintain_method_post)
  5. [年检](#survey)
   - [年检站信息](#survey_surveystation)
     * [查询年检站列表信息](#survey_surveystation_list_get)
@@ -1100,7 +1100,7 @@ param:
 
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
-|status|int|状态|0:待付款，1:待发货，2:待收货，3:待评论，4:已完成|1|  
+|status|int|状态|0:待付款，1:待发货，2:待收货，3:已完成|1|  
 
 return:  
 
@@ -1114,8 +1114,9 @@ return:
 |phone|char(15)|联系电话|来源于所选地址|  
 |city|char(50)|省市区|来源于所选地址|  
 |address|char(100)|收货地址|来源于所选地址|  
-|status|int|状态|0:待付款，1:待发货，2:待收货，3:待评论，4:已完成|  
+|status|int|状态|0:待付款，1:待发货，2:待收货，3:已完成|  
 |is_delete|int|删除状态，0:未删除，1:已删除|无|  
+|is_comment|int|评价状态，0:未删除，1:已删除|无|  
 |logistics_info|text|物流信息|无|  
 |all_price|float|小计金额|无|  
 |point_price|float|积分兑换|无|  
@@ -1152,6 +1153,7 @@ orderproduct_set:
         'address':'广州市越秀区xxx',
         'status':0,
         'is_delete':0,
+        'is_comment':0,
         'logistics_info':'asdasd',
         'all_price':300,
         'point_price':20,
@@ -1236,8 +1238,9 @@ return:
 |phone|char(15)|联系电话|来源于所选地址|  
 |city|char(50)|省市区|来源于所选地址|  
 |address|char(100)|收货地址|来源于所选地址|  
-|status|int|状态|0:待付款，1:待发货，2:待收货，3:待评论，4:已完成|  
+|status|int|状态|0:待付款，1:待发货，2:待收货，3:已完成|  
 |is_delete|int|删除状态，0:未删除，1:已删除|无|  
+|is_comment|int|评价状态，0:未删除，1:已删除|无|  
 |logistics_info|text|物流信息|无|  
 |all_price|float|小计金额|无|  
 |point_price|float|积分兑换|无|  
@@ -1274,6 +1277,7 @@ orderproduct_set:
         'address':'广州市越秀区xxx',
         'status':0,
         'is_delete':0,
+        'is_comment':0,
         'logistics_info':'asdasd',
         'all_price':300,
         'point_price':20,
@@ -1661,6 +1665,9 @@ param:
 
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
+|orderby|char(100)|排序规则|distance、popular|popular|  
+|longitude|float|经度|orderby为distance时必须添加|23|  
+|latitude|float|纬度|orderby为distance时必须添加|123|  
 
 return:  
 
@@ -1677,6 +1684,8 @@ return:
 |mobile_phone|char(20)|手机号码|无|  
 |phone|char(20)|固定电话|无|   
 |work_price|float|工时费|保养使用|  
+|popular|int|人气|无|  
+|pic_url|char(50)|封面url|无|  
 ```
 {
     'data':
@@ -1691,7 +1700,9 @@ return:
         'address':'广州越秀区',
         'mobile_phone':'12345678998',
         'phone':'020-8888888',
-        'work_price':88
+        'work_price':88,
+        'popular':1,
+        'pic_url':'asdla.jpg'
     }]
 }
 ```
@@ -1719,8 +1730,10 @@ return:
 |latitude|float|纬度|无|  
 |address|char(100)|地址|无|  
 |mobile_phone|char(20)|手机号码|无|  
-|phone|char(20)|固定电话|无|  
+|phone|char(20)|固定电话|无|   
 |work_price|float|工时费|保养使用|  
+|popular|int|人气|无|  
+|pic_url|char(50)|封面url|无|  
 ```
 {
     'data':
@@ -1735,7 +1748,9 @@ return:
         'address':'广州越秀区',
         'mobile_phone':'12345678998',
         'phone':'020-8888888',
-        'work_price':88
+        'work_price':88,
+        'popular':1,
+        'pic_url':'asdla.jpg'
     }
 }
 ```
@@ -1763,6 +1778,7 @@ return:
 |L|int|升|无|  
 |price|float|原价|无|  
 |new_price|float|特价|无|  
+|pic_url|char(50)|封面url|无|  
 ```
 {
     'data':
@@ -1773,7 +1789,46 @@ return:
         'name':'没油',
         'L':2,
         'price':1,
-        'new_price':1
+        'new_price':1,
+        'pic_url':'asdla.jpg'
+    }]
+}
+```
+
+<h4 id="maintain_oil_get">查询机油信息</h4>
+
+url:/api/maintain/oil/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|  
+|---|---|---|---|---|  
+|id|int|id|无|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|id|无|  
+|create_time|datetime|创建时间|无|  
+|update_time|datetime|修改时间|无|  
+|name|char(50)|名称|无|  
+|L|int|升|无|  
+|price|float|原价|无|  
+|new_price|float|特价|无|  
+|pic_url|char(50)|封面url|无|  
+```
+{
+    'data':
+    [{
+        'id':1,
+        'create_time':'2018-07-08 12:23:34',
+        'update_time':'2018-07-08 12:23:34',
+        'name':'没油',
+        'L':2,
+        'price':1,
+        'new_price':1,
+        'pic_url':'asdla.jpg'
     }]
 }
 ```
@@ -1788,6 +1843,7 @@ param:
 
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
+|is_finish|bool|是否完成|0表示未完成，1表示已完成|1|  
 
 return:  
 
@@ -1798,30 +1854,35 @@ return:
 |update_time|datetime|修改时间|无|  
 |garage|object|汽修厂|查询汽修厂信息|  
 |name|char(20)|名称|无|  
-|car_code|char(10)|车牌|无|  
-|car_brand|char(20)|车型|无|  
-|user_name|char(20)|联系人|无|  
 |phone|char(20)|电话号码|无|  
-|longitude|float|经度|无|  
-|latitude|float|纬度|无|  
-|address|char(100)|地址|无|  
-|all_price|float|订单价格|无|  
-|discounts_price|float|优惠卷|无|  
-|now_price|float|实付款|无|  
-|work_price|float|工时费|保养使用|  
-|state|int|状态|0:未支付，1:等待服务，2:服务中，3:完成服务|  
-|score|int|评分|大于等于0，小于等于5|  
-|is_comment|bool|是否评价|无|  
+|longitude|float|经度|无|104|  
+|latitude|float|纬度|无|23|  
+|address|char(100)|地址|无|广州天河区|  
 |subscribe_time|datetime|预约时间|无|  
+|pic_url_list|list|图片列表|无|  
+|work_price|float|工时费|无|  
+|price|float|价格|无|  
+|discounts|float|优惠卷|无|  
+|now_price|float|实付款|无|  
+|state|int|状态|0:未支付，1:等待服务，2:服务中，3:已完成|  
+|is_delete|bool|删除状态|无|  
+|is_comment|bool|评论状态|无|  
+|score|int|评分|大于等于0，小于等于5|  
 |order_time|datetime|下单时间|无|  
-|pay_time|datetime|支付时间|无|  
+|pay_time|datetime|付款时间|无|  
 |service_time|datetime|服务时间|无|  
-|finish_time|datetime|完成时间|无|  
-|comment_time|datetime|评价时间|无|  
+|comment_time|datetime|评论时间|无|  
+|over_time|datetime|完成时间|无|   
+|service_item|char(100)|服务项目|无|  
+|service_materials|text|服务材料|无|  
+|deal_id|char(100)|交易单号|无|  
+|order_id|char(100)|订单单号|无|  
 |oil_name|char(50)|机油名称|无|  
-|oil_L|int|机油升|无|  
-|oil_price|float|机油原价|无|  
-|oil_new_price|float|机油特价|无|  
+|oil_L|int|升|无|  
+|oil_price|float|原价|无|  
+|oil_new_price|float|特价|无|  
+|car_brand|char(100)|车辆品牌|无|玛萨拉蒂|  
+|car_code|char(10)|车牌号码|无|粤A24351|  
 ```
 {
     'data':
@@ -1844,24 +1905,35 @@ return:
             'work_price':88
         },
         'name':'张三',
-        'car_code':'粤A23452',
-        'car_brand':'玛萨拉蒂',
-        'address':'广州市越秀区',
         'phone':'12345678998',
+        'longitude':123,
+        'latitude':23,
+        'address':'广州市越秀区',
         'subscribe_time':'2018-07-08 12:23:34',
-        'content':'修理',
-        'order_time':'2018-07-08 12:23:34',
+        'pic_url_list':['/asda.jpg'],
+        'work_price':1,
         'price':1,
-        'oil_block':70,
-        'work_price':88,
+        'discounts':1,
+        'now_price':1,
         'state':1,
+        'is_delete':'true',
+        'is_comment':'false',
         'score':1,
-        'over_time':'2018-07-08 12:23:34',
+        'order_time':'2018-07-08 12:23:34',
+        'pay_time':'2018-07-08 12:23:34',
+        'service_time':'2018-07-08 12:23:34',
         'comment_time':'2018-07-08 12:23:34',
+        'over_time':'2018-07-08 12:23:34',
+        'service_item':'装轮胎',
+        'service_materials':'轮胎',
+        'deal_id':'182731725',
+        'order_id':'8927918238271',
         'oil_name':'没油',
         'oil_L':2,
         'oil_price':1,
-        'oil_new_price':1
+        'oil_new_price':1,
+        'car_brand':'玛萨拉蒂',
+        'car_code':'粤A24351'
     }]
 }
 ```
@@ -1876,7 +1948,7 @@ param:
 |---|---|---|---|---|  
 |garage_id|int|汽修厂id|无|1|  
 |car_id|int|汽车id|无|1|  
-|user_name|char(20)|联系人|无|张三|  
+|name|char(20)|联系人|无|张三|  
 |phone|char(20)|电话号码|无|12345678909|  
 |subscribe_time|datetime|预约时间|无|2018-07-08 12:23:34|  
 |longitude|float|经度|无|1|  
@@ -1914,30 +1986,35 @@ return:
 |update_time|datetime|修改时间|无|  
 |garage|object|汽修厂|查询汽修厂信息|  
 |name|char(20)|名称|无|  
-|car_code|char(10)|车牌|无|  
-|car_brand|char(20)|车型|无|  
-|user_name|char(20)|联系人|无|  
 |phone|char(20)|电话号码|无|  
-|longitude|float|经度|无|  
-|latitude|float|纬度|无|  
-|address|char(100)|地址|无|  
-|all_price|float|订单价格|无|  
-|discounts_price|float|优惠卷|无|  
-|now_price|float|实付款|无|  
-|work_price|float|工时费|保养使用|  
-|state|int|状态|0:未支付，1:等待服务，2:服务中，3:完成服务|  
-|score|int|评分|大于等于0，小于等于5|  
-|is_comment|bool|是否评价|无|  
+|longitude|float|经度|无|104|  
+|latitude|float|纬度|无|23|  
+|address|char(100)|地址|无|广州天河区|  
 |subscribe_time|datetime|预约时间|无|  
+|pic_url_list|list|图片列表|无|  
+|work_price|float|工时费|无|  
+|price|float|价格|无|  
+|discounts|float|优惠卷|无|  
+|now_price|float|实付款|无|  
+|state|int|状态|0:未支付，1:等待服务，2:服务中，3:已完成|  
+|is_delete|bool|删除状态|无|  
+|is_comment|bool|评论状态|无|  
+|score|int|评分|大于等于0，小于等于5|  
 |order_time|datetime|下单时间|无|  
-|pay_time|datetime|支付时间|无|  
+|pay_time|datetime|付款时间|无|  
 |service_time|datetime|服务时间|无|  
-|finish_time|datetime|完成时间|无|  
-|comment_time|datetime|评价时间|无|  
+|comment_time|datetime|评论时间|无|  
+|over_time|datetime|完成时间|无|   
+|service_item|char(100)|服务项目|无|  
+|service_materials|text|服务材料|无|  
+|deal_id|char(100)|交易单号|无|  
+|order_id|char(100)|订单单号|无|  
 |oil_name|char(50)|机油名称|无|  
-|oil_L|int|机油升|无|  
-|oil_price|float|机油原价|无|  
-|oil_new_price|float|机油特价|无|  
+|oil_L|int|升|无|  
+|oil_price|float|原价|无|  
+|oil_new_price|float|特价|无|  
+|car_brand|char(100)|车辆品牌|无|玛萨拉蒂|  
+|car_code|char(10)|车牌号码|无|粤A24351|  
 ```
 {
     'data':
@@ -1960,24 +2037,35 @@ return:
             'work_price':88
         },
         'name':'张三',
-        'car_code':'粤A23452',
-        'car_brand':'玛萨拉蒂',
-        'address':'广州市越秀区',
         'phone':'12345678998',
+        'longitude':123,
+        'latitude':23,
+        'address':'广州市越秀区',
         'subscribe_time':'2018-07-08 12:23:34',
-        'content':'修理',
-        'order_time':'2018-07-08 12:23:34',
+        'pic_url_list':['/asda.jpg'],
+        'work_price':1,
         'price':1,
-        'oil_block':70,
-        'work_price':88,
+        'discounts':1,
+        'now_price':1,
         'state':1,
+        'is_delete':'true',
+        'is_comment':'false',
         'score':1,
-        'over_time':'2018-07-08 12:23:34',
+        'order_time':'2018-07-08 12:23:34',
+        'pay_time':'2018-07-08 12:23:34',
+        'service_time':'2018-07-08 12:23:34',
         'comment_time':'2018-07-08 12:23:34',
+        'over_time':'2018-07-08 12:23:34',
+        'service_item':'装轮胎',
+        'service_materials':'轮胎',
+        'deal_id':'182731725',
+        'order_id':'8927918238271',
         'oil_name':'没油',
         'oil_L':2,
         'oil_price':1,
-        'oil_new_price':1
+        'oil_new_price':1,
+        'car_brand':'玛萨拉蒂',
+        'car_code':'粤A24351'
     }
 }
 ```
@@ -2002,7 +2090,7 @@ return:
 }
 ```
 
-<h4 id="maintain_upkeep_method_post">付款、评价保养订单信息</h4>
+<h4 id="maintain_upkeep_method_post">付款、评论保养订单信息</h4>
 
 url:/api/maintain/upkeep_method/  
 method:post  
@@ -2034,6 +2122,7 @@ param:
 
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
+|is_finish|bool|是否完成|0表示未完成，1表示已完成|1|  
 
 return:  
 
@@ -2044,32 +2133,31 @@ return:
 |update_time|datetime|修改时间|无|  
 |garage|object|汽修厂|查询汽修厂信息|  
 |name|char(20)|名称|无|  
-|car_code|char(10)|车牌|无|  
-|car_brand|char(20)|车型|无|  
-|address|char(100)|地址|无|  
 |phone|char(20)|电话号码|无|  
+|longitude|float|经度|无|104|  
+|latitude|float|纬度|无|23|  
+|address|char(100)|地址|无|广州天河区|  
+|car_type|char(100)|车型|无|  
 |subscribe_time|datetime|预约时间|无|  
 |content|text|内容|无|  
-|order_time|datetime|下单时间|无|  
+|pic_url_list|list|图片列表|无|  
 |price|float|价格|无|  
-|receive_time|datetime|接单时间|无|  
-|state|int|状态|0:等待接单，1:等待付款，2:等待服务，3:待评价，4:已完成，5:失败|  
+|discounts|float|优惠卷|无|  
+|now_price|float|实付款|无|  
+|state|int|状态|0:未支付，1:等待服务，2:服务中，3:已完成|  
+|is_delete|bool|删除状态|无|  
+|is_comment|bool|评论状态|无|  
 |score|int|评分|大于等于0，小于等于5|  
+|order_time|datetime|下单时间|无|  
 |pay_time|datetime|付款时间|无|  
 |service_time|datetime|服务时间|无|  
+|comment_time|datetime|评论时间|无|  
 |over_time|datetime|完成时间|无|  
-|pic_url_list|list|图片列表|无|  
-
-pic_url_list:  
-
-|参数|类型|说明|备注|  
-|---|---|---|---|  
-|id|int|id|无|  
-|create_time|datetime|创建时间|无|  
-|update_time|datetime|修改时间|无|  
-|pic_url|char(100)|图片url|无|  
-|note|char(100)|备注|无|  
-|state|int|状态|0:等待接单，1:等待付款，2:等待服务，3:待评价，4:已完成，5:失败|  
+|car_code|char(10)|车牌|无|  
+|service_item|char(100)|服务项目|无|  
+|service_materials|text|服务材料|无|  
+|deal_id|char(10)|交易单号|无|  
+|order_id|char(10)|订单单号|无|  
 ```
 {
     'data':
@@ -2092,28 +2180,31 @@ pic_url_list:
             'work_price':88
         },
         'name':'张三',
-        'car_code':'粤A23452',
-        'car_brand':'玛萨拉蒂',
-        'address':'广州市越秀区',
-        'phone':'12345678998',
+        'phone':'粤A23452',
+        'longitude':'玛萨拉蒂',
+        'latitude':'广州市越秀区',
+        'address':'12345678998',
+        'car_type':'12345678998',
         'subscribe_time':'2018-07-08 12:23:34',
         'content':'修理',
-        'order_time':'2018-07-08 12:23:34',
+        'pic_url_list':['/asda.jpg'],
         'price':1,
-        'receive_time':70,
+        'discounts':1,
+        'now_price':1,
         'state':1,
+        'is_delete':'true',
+        'is_comment':'false',
         'score':1,
+        'order_time':'2018-07-08 12:23:34',
         'pay_time':'2018-07-08 12:23:34',
         'service_time':'2018-07-08 12:23:34',
+        'comment_time':'2018-07-08 12:23:34',
         'over_time':'2018-07-08 12:23:34',
-        'pic_url_list':[{
-            'id':1,
-            'create_time':'2018-07-08 12:23:34',
-            'update_time':'2018-07-08 12:23:34',
-            'pic_url':'/aklsdjalk.jpg',
-            'note':'无图',
-            'state':1
-        }]
+        'car_code':'粤A88888',
+        'service_item':'装轮胎',
+        'service_materials':'轮胎',
+        'deal_id':'182731725',
+        'order_id':'8927918238271'
     }]
 }
 ```
@@ -2128,14 +2219,15 @@ param:
 |---|---|---|---|---|  
 |garage_id|int|汽修厂id|无|1|  
 |name|char(20)|名称|无|张三|  
-|car_type|char(100)|车型|无|Tx21|   
-|address|char(100)|地址|无|广州市越秀区|  
 |phone|char(20)|电话号码|无|12345678998|  
+|longitude|float|经度|无|104|  
+|latitude|float|纬度|无|23|  
+|address|char(100)|地址|无|广州天河区|  
+|car_type|char(100)|车型|无|Tx21|   
 |subscribe_time|datetime|预约时间|无|2018-07-08 12:23:34|  
 |content|text|内容|无|修理|  
 |number|int|数量|多少个文件|1|  
 |pic1|文件流|图片|编号从1开始|(文件流)|  
-|note1|char(100)|备注|编号从1开始|无图|  
 
 return:  
 
@@ -2167,20 +2259,31 @@ return:
 |update_time|datetime|修改时间|无|  
 |garage|object|汽修厂|查询汽修厂信息|  
 |name|char(20)|名称|无|  
-|car_code|char(10)|车牌|无|  
-|car_brand|char(20)|车型|无|  
-|address|char(100)|地址|无|  
 |phone|char(20)|电话号码|无|  
+|longitude|float|经度|无|104|  
+|latitude|float|纬度|无|23|  
+|address|char(100)|地址|无|广州天河区|  
+|car_type|char(100)|车型|无|  
 |subscribe_time|datetime|预约时间|无|  
 |content|text|内容|无|  
-|order_time|datetime|下单时间|无|  
+|pic_url_list|list|图片列表|无|  
 |price|float|价格|无|  
-|receive_time|datetime|接单时间|无|  
-|state|int|状态|0:等待接单，1:等待付款，2:等待服务，3:待评价，4:已完成，5:失败|  
+|discounts|float|优惠卷|无|  
+|now_price|float|实付款|无|  
+|state|int|状态|0:未支付，1:等待服务，2:服务中，3:已完成|  
+|is_delete|bool|删除状态|无|  
+|is_comment|bool|评论状态|无|  
 |score|int|评分|大于等于0，小于等于5|  
+|order_time|datetime|下单时间|无|  
 |pay_time|datetime|付款时间|无|  
 |service_time|datetime|服务时间|无|  
+|comment_time|datetime|评论时间|无|  
 |over_time|datetime|完成时间|无|  
+|car_code|char(10)|车牌|无|  
+|service_item|char(100)|服务项目|无|  
+|service_materials|text|服务材料|无|  
+|deal_id|char(10)|交易单号|无|  
+|order_id|char(10)|订单单号|无|  
 ```
 {
     'data':
@@ -2203,28 +2306,31 @@ return:
             'work_price':88
         },
         'name':'张三',
-        'car_code':'粤A23452',
-        'car_brand':'玛萨拉蒂',
-        'address':'广州市越秀区',
-        'phone':'12345678998',
+        'phone':'粤A23452',
+        'longitude':'玛萨拉蒂',
+        'latitude':'广州市越秀区',
+        'address':'12345678998',
+        'car_type':'12345678998',
         'subscribe_time':'2018-07-08 12:23:34',
         'content':'修理',
-        'order_time':'2018-07-08 12:23:34',
+        'pic_url_list':['/asda.jpg'],
         'price':1,
-        'receive_time':'2018-07-08 12:23:34',
+        'discounts':1,
+        'now_price':1,
         'state':1,
+        'is_delete':'true',
+        'is_comment':'false',
         'score':1,
+        'order_time':'2018-07-08 12:23:34',
         'pay_time':'2018-07-08 12:23:34',
         'service_time':'2018-07-08 12:23:34',
+        'comment_time':'2018-07-08 12:23:34',
         'over_time':'2018-07-08 12:23:34',
-        'pic_url_list':[{
-            'id':1,
-            'create_time':'2018-07-08 12:23:34',
-            'update_time':'2018-07-08 12:23:34',
-            'pic_url':'/aklsdjalk.jpg',
-            'note':'无图',
-            'state':1
-        }]
+        'car_code':'粤A88888',
+        'service_item':'装轮胎',
+        'service_materials':'轮胎',
+        'deal_id':'182731725',
+        'order_id':'8927918238271'
     }
 }
 ```
@@ -2249,7 +2355,7 @@ return:
 }
 ```
 
-<h4 id="maintain_maintain_method_post">付款、完成、评论维修订单信息</h4>
+<h4 id="maintain_maintain_method_post">付款、评论维修订单信息</h4>
 
 url:/api/maintain/maintain_method/  
 method:post  
@@ -2258,7 +2364,7 @@ param:
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
 |id|int|id|无|1|   
-|method|char(20)|操作|pay:付款，finish:完成，comment:评论|comment|  
+|method|char(20)|操作|pay:付款，comment:评论|comment|  
 |score|int|评分|大于等于0，小于等于5，当method微comment的时候需要|1|  
 
 return:  
@@ -2480,8 +2586,8 @@ return:
 |order_latitude|float|交接地点纬度|无|  
 |order_address|char(100)|交接地点|无|  
 |subscribe_time|datetime|预约日期|13点前表示上午，13点后表示下午|  
-|combo|object|预约日期|13点前表示上午，13点后表示下午|  
-|combo_item|datetime|预约日期|13点前表示上午，13点后表示下午|  
+|combo|object|套餐对象|查看套餐接口|  
+|combo_item_list|list|套餐项列表|查看套餐接口|  
 |base_price|float|基础费用|无|  
 |combo_price|float|套餐费用|无|  
 |survey_price|float|年检费用|无|  
@@ -2497,32 +2603,30 @@ return:
 |return_time|datetime|还车时间|无|  
 |confirm_time|datetime|确认时间|无|  
 |cancel_time|datetime|取消时间|无|  
-||datetime|取消时间|无|  
-|cancel_time|datetime|取消时间|无|  
-|cancel_time|datetime|取消时间|无|  
-|cancel_time|datetime|取消时间|无|  
-
-
-surveycost_list:  
-
-|参数|类型|说明|备注|  
-|---|---|---|---|  
-|id|int|id|1|无|  
-|create_time|datetime|创建时间|无|  
-|update_time|datetime|修改时间|无|  
-|name|char(100)|费用名称|无|  
-|price|float|费用|无|  
-
-pic_url_list:  
-
-|参数|类型|说明|备注|  
-|---|---|---|---|  
-|id|int|id|无|  
-|create_time|datetime|创建时间|无|  
-|update_time|datetime|修改时间|无|  
-|pic_url|char(100)|图片|无|  
-|note|char(100)|备注|无|  
-|state|int|状态|0:已提交，1:已接单，2:已取车，3.已年检，4.已还车，5.已完成，6.失败|  
+|pic_get_confirm1_url|char(50)|取车图片-检车确认1照片url|/url,获取图片|  
+|pic_get_confirm2_url|char(50)|取车图片-检车确认2照片url|/url,获取图片|  
+|pic_get_car1_url|char(50)|取车图片-车身拍照1照片url|/url,获取图片|  
+|pic_get_car2_url|char(50)|取车图片-车身拍照2照片url|/url,获取图片|  
+|pic_get_car3_url|char(50)|取车图片-车身拍照3照片url|/url,获取图片|  
+|pic_get_car4_url|char(50)|取车图片-车身拍照4照片url|/url,获取图片|  
+|pic_get_car5_url|char(50)|取车图片-车身拍照5照片url|/url,获取图片|  
+|pic_get_car6_url|char(50)|取车图片-车身拍照6照片url|/url,获取图片|  
+|pic_survey_upload1_url|char(50)|年检已过-上传照片1照片url|/url,获取图片|  
+|pic_survey_upload2_url|char(50)|年检已过-上传照片2照片url|/url,获取图片|  
+|pic_survey_lamp1_url|char(50)|年检未过-车灯照片1照片url|/url,获取图片|  
+|pic_survey_lamp2_url|char(50)|年检未过-车灯照片2照片url|/url,获取图片|  
+|pic_survey_exhaust1_url|char(50)|年检未过-排气照片2照片url|/url,获取图片|  
+|pic_survey_exhaust2_url|char(50)|年检未过-排气照片2照片url|/url,获取图片|  
+|pic_survey_appearance1_url|char(50)|年检未过-外观照片2照片url|/url,获取图片|  
+|pic_survey_appearance2_url|char(50)|年检未过-外观照片2照片url|/url,获取图片|  
+|pic_return_confirm2_url|char(50)|还车图片-检车确认1照片url|/url,获取图片|  
+|pic_greturn_confirm2_url|char(50)|还车图片-检车确认2照片url|/url,获取图片|  
+|pic_return_car1_url|char(50)|还车图片-车身拍照1照片url|/url,获取图片|  
+|pic_return_car2_url|char(50)|还车图片-车身拍照2照片url|/url,获取图片|  
+|pic_return_car3_url|char(50)|还车图片-车身拍照3照片url|/url,获取图片|  
+|pic_return_car4_url|char(50)|还车图片-车身拍照4照片url|/url,获取图片|  
+|pic_return_car5_url|char(50)|还车图片-车身拍照5照片url|/url,获取图片|  
+|pic_return_car6_url|char(50)|还车图片-车身拍照6照片url|/url,获取图片|  
 ```
 {
     'data':
@@ -2592,19 +2696,21 @@ param:
 |---|---|---|---|---|  
 |name|char(20)|联系人|无|张三|  
 |phone|char(20)|联系人电话|无|12345678998|  
-|pic_IDcard|文件流|身份证正面照|无|(文件流)|  
-|pic_drive_front|文件流|行驶证主页照|无|(文件流)|  
-|pic_drive_front|文件流|行驶证副页照|无|(文件流)|  
+|pic_IDcard_front_url|char(50)|身份证正面照|无|(文件流)|  
+|pic_IDcard_back_url|char(50)|身份证背面照|无|(文件流)|  
+|pic_drive_back_url|char(50)|行驶证副页照|无|(文件流)|  
 |car_name|char(20)|车主姓名|无|张三|  
 |id_card|char(20)|身份证|无|198236817268|  
 |car_brand|char(20)|品牌型号|无|玛萨拉蒂|  
 |car_code|char(20)|车牌|无|粤A23452|  
-|car_type|int|车量类型|0:两人|1|  
+|car_type|int|车量类型|0:小型蓝牌，1：七座以下|  
 |use_type|int|使用性质|0:非营利，1:营利|1|  
 |surveystation_id|int|年检站id|无|1|  
 |order_longitude|float|交接地点经度|无|233|  
 |order_latitude|float|交接地点纬度|无|322|  
 |subscribe_time|datetime|预约日期|13点前表示上午，13点后表示下午|2018-07-08 12:23:34|  
+|combo_id|int|套餐id|无|1|  
+|comboitem_list|char(100)|套餐选项id|使用&拼接|1&2|  
 
 return:  
 
@@ -2774,6 +2880,7 @@ param:
 |longitude|float|经度|无|123|  
 |latitude|float|纬度|无|23|  
 |surveystation_id|int|年检站id|无|1|  
+|combo_id|int|套餐id|无|1|  
 |comboitem_list|char(100)|套餐选项id|使用&拼接|1&2|  
 
 return:  
@@ -2794,3 +2901,24 @@ return:
     }
 }
 ```
+
+<h2 id="driver">司机端</h2>
+
+<h3 id="driver_order">订单</h3>
+
+<h4 id="driver_order_list_get">查询订单列表信息</h4>
+<h4 id="driver_order_get">查询订单信息</h4>
+<h4 id="driver_order_grab_post">抢单</h4>
+<h4 id="driver_order_wait_post">听单</h4>
+<h4 id="driver_order_cancel_post">取消订单</h4>
+<h4 id="driver_order_get_post">确认取车</h4>
+<h4 id="driver_order_survey_post">开始年检</h4>
+<h4 id="driver_order_success_post">年检已过</h4>
+<h4 id="driver_order_fail_post">年检未过</h4>
+<h4 id="driver_order_return_post">确认换车</h4>
+
+<h3 id="driver_account">账户</h3>
+
+<h4 id="driver_account_list_get">查询明细列表信息</h4>
+<h4 id="driver_account_get">查询明细信息</h4>
+<h4 id="driver_account_method_post">明细操作信息-提现</h4>
