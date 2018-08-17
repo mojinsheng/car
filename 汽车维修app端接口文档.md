@@ -27,7 +27,6 @@
     * [修改地址信息](#user_address_put)
     * [删除地址信息](#user_address_delete)
  3. [服务](#service)
-  - [*服务首页图片信息](#service_img_get)
   - [分类信息](#service_catalog)
     * [查询分类列表信息](#service_catalog_list_get)
     * [查询分类信息](#service_catalog_get)
@@ -76,7 +75,6 @@
     * [*删除维修订单信息](#maintain_maintain_delete)
     * [*付款、评论维修订单信息](#maintain_maintain_method_post)
  5. [年检](#survey)
-  - [*年检首页图片信息](#survey_img_get) 
   - [年检站信息](#survey_surveystation)
     * [查询年检站列表信息](#survey_surveystation_list_get)
     * [查询年检站信息](#survey_surveystation_get)
@@ -89,7 +87,10 @@
     * [*查询年检订单信息](#survey_survey_get)
     * [*删除年检订单信息](#survey_survey_delete)
     * [*年检订单操作信息-查询费用、支付、确认还车](#survey_survey_method_post)
- 6. [司机端](#driver)
+ 6. [系统](#system)
+  - [服务首页图片信息](#system_serviceimg_get)
+  - [年检首页图片信息](#system_surveyimg_get) 
+ 7. [司机端](#driver)
   - [订单](#driver_order)
     * [*查询订单列表信息](#driver_order_list_get)
     * [*查询订单信息](#driver_order_get)
@@ -102,9 +103,9 @@
     * [*年检未过](#driver_order_fail_post)
     * [*确认换车](#driver_order_return_post)
   - [账户](#driver_account)
-    * [*查询明细列表信息](#driver_account_list_get)
-    * [*查询明细信息](#driver_account_get)
-    * [*明细操作信息-提现](#driver_account_method_post)
+    * [查询明细列表信息](#driver_account_list_get)
+    * [查询明细信息](#driver_account_get)
+    * [明细操作信息-提现](#driver_account_method_post)
 
 ```
 所有的后台返回值，都以这样子的结构返回
@@ -336,6 +337,7 @@ param:
 
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
+|is_default|bool|是否为默认|无|true|  
 
 return:  
 
@@ -560,6 +562,7 @@ param:
 
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
+|is_default|bool|是否为默认|无|true|  
 
 return:  
 
@@ -1116,7 +1119,7 @@ param:
 
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
-|id|int|id|无|1|   
+|id|int|id|支持使用,来拼接多个id，实现批量删除|1|   
 
 return:  
 
@@ -1130,7 +1133,7 @@ return:
 
 <h3 id="service_order">订单信息</h3>
 
-<h4 id="service_order_list_post">查询订单列表信息</h4>
+<h4 id="service_order_list_get">查询订单列表信息</h4>
 
 url:/api/service/order/  
 method:get  
@@ -1138,7 +1141,7 @@ param:
 
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
-|status|int|状态|0:待付款，1:待发货，2:待收货，3:已完成|1|  
+|status|int|状态|-1:全部，0:待付款，1:待发货，2:待收货，3:已完成|1|  
 
 return:  
 
@@ -1417,7 +1420,7 @@ return:
 |id|int|id|无|  
 |create_time|datetime|创建时间|无|  
 |update_time|datetime|修改时间|无|  
-|car|object|车辆信息|查询物品信息|  
+|car_brand|char(100)|车辆品牌|无|  
 |amount|int|违章次数|无|  
 |score|int|扣分|无|  
 |price|float|罚款|无|  
@@ -1428,17 +1431,7 @@ return:
         'id':1,
         'create_time':'2018-07-08 12:23:34',
         'update_time':'2018-07-08 12:23:34',
-        'car':{
-            'id':1,
-            'create_time':'2018-07-08 12:23:34',
-            'update_time':'2018-07-08 12:23:34',
-            'pic_url':'/alsdfh.jpg',
-            'brand':'玛萨拉蒂',
-            'code':'粤A24351',
-            'engine':'TX21',
-            'buy_time':'2018-03-20',
-            'mileage':'12'
-        },
+        'car_brand':'玛萨拉蒂',
         'amount':1,
         'score':1,
         'price':200
@@ -1463,7 +1456,7 @@ return:
 |id|int|id|无|  
 |create_time|datetime|创建时间|无|  
 |update_time|datetime|修改时间|无|  
-|car|object|车辆信息|查询物品信息|  
+|car_brand|char(100)|车辆品牌|无|  
 |amount|int|违章次数|无|  
 |score|int|扣分|无|  
 |price|float|罚款|无|  
@@ -1474,17 +1467,7 @@ return:
         'id':1,
         'create_time':'2018-07-08 12:23:34',
         'update_time':'2018-07-08 12:23:34',
-        'car':{
-            'id':1,
-            'create_time':'2018-07-08 12:23:34',
-            'update_time':'2018-07-08 12:23:34',
-            'pic_url':'/alsdfh.jpg',
-            'brand':'玛萨拉蒂',
-            'code':'粤A24351',
-            'engine':'TX21',
-            'buy_time':'2018-03-20',
-            'mileage':'12'
-        },
+        'car_brand':'玛萨拉蒂',
         'amount':1,
         'score':1,
         'price':200
@@ -1705,8 +1688,8 @@ param:
 |---|---|---|---|---|  
 |name|char(50)|汽修厂名称|无|天河|  
 |orderby|char(100)|排序规则|all、distance、popular|popular|  
-|longitude|float|经度|orderby为distance时必须添加|23|  
-|latitude|float|纬度|orderby为distance时必须添加|123|  
+|longitude|float|经度|必填|23|  
+|latitude|float|纬度|必填|123|  
 
 return:  
 
@@ -1722,9 +1705,10 @@ return:
 |address|char(100)|地址|无|  
 |mobile_phone|char(20)|手机号码|无|  
 |phone|char(20)|固定电话|无|   
-|work_price|float|工时费|保养使用|  
+|filter_price|float|过滤格|保养使用|  
 |popular|int|人气|无|  
 |pic_url|char(50)|封面url|无|  
+|distance|float|距离|无|  
 ```
 {
     'data':
@@ -1739,9 +1723,10 @@ return:
         'address':'广州越秀区',
         'mobile_phone':'12345678998',
         'phone':'020-8888888',
-        'work_price':88,
+        'filter_price':88,
         'popular':1,
-        'pic_url':'asdla.jpg'
+        'pic_url':'asdla.jpg',
+        'distance':10
     }]
 }
 ```
@@ -1770,9 +1755,10 @@ return:
 |address|char(100)|地址|无|  
 |mobile_phone|char(20)|手机号码|无|  
 |phone|char(20)|固定电话|无|   
-|work_price|float|工时费|保养使用|  
+|filter_price|float|过滤格|保养使用|  
 |popular|int|人气|无|  
 |pic_url|char(50)|封面url|无|  
+|distance|float|距离|无|  
 ```
 {
     'data':
@@ -1787,9 +1773,10 @@ return:
         'address':'广州越秀区',
         'mobile_phone':'12345678998',
         'phone':'020-8888888',
-        'work_price':88,
+        'filter_price':88,
         'popular':1,
-        'pic_url':'asdla.jpg'
+        'pic_url':'asdla.jpg',
+        'distance':10
     }
 }
 ```
@@ -1899,7 +1886,7 @@ return:
 |address|char(100)|地址|无|广州天河区|  
 |subscribe_time|datetime|预约时间|无|  
 |pic_url_list|list|图片列表|无|  
-|work_price|float|工时费|无|  
+|filter_price|float|过滤格|无|  
 |price|float|价格|无|  
 |discounts|float|优惠卷|无|  
 |now_price|float|实付款|无|  
@@ -1950,7 +1937,7 @@ return:
         'address':'广州市越秀区',
         'subscribe_time':'2018-07-08 12:23:34',
         'pic_url_list':['/asda.jpg'],
-        'work_price':1,
+        'filter_price':1,
         'price':1,
         'discounts':1,
         'now_price':1,
@@ -2031,7 +2018,7 @@ return:
 |address|char(100)|地址|无|广州天河区|  
 |subscribe_time|datetime|预约时间|无|  
 |pic_url_list|list|图片列表|无|  
-|work_price|float|工时费|无|  
+|filter_price|float|过滤格|无|  
 |price|float|价格|无|  
 |discounts|float|优惠卷|无|  
 |now_price|float|实付款|无|  
@@ -2082,7 +2069,7 @@ return:
         'address':'广州市越秀区',
         'subscribe_time':'2018-07-08 12:23:34',
         'pic_url_list':['/asda.jpg'],
-        'work_price':1,
+        'filter_price':1,
         'price':1,
         'discounts':1,
         'now_price':1,
@@ -2176,7 +2163,6 @@ return:
 |longitude|float|经度|无|104|  
 |latitude|float|纬度|无|23|  
 |address|char(100)|地址|无|广州天河区|  
-|car_type|char(100)|车型|无|  
 |subscribe_time|datetime|预约时间|无|  
 |content|text|内容|无|  
 |pic_url_list|list|图片列表|无|  
@@ -2193,6 +2179,7 @@ return:
 |comment_time|datetime|评论时间|无|  
 |over_time|datetime|完成时间|无|  
 |car_code|char(10)|车牌|无|  
+|car_type|char(100)|车型|无|  
 |service_item|char(100)|服务项目|无|  
 |service_materials|text|服务材料|无|  
 |deal_id|char(10)|交易单号|无|  
@@ -2788,7 +2775,7 @@ param:
 |order_latitude|float|交接地点纬度|无|322|  
 |subscribe_time|datetime|预约日期|13点前表示上午，13点后表示下午|2018-07-08 12:23:34|  
 |combo_id|int|套餐id|无|1|  
-|comboitem_list|char(100)|套餐选项id|使用&拼接|1&2|  
+|comboitem_list|char(100)|套餐选项id|使用&拼接|1,2|  
 
 return:  
 
@@ -3394,7 +3381,7 @@ return:
 
 <h4 id="driver_order_success_post">年检已过</h4>
 
-url:/api/driver/order_get/  
+url:/api/driver/order_success/  
 method:post  
 param:   
 
@@ -3417,7 +3404,7 @@ return:
 
 <h4 id="driver_order_fail_post">年检未过</h4>
 
-url:/api/driver/order_get/  
+url:/api/driver/order_fail/  
 method:post  
 param:   
 
@@ -3445,7 +3432,7 @@ return:
 
 <h4 id="driver_order_return_post">确认换车</h4>
 
-url:/api/driver/order_get/  
+url:/api/driver/order_return/  
 method:post  
 param:   
 
@@ -3477,9 +3464,12 @@ return:
 
 <h4 id="driver_account_list_get">查询明细列表信息</h4>
 
+url:/api/driver/account/  
+method:get  
+param:   
+
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
-|id|int|id|无|1|   
 
 return:  
 
@@ -3488,7 +3478,7 @@ return:
 |id|int|id|无|  
 |create_time|datetime|创建时间|无|  
 |update_time|datetime|修改时间|无|  
-|order_time|char(50)|时间|无|  
+|order_time|datetime|时间|无|  
 |start_address|char(100)|出发地点|无|  
 |end_address|char(100)|到达地点|无|  
 |method|char(100)|行为|0：支出，1：收入|  
@@ -3512,6 +3502,10 @@ return:
 
 <h4 id="driver_account_get">查询明细信息</h4>
 
+url:/api/driver/account/  
+method:get  
+param:   
+
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
 |id|int|id|无|1|   
@@ -3523,7 +3517,7 @@ return:
 |id|int|id|无|  
 |create_time|datetime|创建时间|无|  
 |update_time|datetime|修改时间|无|  
-|order_time|char(50)|时间|无|  
+|order_time|datetime|时间|无|  
 |start_address|char(100)|出发地点|无|  
 |end_address|char(100)|到达地点|无|  
 |method|char(100)|行为|0：支出，1：收入|  
@@ -3547,7 +3541,7 @@ return:
 
 <h4 id="driver_account_method_post">明细操作信息-提现</h4>
 
-url:/api/driver/order_get/  
+url:/api/driver/account/  
 method:post  
 param:   
 
