@@ -749,31 +749,6 @@ return:
 
 <h2 id="service">服务</h2>
 
-<h3 id="service_img_get">服务首页图片信息</h3>
-
-url:/api/service/img/  
-method:get  
-param:   
-
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|   
-
-return:  
-
-|参数|类型|说明|备注|  
-|---|---|---|---|  
-|pic1_url|char(100)|图片url|无|  
-|pic2_url|char(100)|图片url|无|  
-
-```
-{
-    'data':{
-        'pic1_url':'/asd.hpg',
-        'pic2_url':'/asd.hpg'
-    }
-}
-```
-
 <h3 id="service_catalog">分类信息</h3>
 
 <h4 id="service_catalog_list_get">查询分类列表信息</h4>
@@ -1026,7 +1001,7 @@ param:
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
 |product_id|int|物品id|无|1|  
-|amount|int|数量|无|123456789984|  
+|amount|int|数量|会在这个商品已有的基础上添加amount个，可以添加负数，最终结果只能为0|123456789984|  
 
 return:  
 
@@ -1099,7 +1074,7 @@ param:
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
 |id|int|id|无|1|    
-|amount|int|数量|无|123456789984|  
+|amount|int|数量|直接修改数量|123456789984|  
 
 return:  
 
@@ -1209,12 +1184,12 @@ orderproduct_set:
             'id':1,
             'create_time':'2018-07-08 12:23:34',
             'update_time':'2018-07-08 12:23:34',
-            'product':
             {
                 'id':1,
                 'create_time':'2018-07-08 12:23:34',
                 'update_time':'2018-07-08 12:23:34',
                 'name':'轮胎',
+                'pic_url':'/asd.hpg',
                 'price':1200,
                 'special_price':1200,
                 'param':'顶配',
@@ -1227,6 +1202,7 @@ orderproduct_set:
                     'p_id':0
                 },
                 'amount':666,
+                'sale':666,
                 'pic_url_list':['/asd.hpg','/fasda.jpg']
             },
             'amount':1,
@@ -1245,7 +1221,7 @@ param:
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
 |address_id|int|地址id|无|1|
-|order_car_list|char(200)|购物车id列表|使用&拼接|1&2&3&4&5&6|
+|order_car_list|char(200)|购物车id列表|使用,拼接|1,2,3,4,5,6|
 
 return:  
 
@@ -1339,6 +1315,7 @@ orderproduct_set:
                 'create_time':'2018-07-08 12:23:34',
                 'update_time':'2018-07-08 12:23:34',
                 'name':'轮胎',
+                'pic_url':'/asd.hpg',
                 'price':1200,
                 'special_price':1200,
                 'param':'顶配',
@@ -1351,6 +1328,7 @@ orderproduct_set:
                     'p_id':0
                 },
                 'amount':666,
+                'sale':666,
                 'pic_url_list':['/asd.hpg','/fasda.jpg']
             },
             'amount':1,
@@ -1869,7 +1847,7 @@ param:
 
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
-|is_finish|bool|是否完成|0表示未完成，1表示已完成|1|  
+|finish|int|是否完成|0表示所有，1表示未完成，2表示已完成|1|  
 
 return:  
 
@@ -1885,7 +1863,6 @@ return:
 |latitude|float|纬度|无|23|  
 |address|char(100)|地址|无|广州天河区|  
 |subscribe_time|datetime|预约时间|无|  
-|pic_url_list|list|图片列表|无|  
 |filter_price|float|过滤格|无|  
 |price|float|价格|无|  
 |discounts|float|优惠卷|无|  
@@ -1936,7 +1913,6 @@ return:
         'latitude':23,
         'address':'广州市越秀区',
         'subscribe_time':'2018-07-08 12:23:34',
-        'pic_url_list':['/asda.jpg'],
         'filter_price':1,
         'price':1,
         'discounts':1,
@@ -2017,7 +1993,6 @@ return:
 |latitude|float|纬度|无|23|  
 |address|char(100)|地址|无|广州天河区|  
 |subscribe_time|datetime|预约时间|无|  
-|pic_url_list|list|图片列表|无|  
 |filter_price|float|过滤格|无|  
 |price|float|价格|无|  
 |discounts|float|优惠卷|无|  
@@ -2068,7 +2043,6 @@ return:
         'latitude':23,
         'address':'广州市越秀区',
         'subscribe_time':'2018-07-08 12:23:34',
-        'pic_url_list':['/asda.jpg'],
         'filter_price':1,
         'price':1,
         'discounts':1,
@@ -2126,7 +2100,7 @@ param:
 |---|---|---|---|---|  
 |id|int|id|无|1|   
 |method|char(20)|操作|pay:付款，comment:评论|comment|  
-|score|int|评分|大于等于0，小于等于5，当method微comment的时候需要|1|  
+|score|int|评分|大于等于0，小于等于5，当method为comment的时候需要|1|  
 
 return:  
 
@@ -2148,7 +2122,7 @@ param:
 
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
-|is_finish|bool|是否完成|0表示未完成，1表示已完成|1|  
+|finish|int|是否完成|0表示所有，1表示未完成，2表示已完成|1|  
 
 return:  
 
@@ -2249,7 +2223,6 @@ param:
 |longitude|float|经度|无|104|  
 |latitude|float|纬度|无|23|  
 |address|char(100)|地址|无|广州天河区|  
-|car_type|char(100)|车型|无|Tx21|   
 |subscribe_time|datetime|预约时间|无|2018-07-08 12:23:34|  
 |content|text|内容|无|修理|  
 |number|int|数量|多少个文件|1|  
@@ -2405,31 +2378,6 @@ return:
 
 
 <h2 id="survey">年检</h2>
-
-<h3 id="survey_img_get">年检首页图片信息</h3>
-
-url:/api/survey/img/  
-method:get  
-param:   
-
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|   
-
-return:  
-
-|参数|类型|说明|备注|  
-|---|---|---|---|  
-|pic1_url|char(100)|图片url|无|  
-|pic2_url|char(100)|图片url|无|  
-
-```
-{
-    'data':{
-        'pic1_url':'/asd.hpg',
-        'pic2_url':'/asd.hpg'
-    }
-}
-```
 
 <h3 id="survey_surveystation">年检站信息</h3>
 
@@ -2969,7 +2917,7 @@ param:
 |latitude|float|纬度|无|23|  
 |surveystation_id|int|年检站id|无|1|  
 |combo_id|int|套餐id|无|1|  
-|comboitem_list|char(100)|套餐选项id|使用&拼接|1&2|  
+|comboitem_list|char(100)|套餐选项id|使用,拼接|1&2|  
 
 return:  
 
@@ -2986,6 +2934,58 @@ return:
     'data':{
         'base_price':1,
         'combo_price':1
+    }
+}
+```
+
+<h2 id="system">系统</h2>
+
+<h3 id="system_serviceimg_get">服务首页图片信息</h3>
+
+url:/api/system/serviceimg/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|  
+|---|---|---|---|---|   
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|pic_url|char(100)|图片url|无|  
+|dir|char(100)|轮播图片列表|无|  
+
+```
+{
+    'data':{
+        'pic_url':'/asd.hpg',
+        'dir':['/asd.hpg']
+    }
+}
+```
+
+<h3 id="survey_img_get">年检首页图片信息</h3>
+
+url:/api/system/surveyimg/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|  
+|---|---|---|---|---|   
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|pic_url|char(100)|图片url|无|  
+|dir|char(100)|轮播图片列表|无|  
+
+```
+{
+    'data':{
+        'pic_url':'/asd.hpg',
+        'dir':['/asd.hpg']
     }
 }
 ```
