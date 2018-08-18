@@ -63,17 +63,17 @@
     * [查询机油列表信息](#maintain_oil_list_get)
     * [查询机油信息](#maintain_oil_get)
   - [保养](#maintain_upkeep)
-    * [*查询保养列表信息](#maintain_upkeep_list_get)
-    * [*生成保养订单信息](#maintain_upkeep_list_post)
-    * [*查询保养信息](#maintain_upkeep_get)
-    * [*删除保养订单信息](#maintain_upkeep_delete)
-    * [*付款、评论保养订单信息](#maintain_upkeep_method_post)
+    * [查询保养列表信息](#maintain_upkeep_list_get)
+    * [生成保养订单信息](#maintain_upkeep_list_post)
+    * [查询保养信息](#maintain_upkeep_get)
+    * [删除保养订单信息](#maintain_upkeep_delete)
+    * [付款、评论保养订单信息](#maintain_upkeep_method_post)
   - [维修](#maintain_maintain)
-    * [*查询维修列表信息](#maintain_maintain_list_get)
-    * [*生成维修订单信息](#maintain_maintain_list_post)
-    * [*查询维修信息](#maintain_maintain_get)
-    * [*删除维修订单信息](#maintain_maintain_delete)
-    * [*付款、评论维修订单信息](#maintain_maintain_method_post)
+    * [查询维修列表信息](#maintain_maintain_list_get)
+    * [生成维修订单信息](#maintain_maintain_list_post)
+    * [查询维修信息](#maintain_maintain_get)
+    * [删除维修订单信息](#maintain_maintain_delete)
+    * [付款、评论维修订单信息](#maintain_maintain_method_post)
  5. [年检](#survey)
   - [年检站信息](#survey_surveystation)
     * [查询年检站列表信息](#survey_surveystation_list_get)
@@ -82,26 +82,26 @@
     * [查询套餐列表信息](#survey_combo_list_get)
     * [查询套餐信息](#survey_combo_get)
   - [年检订单信息](#survey_survey)
-    * [*查询年检订单列表信息](#survey_survey_list_get)
-    * [*提交年检订单信息](#survey_survey_list_post)
-    * [*查询年检订单信息](#survey_survey_get)
+    * [查询年检订单列表信息](#survey_survey_list_get)
+    * [提交年检订单信息](#survey_survey_list_post)
+    * [查询年检订单信息](#survey_survey_get)
     * [*删除年检订单信息](#survey_survey_delete)
-    * [*年检订单操作信息-查询费用、支付、确认还车](#survey_survey_method_post)
+    * [年检订单操作信息-查询费用、支付、确认还车](#survey_survey_method_post)
  6. [系统](#system)
   - [服务首页图片信息](#system_serviceimg_get)
   - [年检首页图片信息](#system_surveyimg_get) 
  7. [司机端](#driver)
   - [订单](#driver_order)
-    * [*查询订单列表信息](#driver_order_list_get)
-    * [*查询订单信息](#driver_order_get)
-    * [*抢单](#driver_order_grab_post)
+    * [查询订单列表信息](#driver_order_list_get)
+    * [查询订单信息](#driver_order_get)
+    * [抢单](#driver_order_grab_post)
     * [*听单](#driver_order_wait_post)
-    * [*取消订单](#driver_order_cancel_post)
-    * [*确认取车](#driver_order_get_post)
-    * [*开始年检](#driver_order_survey_post)
-    * [*年检已过](#driver_order_success_post)
-    * [*年检未过](#driver_order_fail_post)
-    * [*确认换车](#driver_order_return_post)
+    * [取消订单](#driver_order_cancel_post)
+    * [确认取车](#driver_order_get_post)
+    * [开始年检](#driver_order_survey_post)
+    * [年检已过](#driver_order_success_post)
+    * [年检未过](#driver_order_fail_post)
+    * [确认换车](#driver_order_return_post)
   - [账户](#driver_account)
     * [查询明细列表信息](#driver_account_list_get)
     * [查询明细信息](#driver_account_get)
@@ -299,7 +299,7 @@ return:
         'name':'admin',
         'pic':'/alsdfh.jpg',
         'point':'20',
-        'is_pass':'false'
+        'is_pass':false
     }
 }
 ```
@@ -367,7 +367,7 @@ return:
         'engine':'TX21',
         'buy_time':'2018-03-20',
         'mileage':'12',
-        'is_default':'false'
+        'is_default':false
     }]
 }
 ```
@@ -436,7 +436,7 @@ return:
         'engine':'TX21',
         'buy_time':'2018-03-20',
         'mileage':'12',
-        'is_default':'false'
+        'is_default':false
     }
 }
 ```
@@ -1556,7 +1556,7 @@ return:
         'content':'没钱了',
         'pic_url':'asdla.jpg',
         'pic_url_list':['/asd.hpg','/fasda.jpg'],
-        'is_bar':'True'
+        'is_bar':true
     }]
 }
 ```
@@ -1602,7 +1602,7 @@ return:
         'content':'没钱了',
         'pic_url':'asdla.jpg',
         'pic_url_list':['/asd.hpg','/fasda.jpg'],
-        'is_bar':'True'
+        'is_bar':true
     }]
 }
 ```
@@ -1647,7 +1647,7 @@ return:
         'content':'没钱了',
         'pic_url':'asdla.jpg',
         'pic_url_list':['/asd.hpg','/fasda.jpg'],
-        'is_bar':'True'
+        'is_bar':true
     }
 }
 ```
@@ -1918,8 +1918,8 @@ return:
         'discounts':1,
         'now_price':1,
         'state':1,
-        'is_delete':'true',
-        'is_comment':'false',
+        'is_delete':true,
+        'is_comment':false,
         'score':1,
         'order_time':'2018-07-08 12:23:34',
         'pay_time':'2018-07-08 12:23:34',
@@ -2048,8 +2048,8 @@ return:
         'discounts':1,
         'now_price':1,
         'state':1,
-        'is_delete':'true',
-        'is_comment':'false',
+        'is_delete':true,
+        'is_comment':false,
         'score':1,
         'order_time':'2018-07-08 12:23:34',
         'pay_time':'2018-07-08 12:23:34',
@@ -2192,8 +2192,8 @@ return:
         'discounts':1,
         'now_price':1,
         'state':1,
-        'is_delete':'true',
-        'is_comment':'false',
+        'is_delete':true,
+        'is_comment':false,
         'score':1,
         'order_time':'2018-07-08 12:23:34',
         'pay_time':'2018-07-08 12:23:34',
@@ -2317,8 +2317,8 @@ return:
         'discounts':1,
         'now_price':1,
         'state':1,
-        'is_delete':'true',
-        'is_comment':'false',
+        'is_delete':true,
+        'is_comment':false,
         'score':1,
         'order_time':'2018-07-08 12:23:34',
         'pay_time':'2018-07-08 12:23:34',
@@ -2456,7 +2456,7 @@ return:
 
 <h4 id="survey_combo_list_get">查询套餐列表信息</h4>
 
-url:/api/survey/surveycombo/  
+url:/api/survey/combo/  
 method:get  
 param:   
 
@@ -2471,6 +2471,7 @@ return:
 |create_time|datetime|创建时间|无|  
 |update_time|datetime|修改时间|无|  
 |name|char(50)|名称|无|  
+|detail|char(100)|套餐详情|无|  
 |comboitem_set|list|套餐内容|无|
 
 comboitem_set:  
@@ -2491,6 +2492,7 @@ comboitem_set:
         'create_time':'2018-07-08 12:23:34',
         'update_time':'2018-07-08 12:23:34',
         'name':'a套餐',
+        'detail':'不要钱',
         'comboitem_set':[{
             'id':1,
             'create_time':'2018-07-08 12:23:34',
@@ -2504,7 +2506,7 @@ comboitem_set:
 
 <h4 id="survey_combo_get">查询套餐信息</h4>
 
-url:/api/survey/surveycombo/  
+url:/api/survey/combo/  
 method:get  
 param:   
 
@@ -2520,7 +2522,8 @@ return:
 |create_time|datetime|创建时间|无|  
 |update_time|datetime|修改时间|无|  
 |name|char(50)|名称|无|  
-|comboitem_set|list|套餐内容|无|
+|detail|char(100)|套餐详情|无|  
+|comboitem_set|list|套餐内容|无|  
 
 comboitem_set:  
 
@@ -2540,6 +2543,7 @@ comboitem_set:
         'create_time':'2018-07-08 12:23:34',
         'update_time':'2018-07-08 12:23:34',
         'name':'a套餐',
+        'detail':'不要钱',
         'comboitem_set':[{
             'id':1,
             'create_time':'2018-07-08 12:23:34',
@@ -2561,6 +2565,7 @@ param:
 
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
+|finish|int|是否完成|0表示所有，1表示未完成，2表示已完成|1|  
 
 return:  
 
@@ -2570,29 +2575,25 @@ return:
 |create_time|datetime|创建时间|无|  
 |update_time|datetime|修改时间|无|  
 |name|char(20)|联系人|无|  
-|phone|char(20)|联系人电话|无|  
-|pic_IDcard_front_url|char(50)|身份证正面照|无|  
-|pic_IDcard_back_url|char(50)|身份证背面照|无|  
-|pic_drive_back_url|char(50)|行驶证副页照|无|  
+|phone|char(20)|联系人电话|无|   
 |car_name|char(20)|车主姓名|无|  
-|id_card|char(20)|身份证|无|  
 |car_brand|char(20)|品牌型号|无|  
 |car_code|char(20)|车牌|无|  
 |car_type|int|车量类型|0:小型蓝牌，1：七座以下|  
-|use_type|int|使用性质|0:非营利，1:营利|  
 |surveystation|object|年检站|查询年检站信息|  
 |order_longitude|float|交接地点经度|无|  
 |order_latitude|float|交接地点纬度|无|  
 |order_address|char(100)|交接地点|无|  
-|subscribe_time|datetime|预约日期|13点前表示上午，13点后表示下午|  
+|subscribe_time|datetime|预约日期|无|  
+|is_self|bool|是否自驾|无|  
 |combo|object|套餐对象|查看套餐接口|  
-|combo_item_list|list|套餐项列表|查看套餐接口|  
+|surveycomboitem_set|list|套餐项列表|查看套餐接口|  
 |base_price|float|基础费用|无|  
 |combo_price|float|套餐费用|无|  
 |survey_price|float|年检费用|无|  
 |total_price|float|总计费用|无|  
-|state|int|状态|0:已发布，1:已接单，2:已取车，3.到达年检，4.年检结束，5.到达还车，6.已还车，7.已完成，8.已取消|  
-|drive_user_id|int|用户id|无|  
+|state|int|状态|0:已发布，1:已接单，2:已取车，3.到达年检，4.年检结束，5.等待支付，6.到达还车，7.已还车，8.已完成，9.已取消|  
+|drive_user_id|int|接单用户id|无|  
 |order_time|datetime|下单时间|无|  
 |receive_time|datetime|接单时间|无|  
 |get_time|datetime|取车时间|无|  
@@ -2614,11 +2615,11 @@ return:
 |pic_survey_upload2_url|char(50)|年检已过-上传照片2照片url|/url,获取图片|  
 |pic_survey_lamp1_url|char(50)|年检未过-车灯照片1照片url|/url,获取图片|  
 |pic_survey_lamp2_url|char(50)|年检未过-车灯照片2照片url|/url,获取图片|  
-|pic_survey_exhaust1_url|char(50)|年检未过-排气照片2照片url|/url,获取图片|  
+|pic_survey_exhaust1_url|char(50)|年检未过-排气照片1照片url|/url,获取图片|  
 |pic_survey_exhaust2_url|char(50)|年检未过-排气照片2照片url|/url,获取图片|  
-|pic_survey_appearance1_url|char(50)|年检未过-外观照片2照片url|/url,获取图片|  
+|pic_survey_appearance1_url|char(50)|年检未过-外观照片1照片url|/url,获取图片|  
 |pic_survey_appearance2_url|char(50)|年检未过-外观照片2照片url|/url,获取图片|  
-|pic_return_confirm2_url|char(50)|还车图片-检车确认1照片url|/url,获取图片|  
+|pic_return_confirm1_url|char(50)|还车图片-检车确认1照片url|/url,获取图片|  
 |pic_greturn_confirm2_url|char(50)|还车图片-检车确认2照片url|/url,获取图片|  
 |pic_return_car1_url|char(50)|还车图片-车身拍照1照片url|/url,获取图片|  
 |pic_return_car2_url|char(50)|还车图片-车身拍照2照片url|/url,获取图片|  
@@ -2635,15 +2636,10 @@ return:
         'update_time':'2018-07-08 12:23:34',
         'name':'张三',
         'phone':'12345678998',
-        'pic_IDcard_front_url':'/kdhaskdjflhas.jpg',
-        'pic_IDcard_back_url':'/kdhaskdjflhas.jpg',
-        'pic_drive_back_url':'/kdhaskdjflhas.jpg',
         'car_name':'张三',
-        'id_card':'198236817268',
         'car_brand':'玛萨拉蒂',
         'car_code':'粤A23452',
         'car_type':1,
-        'use_type':1,
         'surveystation':{
             'id':1,
             'create_time':'2018-07-08 12:23:34',
@@ -2655,7 +2651,19 @@ return:
         },
         'order_longitude':23,
         'order_latitude':123,
+        'order_address':'广州白云区',
         'subscribe_time':'2018-07-08 12:23:34',
+        'is_self':true,
+        'combo':{
+
+        },
+        'surveycomboitem_set':[{
+            'id':1,
+            'create_time':'2018-07-08 12:23:34',
+            'update_time':'2018-07-08 12:23:34',
+            'name':'轮胎',
+            'price':200
+        }],
         'base_price':1,
         'combo_price':1,
         'survey_price':1,
@@ -2709,21 +2717,18 @@ param:
 |---|---|---|---|---|  
 |name|char(20)|联系人|无|张三|  
 |phone|char(20)|联系人电话|无|12345678998|  
-|pic_IDcard_front_url|char(50)|身份证正面照|无|(文件流)|  
-|pic_IDcard_back_url|char(50)|身份证背面照|无|(文件流)|  
-|pic_drive_back_url|char(50)|行驶证副页照|无|(文件流)|  
 |car_name|char(20)|车主姓名|无|张三|  
-|id_card|char(20)|身份证|无|198236817268|  
 |car_brand|char(20)|品牌型号|无|玛萨拉蒂|  
 |car_code|char(20)|车牌|无|粤A23452|  
 |car_type|int|车量类型|0:小型蓝牌，1：七座以下|  
-|use_type|int|使用性质|0:非营利，1:营利|1|  
 |surveystation_id|int|年检站id|无|1|  
 |order_longitude|float|交接地点经度|无|233|  
 |order_latitude|float|交接地点纬度|无|322|  
+|order_address|char(100)|交接地点|无|广州白云区|  
 |subscribe_time|datetime|预约日期|13点前表示上午，13点后表示下午|2018-07-08 12:23:34|  
+|is_self|bool|是否自驾|无|false|  
 |combo_id|int|套餐id|无|1|  
-|comboitem_list|char(100)|套餐选项id|使用&拼接|1,2|  
+|comboitem_list|char(100)|套餐选项id|使用,拼接|1,2|  
 
 return:  
 
@@ -2754,29 +2759,25 @@ return:
 |create_time|datetime|创建时间|无|  
 |update_time|datetime|修改时间|无|  
 |name|char(20)|联系人|无|  
-|phone|char(20)|联系人电话|无|  
-|pic_IDcard_front_url|char(50)|身份证正面照|无|  
-|pic_IDcard_back_url|char(50)|身份证背面照|无|  
-|pic_drive_back_url|char(50)|行驶证副页照|无|  
+|phone|char(20)|联系人电话|无|   
 |car_name|char(20)|车主姓名|无|  
-|id_card|char(20)|身份证|无|  
 |car_brand|char(20)|品牌型号|无|  
 |car_code|char(20)|车牌|无|  
 |car_type|int|车量类型|0:小型蓝牌，1：七座以下|  
-|use_type|int|使用性质|0:非营利，1:营利|  
 |surveystation|object|年检站|查询年检站信息|  
 |order_longitude|float|交接地点经度|无|  
 |order_latitude|float|交接地点纬度|无|  
 |order_address|char(100)|交接地点|无|  
-|subscribe_time|datetime|预约日期|13点前表示上午，13点后表示下午|  
+|subscribe_time|datetime|预约日期|无|  
+|is_self|bool|是否自驾|无|  
 |combo|object|套餐对象|查看套餐接口|  
-|combo_item_list|list|套餐项列表|查看套餐接口|  
+|surveycomboitem_set|list|套餐项列表|查看套餐接口|  
 |base_price|float|基础费用|无|  
 |combo_price|float|套餐费用|无|  
 |survey_price|float|年检费用|无|  
 |total_price|float|总计费用|无|  
-|state|int|状态|0:已发布，1:已接单，2:已取车，3.到达年检，4.年检结束，5.到达还车，6.已还车，7.已完成，8.已取消|  
-|drive_user_id|int|用户id|无|  
+|state|int|状态|0:已发布，1:已接单，2:已取车，3.到达年检，4.年检结束，5.等待支付，6.到达还车，7.已还车，8.已完成，9.已取消|  
+|drive_user_id|int|接单用户id|无|  
 |order_time|datetime|下单时间|无|  
 |receive_time|datetime|接单时间|无|  
 |get_time|datetime|取车时间|无|  
@@ -2798,9 +2799,9 @@ return:
 |pic_survey_upload2_url|char(50)|年检已过-上传照片2照片url|/url,获取图片|  
 |pic_survey_lamp1_url|char(50)|年检未过-车灯照片1照片url|/url,获取图片|  
 |pic_survey_lamp2_url|char(50)|年检未过-车灯照片2照片url|/url,获取图片|  
-|pic_survey_exhaust1_url|char(50)|年检未过-排气照片2照片url|/url,获取图片|  
+|pic_survey_exhaust1_url|char(50)|年检未过-排气照片1照片url|/url,获取图片|  
 |pic_survey_exhaust2_url|char(50)|年检未过-排气照片2照片url|/url,获取图片|  
-|pic_survey_appearance1_url|char(50)|年检未过-外观照片2照片url|/url,获取图片|  
+|pic_survey_appearance1_url|char(50)|年检未过-外观照片1照片url|/url,获取图片|  
 |pic_survey_appearance2_url|char(50)|年检未过-外观照片2照片url|/url,获取图片|  
 |pic_return_confirm2_url|char(50)|还车图片-检车确认1照片url|/url,获取图片|  
 |pic_greturn_confirm2_url|char(50)|还车图片-检车确认2照片url|/url,获取图片|  
@@ -2819,15 +2820,10 @@ return:
         'update_time':'2018-07-08 12:23:34',
         'name':'张三',
         'phone':'12345678998',
-        'pic_IDcard_front_url':'/kdhaskdjflhas.jpg',
-        'pic_IDcard_back_url':'/kdhaskdjflhas.jpg',
-        'pic_drive_back_url':'/kdhaskdjflhas.jpg',
         'car_name':'张三',
-        'id_card':'198236817268',
         'car_brand':'玛萨拉蒂',
         'car_code':'粤A23452',
         'car_type':1,
-        'use_type':1,
         'surveystation':{
             'id':1,
             'create_time':'2018-07-08 12:23:34',
@@ -2839,7 +2835,19 @@ return:
         },
         'order_longitude':23,
         'order_latitude':123,
+        'order_address':'广州白云区',
         'subscribe_time':'2018-07-08 12:23:34',
+        'is_self':true,
+        'combo':{
+
+        },
+        'surveycomboitem_set':[{
+            'id':1,
+            'create_time':'2018-07-08 12:23:34',
+            'update_time':'2018-07-08 12:23:34',
+            'name':'轮胎',
+            'price':200
+        }],
         'base_price':1,
         'combo_price':1,
         'survey_price':1,
@@ -2917,7 +2925,7 @@ param:
 |latitude|float|纬度|无|23|  
 |surveystation_id|int|年检站id|无|1|  
 |combo_id|int|套餐id|无|1|  
-|comboitem_list|char(100)|套餐选项id|使用,拼接|1&2|  
+|comboitem_list|char(100)|套餐选项id|使用,拼接|1,2|  
 
 return:  
 
@@ -3011,29 +3019,25 @@ return:
 |create_time|datetime|创建时间|无|  
 |update_time|datetime|修改时间|无|  
 |name|char(20)|联系人|无|  
-|phone|char(20)|联系人电话|无|  
-|pic_IDcard_front_url|char(50)|身份证正面照|无|  
-|pic_IDcard_back_url|char(50)|身份证背面照|无|  
-|pic_drive_back_url|char(50)|行驶证副页照|无|  
+|phone|char(20)|联系人电话|无|   
 |car_name|char(20)|车主姓名|无|  
-|id_card|char(20)|身份证|无|  
 |car_brand|char(20)|品牌型号|无|  
 |car_code|char(20)|车牌|无|  
 |car_type|int|车量类型|0:小型蓝牌，1：七座以下|  
-|use_type|int|使用性质|0:非营利，1:营利|  
 |surveystation|object|年检站|查询年检站信息|  
 |order_longitude|float|交接地点经度|无|  
 |order_latitude|float|交接地点纬度|无|  
 |order_address|char(100)|交接地点|无|  
-|subscribe_time|datetime|预约日期|13点前表示上午，13点后表示下午|  
+|subscribe_time|datetime|预约日期|无|  
+|is_self|bool|是否自驾|无|  
 |combo|object|套餐对象|查看套餐接口|  
-|combo_item_list|list|套餐项列表|查看套餐接口|  
+|surveycomboitem_set|list|套餐项列表|查看套餐接口|  
 |base_price|float|基础费用|无|  
 |combo_price|float|套餐费用|无|  
 |survey_price|float|年检费用|无|  
 |total_price|float|总计费用|无|  
 |state|int|状态|0:已发布，1:已接单，2:已取车，3.到达年检，4.年检结束，5.到达还车，6.已还车，7.已完成，8.已取消|  
-|drive_user_id|int|用户id|无|  
+|drive_user_id|int|接单用户id|无|  
 |order_time|datetime|下单时间|无|  
 |receive_time|datetime|接单时间|无|  
 |get_time|datetime|取车时间|无|  
@@ -3055,9 +3059,9 @@ return:
 |pic_survey_upload2_url|char(50)|年检已过-上传照片2照片url|/url,获取图片|  
 |pic_survey_lamp1_url|char(50)|年检未过-车灯照片1照片url|/url,获取图片|  
 |pic_survey_lamp2_url|char(50)|年检未过-车灯照片2照片url|/url,获取图片|  
-|pic_survey_exhaust1_url|char(50)|年检未过-排气照片2照片url|/url,获取图片|  
+|pic_survey_exhaust1_url|char(50)|年检未过-排气照片1照片url|/url,获取图片|  
 |pic_survey_exhaust2_url|char(50)|年检未过-排气照片2照片url|/url,获取图片|  
-|pic_survey_appearance1_url|char(50)|年检未过-外观照片2照片url|/url,获取图片|  
+|pic_survey_appearance1_url|char(50)|年检未过-外观照片1照片url|/url,获取图片|  
 |pic_survey_appearance2_url|char(50)|年检未过-外观照片2照片url|/url,获取图片|  
 |pic_return_confirm2_url|char(50)|还车图片-检车确认1照片url|/url,获取图片|  
 |pic_greturn_confirm2_url|char(50)|还车图片-检车确认2照片url|/url,获取图片|  
@@ -3076,15 +3080,10 @@ return:
         'update_time':'2018-07-08 12:23:34',
         'name':'张三',
         'phone':'12345678998',
-        'pic_IDcard_front_url':'/kdhaskdjflhas.jpg',
-        'pic_IDcard_back_url':'/kdhaskdjflhas.jpg',
-        'pic_drive_back_url':'/kdhaskdjflhas.jpg',
         'car_name':'张三',
-        'id_card':'198236817268',
         'car_brand':'玛萨拉蒂',
         'car_code':'粤A23452',
         'car_type':1,
-        'use_type':1,
         'surveystation':{
             'id':1,
             'create_time':'2018-07-08 12:23:34',
@@ -3096,7 +3095,19 @@ return:
         },
         'order_longitude':23,
         'order_latitude':123,
+        'order_address':'广州白云区',
         'subscribe_time':'2018-07-08 12:23:34',
+        'is_self':true,
+        'combo':{
+
+        },
+        'surveycomboitem_set':[{
+            'id':1,
+            'create_time':'2018-07-08 12:23:34',
+            'update_time':'2018-07-08 12:23:34',
+            'name':'轮胎',
+            'price':200
+        }],
         'base_price':1,
         'combo_price':1,
         'survey_price':1,
@@ -3157,29 +3168,25 @@ return:
 |create_time|datetime|创建时间|无|  
 |update_time|datetime|修改时间|无|  
 |name|char(20)|联系人|无|  
-|phone|char(20)|联系人电话|无|  
-|pic_IDcard_front_url|char(50)|身份证正面照|无|  
-|pic_IDcard_back_url|char(50)|身份证背面照|无|  
-|pic_drive_back_url|char(50)|行驶证副页照|无|  
+|phone|char(20)|联系人电话|无|   
 |car_name|char(20)|车主姓名|无|  
-|id_card|char(20)|身份证|无|  
 |car_brand|char(20)|品牌型号|无|  
 |car_code|char(20)|车牌|无|  
 |car_type|int|车量类型|0:小型蓝牌，1：七座以下|  
-|use_type|int|使用性质|0:非营利，1:营利|  
 |surveystation|object|年检站|查询年检站信息|  
 |order_longitude|float|交接地点经度|无|  
 |order_latitude|float|交接地点纬度|无|  
 |order_address|char(100)|交接地点|无|  
-|subscribe_time|datetime|预约日期|13点前表示上午，13点后表示下午|  
+|subscribe_time|datetime|预约日期|无|  
+|is_self|bool|是否自驾|无|  
 |combo|object|套餐对象|查看套餐接口|  
-|combo_item_list|list|套餐项列表|查看套餐接口|  
+|surveycomboitem_set|list|套餐项列表|查看套餐接口|  
 |base_price|float|基础费用|无|  
 |combo_price|float|套餐费用|无|  
 |survey_price|float|年检费用|无|  
 |total_price|float|总计费用|无|  
 |state|int|状态|0:已发布，1:已接单，2:已取车，3.到达年检，4.年检结束，5.到达还车，6.已还车，7.已完成，8.已取消|  
-|drive_user_id|int|用户id|无|  
+|drive_user_id|int|接单用户id|无|  
 |order_time|datetime|下单时间|无|  
 |receive_time|datetime|接单时间|无|  
 |get_time|datetime|取车时间|无|  
@@ -3201,9 +3208,9 @@ return:
 |pic_survey_upload2_url|char(50)|年检已过-上传照片2照片url|/url,获取图片|  
 |pic_survey_lamp1_url|char(50)|年检未过-车灯照片1照片url|/url,获取图片|  
 |pic_survey_lamp2_url|char(50)|年检未过-车灯照片2照片url|/url,获取图片|  
-|pic_survey_exhaust1_url|char(50)|年检未过-排气照片2照片url|/url,获取图片|  
+|pic_survey_exhaust1_url|char(50)|年检未过-排气照片1照片url|/url,获取图片|  
 |pic_survey_exhaust2_url|char(50)|年检未过-排气照片2照片url|/url,获取图片|  
-|pic_survey_appearance1_url|char(50)|年检未过-外观照片2照片url|/url,获取图片|  
+|pic_survey_appearance1_url|char(50)|年检未过-外观照片1照片url|/url,获取图片|  
 |pic_survey_appearance2_url|char(50)|年检未过-外观照片2照片url|/url,获取图片|  
 |pic_return_confirm2_url|char(50)|还车图片-检车确认1照片url|/url,获取图片|  
 |pic_greturn_confirm2_url|char(50)|还车图片-检车确认2照片url|/url,获取图片|  
@@ -3222,15 +3229,10 @@ return:
         'update_time':'2018-07-08 12:23:34',
         'name':'张三',
         'phone':'12345678998',
-        'pic_IDcard_front_url':'/kdhaskdjflhas.jpg',
-        'pic_IDcard_back_url':'/kdhaskdjflhas.jpg',
-        'pic_drive_back_url':'/kdhaskdjflhas.jpg',
         'car_name':'张三',
-        'id_card':'198236817268',
         'car_brand':'玛萨拉蒂',
         'car_code':'粤A23452',
         'car_type':1,
-        'use_type':1,
         'surveystation':{
             'id':1,
             'create_time':'2018-07-08 12:23:34',
@@ -3242,7 +3244,19 @@ return:
         },
         'order_longitude':23,
         'order_latitude':123,
+        'order_address':'广州白云区',
         'subscribe_time':'2018-07-08 12:23:34',
+        'is_self':true,
+        'combo':{
+
+        },
+        'surveycomboitem_set':[{
+            'id':1,
+            'create_time':'2018-07-08 12:23:34',
+            'update_time':'2018-07-08 12:23:34',
+            'name':'轮胎',
+            'price':200
+        }],
         'base_price':1,
         'combo_price':1,
         'survey_price':1,
@@ -3481,8 +3495,10 @@ return:
 |order_time|datetime|时间|无|  
 |start_address|char(100)|出发地点|无|  
 |end_address|char(100)|到达地点|无|  
-|method|char(100)|行为|0：支出，1：收入|  
+|method|char(100)|行为|0：提现，1：收入|  
+|via|char(100)|提现途径|alipay,weixin|  
 |cost|float|费用|无|  
+|survey|objects|年检订单|查看年检信息,如果是提现的话，这里为空|
 
 ```
 {
@@ -3495,7 +3511,9 @@ return:
         'start_address':'广州白玉区',
         'end_address':'广州天河区',
         'method':1,
-        'cost':123
+        'via':'',
+        'cost':123,
+        'survey':{}
     }]
 }
 ```
@@ -3520,8 +3538,10 @@ return:
 |order_time|datetime|时间|无|  
 |start_address|char(100)|出发地点|无|  
 |end_address|char(100)|到达地点|无|  
-|method|char(100)|行为|0：支出，1：收入|  
+|method|char(100)|行为|0：提现，1：收入|  
+|via|char(100)|提现途径|alipay,weixin|  
 |cost|float|费用|无|  
+|survey|objects|年检订单|查看年检信息,如果是提现的话，这里为空|  
 
 ```
 {
@@ -3534,7 +3554,9 @@ return:
         'start_address':'广州白玉区',
         'end_address':'广州天河区',
         'method':1,
-        'cost':123
+        'via':'',
+        'cost':123,
+        'survey':{}
     }
 }
 ```
@@ -3549,6 +3571,7 @@ param:
 |---|---|---|---|---|  
 |id|int|id|无|1|  
 |money|float|提现金额|无|1|  
+|via|char(100)|体现途径|alipay,weixin|weixin|  
 
 return:  
 
