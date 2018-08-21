@@ -221,13 +221,13 @@ return:
 |---|---|---|---|  
 |user_id|int|用户id|无|  
 |token|char(50)|凭证|无|  
-|expire|int|有效时间|单位：秒|  
+|expire|datetime|有效时间|无|  
 ```
 {
     'data':{
         'user_id':'1'
         'token':'sjkdhasjkhf123jga',
-        'expire':1800
+        'expire':'2018-07-08 12:23:34'
     }
 }
 ```
@@ -256,13 +256,13 @@ return:
 |---|---|---|---|  
 |user_id|int|用户id|无|  
 |token|char(50)|凭证|无|  
-|expire|int|有效时间|单位：秒|  
+|expire|datetime|有效时间|无|  
 ```
 {
     'data':{
         'user_id':'1'
         'token':'sjkdhasjkhf123jga',
-        'expire':1800
+        'expire':'2018-07-08 12:23:34'
     }
 }
 ```
@@ -1117,6 +1117,7 @@ param:
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
 |status|int|状态|-1:全部，0:待付款，1:待发货，2:待收货，3:已完成|1|  
+|is_comment|bool|是否评论|无|true|  
 
 return:  
 
@@ -1338,7 +1339,7 @@ orderproduct_set:
 }
 ```
 
-<h4 id="service_order_method_post">付款、完成订单信息</h4>
+<h4 id="service_order_method_post">付款、完成、评论订单信息</h4>
 
 url:/api/service/order_method/  
 method:post  
@@ -1347,7 +1348,7 @@ param:
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
 |id|int|id|无|1|   
-|method|char(20)|操作|pay:付款，comment:评论|pay|  
+|method|char(20)|操作|pay:付款，finish：完成，comment:评论|pay|  
 |score|int|评分|大于等于0，小于等于5，当method为comment的时候需要|1|  
 
 return:  
@@ -2401,6 +2402,7 @@ return:
 |longitude|float|经度|无|  
 |latitude|float|纬度|无|  
 |address|char(100)|地址|无|  
+|price|float|价格|无|  
 ```
 {
     'data':
@@ -2411,7 +2413,8 @@ return:
         'name':'张三年检站',
         'longitude':223,
         'latitude':322,
-        'address':'广州越秀区'
+        'address':'广州越秀区',
+        'price':1
     }]
 }
 ```
@@ -2437,6 +2440,7 @@ return:
 |longitude|float|经度|无|  
 |latitude|float|纬度|无|  
 |address|char(100)|地址|无|  
+|price|float|价格|无|  
 ```
 {
     'data':
@@ -2447,7 +2451,8 @@ return:
         'name':'张三年检站',
         'longitude':223,
         'latitude':322,
-        'address':'广州越秀区'
+        'address':'广州越秀区',
+        'price':1
     }
 }
 ```
@@ -2567,6 +2572,14 @@ param:
 |---|---|---|---|---|  
 |finish|int|是否完成|0表示所有，1表示未完成，2表示已完成|1|  
 
+'''
+代驾取车：0:已发布，1:已接单，2:已取车
+开始年检：3.到达年检，4.年检结束，5.等待支付，
+检完还车：6.到达还车，7.已还车，8.已完成
+代驾：0-1-2-3-4-5-6-7-8
+自驾：3-5-8
+'''
+
 return:  
 
 |参数|类型|说明|备注|  
@@ -2593,6 +2606,7 @@ return:
 |survey_price|float|年检费用|无|  
 |total_price|float|总计费用|无|  
 |state|int|状态|0:已发布，1:已接单，2:已取车，3.到达年检，4.年检结束，5.等待支付，6.到达还车，7.已还车，8.已完成，9.已取消|  
+|is_success|bool|年检是否成功|无|  
 |drive_user_id|int|接单用户id|无|  
 |order_time|datetime|下单时间|无|  
 |receive_time|datetime|接单时间|无|  
@@ -2647,7 +2661,8 @@ return:
             'name':'张三年检站',
             'longitude':223,
             'latitude':322,
-            'address':'广州越秀区'
+            'address':'广州越秀区',
+            'price':1
         },
         'order_longitude':23,
         'order_latitude':123,
@@ -2669,6 +2684,7 @@ return:
         'survey_price':1,
         'total_price':1,
         'state':1,
+        'is_success':true,
         'drive_user_id':1,
         'order_time':'2018-07-08 12:23:34',
         'receive_time':'2018-07-08 12:23:34',
@@ -2777,6 +2793,7 @@ return:
 |survey_price|float|年检费用|无|  
 |total_price|float|总计费用|无|  
 |state|int|状态|0:已发布，1:已接单，2:已取车，3.到达年检，4.年检结束，5.等待支付，6.到达还车，7.已还车，8.已完成，9.已取消|  
+|is_success|bool|年检是否成功|无|  
 |drive_user_id|int|接单用户id|无|  
 |order_time|datetime|下单时间|无|  
 |receive_time|datetime|接单时间|无|  
@@ -2831,7 +2848,8 @@ return:
             'name':'张三年检站',
             'longitude':223,
             'latitude':322,
-            'address':'广州越秀区'
+            'address':'广州越秀区',
+            'price':1
         },
         'order_longitude':23,
         'order_latitude':123,
@@ -2853,6 +2871,7 @@ return:
         'survey_price':1,
         'total_price':1,
         'state':1,
+        'is_success':true,
         'drive_user_id':1,
         'order_time':'2018-07-08 12:23:34',
         'receive_time':'2018-07-08 12:23:34',
@@ -2911,7 +2930,7 @@ return:
 }
 ```
 
-<h4 id="survey_survey_method_post">年检订单操作信息-查询费用、支付、确认还车</h4>
+<h4 id="survey_survey_method_post">年检订单操作信息-查询费用、支付、确认还车、自驾完成</h4>
 
 url:/api/survey/survey_method/  
 method:post  
@@ -2919,8 +2938,8 @@ param:
 
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
-|id|int|id|无|1|   
-|method|char(20)|操作|get:查询费用，pay:支付，return:确认还车|get|  
+|id|int|id|查询费用不需要添加id|1|   
+|method|char(20)|操作|get:查询费用，pay:支付（自驾代驾），return:确认还车（代驾），survey：到达年检（自驾）|get|  
 |longitude|float|经度|无|123|  
 |latitude|float|纬度|无|23|  
 |surveystation_id|int|年检站id|无|1|  
@@ -2931,16 +2950,23 @@ return:
 
 ```
 如果是查询费用，data里面才会有结构返回
+1.参数中有年检站参数，会计算年检费用
+2.存在年检站参数、经纬度、套餐id，会计算基础费用
+3.存在套餐id、套餐项id列表，会计算套餐费用
 ```
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
-|surveystation_id|float|基础费用|无|
-|surveystation_id|float|套餐费用|无|
+|base_price|float|基础费用|无|  
+|combo_price|float|套餐费用|无|  
+|survey_price|float|年检费用|无|  
+|total_price|float|总计费用|无|  
 ```
 {
     'data':{
         'base_price':1,
+        'combo_price':1
+        'survey_price':1
         'combo_price':1
     }
 }
@@ -2962,13 +2988,13 @@ return:
 |参数|类型|说明|备注|  
 |---|---|---|---|  
 |pic_url|char(100)|图片url|无|  
-|dir|char(100)|轮播图片列表|无|  
+|pic_url_list|char(100)|轮播图片列表|无|  
 
 ```
 {
     'data':{
         'pic_url':'/asd.hpg',
-        'dir':['/asd.hpg']
+        'pic_url_list':['/asd.hpg']
     }
 }
 ```
@@ -2987,13 +3013,13 @@ return:
 |参数|类型|说明|备注|  
 |---|---|---|---|  
 |pic_url|char(100)|图片url|无|  
-|dir|char(100)|轮播图片列表|无|  
+|pic_url_list|char(100)|轮播图片列表|无|  
 
 ```
 {
     'data':{
         'pic_url':'/asd.hpg',
-        'dir':['/asd.hpg']
+        'pic_url_list':['/asd.hpg']
     }
 }
 ```
@@ -3010,6 +3036,7 @@ param:
 
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
+|type|char(100)|类型|order：可以接的单，driver：已接订单|  
 
 return:  
 
@@ -3037,6 +3064,7 @@ return:
 |survey_price|float|年检费用|无|  
 |total_price|float|总计费用|无|  
 |state|int|状态|0:已发布，1:已接单，2:已取车，3.到达年检，4.年检结束，5.到达还车，6.已还车，7.已完成，8.已取消|  
+|is_success|bool|年检是否成功|无|  
 |drive_user_id|int|接单用户id|无|  
 |order_time|datetime|下单时间|无|  
 |receive_time|datetime|接单时间|无|  
@@ -3091,7 +3119,8 @@ return:
             'name':'张三年检站',
             'longitude':223,
             'latitude':322,
-            'address':'广州越秀区'
+            'address':'广州越秀区',
+            'price':1
         },
         'order_longitude':23,
         'order_latitude':123,
@@ -3113,6 +3142,7 @@ return:
         'survey_price':1,
         'total_price':1,
         'state':1,
+        'is_success':true,
         'drive_user_id':1,
         'order_time':'2018-07-08 12:23:34',
         'receive_time':'2018-07-08 12:23:34',
@@ -3186,6 +3216,7 @@ return:
 |survey_price|float|年检费用|无|  
 |total_price|float|总计费用|无|  
 |state|int|状态|0:已发布，1:已接单，2:已取车，3.到达年检，4.年检结束，5.到达还车，6.已还车，7.已完成，8.已取消|  
+|is_success|bool|年检是否成功|无|  
 |drive_user_id|int|接单用户id|无|  
 |order_time|datetime|下单时间|无|  
 |receive_time|datetime|接单时间|无|  
@@ -3240,7 +3271,8 @@ return:
             'name':'张三年检站',
             'longitude':223,
             'latitude':322,
-            'address':'广州越秀区'
+            'address':'广州越秀区',
+            'price':1
         },
         'order_longitude':23,
         'order_latitude':123,
@@ -3262,6 +3294,7 @@ return:
         'survey_price':1,
         'total_price':1,
         'state':1,
+        'is_success':true,
         'drive_user_id':1,
         'order_time':'2018-07-08 12:23:34',
         'receive_time':'2018-07-08 12:23:34',
