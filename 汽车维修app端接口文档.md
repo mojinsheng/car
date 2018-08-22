@@ -44,7 +44,7 @@
     * [生成订单](#service_order_list_post)
     * [查询订单信息](#service_order_get)
     * [删除订单信息](#service_order_delete)
-    * [付款、完成订单信息](#service_order_method_post)
+    * [付款、完成、评论订单信息](#service_order_method_post)
   - [违章记录信息](#service_rules)
     * [查询违章记录列表信息](#service_rules_list_get)
     * [查询违章记录信息](#service_rules_get)
@@ -74,6 +74,7 @@
     * [查询维修信息](#maintain_maintain_get)
     * [删除维修订单信息](#maintain_maintain_delete)
     * [付款、评论维修订单信息](#maintain_maintain_method_post)
+  - [保养、维修订单列表信息](#maintain_list_get)  
  5. [年检](#survey)
   - [年检站信息](#survey_surveystation)
     * [查询年检站列表信息](#survey_surveystation_list_get)
@@ -2377,6 +2378,27 @@ return:
 }
 ```
 
+<h3 id="maintain_list_get">保养、维修订单列表信息</h3>
+
+url:/api/maintain/list/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|  
+|---|---|---|---|---|  
+|status|int|状态|-1:全部，0:未支付，1:等待服务，2:服务中，3:已完成|1|  
+|is_comment|bool|是否评论|无|true|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+```
+{
+    'data':{}
+}
+```
+
 
 <h2 id="survey">年检</h2>
 
@@ -2573,11 +2595,11 @@ param:
 |finish|int|是否完成|0表示所有，1表示未完成，2表示已完成|1|  
 
 '''
-代驾取车：0:已发布，1:已接单，2:已取车
-开始年检：3.到达年检，4.年检结束，5.等待支付，
+代驾取车：0:等待支付，1:等待接单，2:等待取车
+开始年检：3.等待年检，4.正在年检，5.年检结束，
 检完还车：6.到达还车，7.已还车，8.已完成
 代驾：0-1-2-3-4-5-6-7-8
-自驾：3-5-8
+自驾：0-3-8
 '''
 
 return:  
@@ -2592,7 +2614,7 @@ return:
 |car_name|char(20)|车主姓名|无|  
 |car_brand|char(20)|品牌型号|无|  
 |car_code|char(20)|车牌|无|  
-|car_type|int|车量类型|0:小型蓝牌，1：七座以下|  
+|car_type|char(100)|车量类型|小型蓝牌，七座以下|  
 |surveystation|object|年检站|查询年检站信息|  
 |order_longitude|float|交接地点经度|无|  
 |order_latitude|float|交接地点纬度|无|  
@@ -2605,7 +2627,7 @@ return:
 |combo_price|float|套餐费用|无|  
 |survey_price|float|年检费用|无|  
 |total_price|float|总计费用|无|  
-|state|int|状态|0:已发布，1:已接单，2:已取车，3.到达年检，4.年检结束，5.等待支付，6.到达还车，7.已还车，8.已完成，9.已取消|  
+|state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检结束，6.到达还车，7.已还车，8.已完成，9.已取消|  
 |is_success|bool|年检是否成功|无|  
 |drive_user_id|int|接单用户id|无|  
 |order_time|datetime|下单时间|无|  
@@ -2653,7 +2675,7 @@ return:
         'car_name':'张三',
         'car_brand':'玛萨拉蒂',
         'car_code':'粤A23452',
-        'car_type':1,
+        'car_type':'小型蓝牌',
         'surveystation':{
             'id':1,
             'create_time':'2018-07-08 12:23:34',
@@ -2736,7 +2758,7 @@ param:
 |car_name|char(20)|车主姓名|无|张三|  
 |car_brand|char(20)|品牌型号|无|玛萨拉蒂|  
 |car_code|char(20)|车牌|无|粤A23452|  
-|car_type|int|车量类型|0:小型蓝牌，1：七座以下|  
+|car_type|char(100)|车量类型|小型蓝牌，七座以下|  
 |surveystation_id|int|年检站id|无|1|  
 |order_longitude|float|交接地点经度|无|233|  
 |order_latitude|float|交接地点纬度|无|322|  
@@ -2779,7 +2801,7 @@ return:
 |car_name|char(20)|车主姓名|无|  
 |car_brand|char(20)|品牌型号|无|  
 |car_code|char(20)|车牌|无|  
-|car_type|int|车量类型|0:小型蓝牌，1：七座以下|  
+|car_type|char(100)|车量类型|小型蓝牌，七座以下|  
 |surveystation|object|年检站|查询年检站信息|  
 |order_longitude|float|交接地点经度|无|  
 |order_latitude|float|交接地点纬度|无|  
@@ -2792,7 +2814,7 @@ return:
 |combo_price|float|套餐费用|无|  
 |survey_price|float|年检费用|无|  
 |total_price|float|总计费用|无|  
-|state|int|状态|0:已发布，1:已接单，2:已取车，3.到达年检，4.年检结束，5.等待支付，6.到达还车，7.已还车，8.已完成，9.已取消|  
+|state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检结束，6.到达还车，7.已还车，8.已完成，9.已取消|  
 |is_success|bool|年检是否成功|无|  
 |drive_user_id|int|接单用户id|无|  
 |order_time|datetime|下单时间|无|  
@@ -2840,7 +2862,7 @@ return:
         'car_name':'张三',
         'car_brand':'玛萨拉蒂',
         'car_code':'粤A23452',
-        'car_type':1,
+        'car_type':'小型蓝牌',
         'surveystation':{
             'id':1,
             'create_time':'2018-07-08 12:23:34',
@@ -3063,7 +3085,7 @@ return:
 |combo_price|float|套餐费用|无|  
 |survey_price|float|年检费用|无|  
 |total_price|float|总计费用|无|  
-|state|int|状态|0:已发布，1:已接单，2:已取车，3.到达年检，4.年检结束，5.到达还车，6.已还车，7.已完成，8.已取消|  
+|state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检结束，6.到达还车，7.已还车，8.已完成，9.已取消|  
 |is_success|bool|年检是否成功|无|  
 |drive_user_id|int|接单用户id|无|  
 |order_time|datetime|下单时间|无|  
@@ -3111,7 +3133,7 @@ return:
         'car_name':'张三',
         'car_brand':'玛萨拉蒂',
         'car_code':'粤A23452',
-        'car_type':1,
+        'car_type':'小型蓝牌',
         'surveystation':{
             'id':1,
             'create_time':'2018-07-08 12:23:34',
@@ -3215,7 +3237,7 @@ return:
 |combo_price|float|套餐费用|无|  
 |survey_price|float|年检费用|无|  
 |total_price|float|总计费用|无|  
-|state|int|状态|0:已发布，1:已接单，2:已取车，3.到达年检，4.年检结束，5.到达还车，6.已还车，7.已完成，8.已取消|  
+|state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检结束，6.到达还车，7.已还车，8.已完成，9.已取消|  
 |is_success|bool|年检是否成功|无|  
 |drive_user_id|int|接单用户id|无|  
 |order_time|datetime|下单时间|无|  
@@ -3263,7 +3285,7 @@ return:
         'car_name':'张三',
         'car_brand':'玛萨拉蒂',
         'car_code':'粤A23452',
-        'car_type':1,
+        'car_type':'小型蓝牌',
         'surveystation':{
             'id':1,
             'create_time':'2018-07-08 12:23:34',
