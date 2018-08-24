@@ -3,13 +3,12 @@
  1. [登陆验证机制](#login)
  - [用户注册](#login_register)
  - [司机端用户注册](#login_register_driver)
+ - [用户重置密码](#login_reset)
+ - [司机端重置密码](#login_reset_driver)
+ - [用户发短信](#login_message)
  - [登陆](#login_login)
- - [*发送用户登陆验证短信](#login_message_get)
- - [*用户短信登陆（自带注册）](#login_message_post)
- - [*发送司机登陆验证短信](#login_message_driver_get)
- - [*司机短信登陆（自带注册）](#login_message_driver_post)
  - [刷新token](#login_refresh)
- 2. [个人中心](#user)
+ 1. [个人中心](#user)
   - [用户信息](#user_user)
     * [查询自身信息](#user_user_get)
     * [修改自身信息](#user_user_put)
@@ -171,7 +170,7 @@ param:
 |---|---|---|---|---|  
 |phone|char(20)|电话号码|作为账号|12345678998|  
 |password|char(20)|密码|6-20，字母、数字、符号|123456789qwer|  
-|name|char(20)|昵称|无|张三|  
+|message|char(10)|短信验证码|6位数字|123456|  
 
 return:  
 
@@ -193,7 +192,72 @@ param:
 |---|---|---|---|---|  
 |phone|char(20)|电话号码|作为账号|12345678998|  
 |password|char(20)|密码|6-20，字母、数字、符号|123456789qwer|  
-|name|char(20)|昵称|无|张三|  
+|message|char(10)|短信验证码|6位数字|123456|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+```
+{
+    data:{}
+}
+```
+
+<h3 id="login_reset">用户重置密码</h3>
+
+url:/api/login/reset/  
+method:post  
+param:   
+
+|参数|类型|说明|备注|例子|  
+|---|---|---|---|---|  
+|phone|char(20)|电话号码|作为账号|12345678998|  
+|password|char(20)|密码|6-20，字母、数字、符号|123456789qwer|  
+|message|char(10)|短信验证码|6位数字|123456|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+```
+{
+    data:{}
+}
+```
+
+<h4 id="login_reset_driver">司机端重置密码</h4>
+
+url:/api/login/reset_driver/  
+method:post  
+param:   
+
+|参数|类型|说明|备注|例子|  
+|---|---|---|---|---|  
+|phone|char(20)|电话号码|作为账号|12345678998|  
+|password|char(20)|密码|6-20，字母、数字、符号|123456789qwer|  
+|message|char(10)|短信验证码|6位数字|123456|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+```
+{
+    data:{}
+}
+```
+
+<h3 id="login_message">用户发短信</h3>
+
+url:/api/login/message/  
+method:post  
+param:   
+
+|参数|类型|说明|备注|例子|  
+|---|---|---|---|---|  
+|phone|char(20)|电话号码|作为账号|12345678998|  
+|type|char(50)|类型|register、reset、register_driver、reset_driver|register|  
 
 return:  
 
@@ -2386,7 +2450,7 @@ param:
 
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
-|status|int|状态|-1:全部，0:未支付，1:等待服务，2:服务中，3:已完成|1|  
+|state|int|状态|-1:全部，0:未支付，1:等待服务，2:服务中，3:已完成|1|  
 |is_comment|bool|是否评论|无|true|  
 
 return:  
@@ -3550,7 +3614,7 @@ return:
 |order_time|datetime|时间|无|  
 |start_address|char(100)|出发地点|无|  
 |end_address|char(100)|到达地点|无|  
-|method|char(100)|行为|0：提现，1：收入|  
+|method|int|行为|0：提现，1：收入|  
 |via|char(100)|提现途径|alipay,weixin|  
 |cost|float|费用|无|  
 |survey|objects|年检订单|查看年检信息,如果是提现的话，这里为空|
@@ -3593,7 +3657,7 @@ return:
 |order_time|datetime|时间|无|  
 |start_address|char(100)|出发地点|无|  
 |end_address|char(100)|到达地点|无|  
-|method|char(100)|行为|0：提现，1：收入|  
+|method|int|行为|0：提现，1：收入|  
 |via|char(100)|提现途径|alipay,weixin|  
 |cost|float|费用|无|  
 |survey|objects|年检订单|查看年检信息,如果是提现的话，这里为空|  
