@@ -19,7 +19,8 @@
     * [修改车辆信息](#user_car_put)
     * [删除车辆信息](#user_car_delete)
   - [地址信息](#user_address)
-    * [查询三级地址信息](#user_address_info_list_get)
+    * [查询三级地址文件信息](#user_addressinfo_list_get)
+    * [查询三级地址信息](#user_addressinfo_get)
     * [查询地址列表信息](#user_address_list_get)
     * [添加地址信息](#user_address_list_post)
     * [查询地址信息](#user_address_get)
@@ -32,6 +33,7 @@
   - [物品信息](#service_product)
     * [查询物品列表信息](#service_product_list_get)
     * [查询物品信息](#service_product_get)
+    * [查询物品详情页面](#service_product_detail_get)
   - [购物车信息](#service_ordercar)
     * [查询购物车物品列表信息](#service_ordercar_list_get)
     * [添加购物车物品信息](#service_ordercar_list_post)
@@ -54,6 +56,7 @@
     * [查询滚动资讯列表信息](#service_news_info_list_get)
     * [查询资讯列表信息](#service_news_list_get)
     * [查询资讯信息](#service_news_get)
+    * [查询资讯详情页面](#service_news_detail_get)
  4. [维修厂](#maintain)
   - [汽修厂](#maintain_garage)
     * [查询汽修厂列表信息](#maintain_garage_list_get)
@@ -257,7 +260,7 @@ param:
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
 |phone|char(20)|电话号码|作为账号|12345678998|  
-|type|char(50)|类型|register、reset、register_driver、reset_driver|register|  
+|type|char(50)|类型|register：用户注册、reset：用户重置密码、register_driver：司机注册、reset_driver：司机重置密码|register|  
 
 return:  
 
@@ -296,15 +299,6 @@ return:
     }
 }
 ```
-
-<h3 id="login_message_get">发送用户登陆验证短信</h3>
-无
-
-<h3 id="login_message_driver_get">用户短信登陆（自带注册）</h3>
-无
-
-<h3 id="login_message_driver_post">司机短信登陆（自带注册）</h3>
-无
 
 <h3 id="login_refresh">刷新token</h3>
 
@@ -557,45 +551,12 @@ return:
 
 <h4 id="user_address_info_list_get">查询三级地址信息</h4>
 
-url:/api/user/address_info/   
-method:get  
-param:   
-
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|p_id|int|id|查询id下的所有下级节点，0为根结点|0|  
-
-return:  
-
-|参数|类型|说明|备注|  
-|---|---|---|---|  
-|id|int|id|无|  
-|create_time|datetime|创建时间|无|  
-|update_time|datetime|修改时间|无|  
-|name|char(50)|名称|无|  
-|p_id|int|父id|无|  
-```
-{
-    'data':
-    [{
-        'id':1,
-        'create_time':'2018-07-08 12:23:34',
-        'update_time':'2018-07-08 12:23:34',
-        'name':'北京市',
-        'p_id':1
-    }]
-}
-```
-
-<h4 id="user_address_info_get">查询三级地址信息</h4>
-
 url:/api/user/addressinfo/   
 method:get  
 param:   
 
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
-|id|int|id|无|1|  
 
 return:  
 
@@ -604,18 +565,21 @@ return:
 |id|int|id|无|  
 |create_time|datetime|创建时间|无|  
 |update_time|datetime|修改时间|无|  
-|name|char(50)|名称|无|  
-|p_id|int|父id|无|  
+|name|char(10)|收货人姓名|无|  
+|children|list|三级地址|无|  
 ```
 {
     'data':
-    {
+    [{
         'id':1,
-        'create_time':'2018-07-08 12:23:34',
-        'update_time':'2018-07-08 12:23:34',
         'name':'北京市',
-        'p_id':1
-    }
+        'children':[{
+            'id':1,
+            'name':'北京市',
+            'children':[{
+            }]
+        }]
+    }]
 }
 ```
 
@@ -1194,7 +1158,7 @@ return:
 |order_code|char(100)|订单编号|无|  
 |name|char(10)|收货人姓名|来源于所选地址|  
 |phone|char(15)|联系电话|来源于所选地址|  
-|city|char(50)|省市区|来源于所选地址|  
+|city|char(50)|省市区|来源于所选地址|  
 |address|char(100)|收货地址|来源于所选地址|  
 |status|int|状态|0:待付款，1:待发货，2:待收货，3:已完成|  
 |is_delete|int|删除状态，0:未删除，1:已删除|无|  
@@ -1319,7 +1283,7 @@ return:
 |order_code|char(100)|订单编号|无|  
 |name|char(10)|收货人姓名|来源于所选地址|  
 |phone|char(15)|联系电话|来源于所选地址|  
-|city|char(50)|省市区|来源于所选地址|  
+|city|char(50)|省市区|来源于所选地址|  
 |address|char(100)|收货地址|来源于所选地址|  
 |status|int|状态|0:待付款，1:待发货，2:待收货，3:已完成|  
 |is_delete|int|删除状态，0:未删除，1:已删除|无|  
@@ -2457,9 +2421,23 @@ return:
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
+|id|int|维修 or 保养id|区分需要依靠type|  
+|order_name|char(100)|订单名称|无|  
+|order_pic_url|char(100)|图片url|无|  
+|type|char(50)|类型|upkeep:保养，maintain:维修|  
+|subscribe_time|datetime|预约时间|无|  
+|now_price|float|价格|无|  
 ```
 {
-    'data':{}
+    'data':
+    [{
+        'id':1,
+        'order_name':'张三年检站维修服务',
+        'order_pic_url':'www.asd.cn/dqwd.jpg',
+        'type':'upkeep',
+        'subscribe_time':'2018-07-08 12:23:34',
+        'now_price':1
+    }]
 }
 ```
 
@@ -2659,11 +2637,11 @@ param:
 |finish|int|是否完成|0表示所有，1表示未完成，2表示已完成|1|  
 
 '''
-代驾取车：0:等待支付，1:等待接单，2:等待取车
-开始年检：3.等待年检，4.正在年检，5.年检结束，
-检完还车：6.到达还车，7.已还车，8.已完成
-代驾：0-1-2-3-4-5-6-7-8
-自驾：0-3-8
+代驾取车：0:等待支付，1:等待接单，2:等待取车  
+开始年检：3.等待年检，4.正在年检，5.年检结束  
+检完还车：6.到达还车，7.已还车，8.已完成  
+代驾：0-1-2-3-4-5-6-7-8  
+自驾：0-3-8  
 '''
 
 return:  
@@ -2703,30 +2681,7 @@ return:
 |return_time|datetime|还车时间|无|  
 |confirm_time|datetime|确认时间|无|  
 |cancel_time|datetime|取消时间|无|  
-|pic_get_confirm1_url|char(50)|取车图片-检车确认1照片url|/url,获取图片|  
-|pic_get_confirm2_url|char(50)|取车图片-检车确认2照片url|/url,获取图片|  
-|pic_get_car1_url|char(50)|取车图片-车身拍照1照片url|/url,获取图片|  
-|pic_get_car2_url|char(50)|取车图片-车身拍照2照片url|/url,获取图片|  
-|pic_get_car3_url|char(50)|取车图片-车身拍照3照片url|/url,获取图片|  
-|pic_get_car4_url|char(50)|取车图片-车身拍照4照片url|/url,获取图片|  
-|pic_get_car5_url|char(50)|取车图片-车身拍照5照片url|/url,获取图片|  
-|pic_get_car6_url|char(50)|取车图片-车身拍照6照片url|/url,获取图片|  
-|pic_survey_upload1_url|char(50)|年检已过-上传照片1照片url|/url,获取图片|  
-|pic_survey_upload2_url|char(50)|年检已过-上传照片2照片url|/url,获取图片|  
-|pic_survey_lamp1_url|char(50)|年检未过-车灯照片1照片url|/url,获取图片|  
-|pic_survey_lamp2_url|char(50)|年检未过-车灯照片2照片url|/url,获取图片|  
-|pic_survey_exhaust1_url|char(50)|年检未过-排气照片1照片url|/url,获取图片|  
-|pic_survey_exhaust2_url|char(50)|年检未过-排气照片2照片url|/url,获取图片|  
-|pic_survey_appearance1_url|char(50)|年检未过-外观照片1照片url|/url,获取图片|  
-|pic_survey_appearance2_url|char(50)|年检未过-外观照片2照片url|/url,获取图片|  
-|pic_return_confirm1_url|char(50)|还车图片-检车确认1照片url|/url,获取图片|  
-|pic_greturn_confirm2_url|char(50)|还车图片-检车确认2照片url|/url,获取图片|  
-|pic_return_car1_url|char(50)|还车图片-车身拍照1照片url|/url,获取图片|  
-|pic_return_car2_url|char(50)|还车图片-车身拍照2照片url|/url,获取图片|  
-|pic_return_car3_url|char(50)|还车图片-车身拍照3照片url|/url,获取图片|  
-|pic_return_car4_url|char(50)|还车图片-车身拍照4照片url|/url,获取图片|  
-|pic_return_car5_url|char(50)|还车图片-车身拍照5照片url|/url,获取图片|  
-|pic_return_car6_url|char(50)|还车图片-车身拍照6照片url|/url,获取图片|  
+|pic_list|list|图片备注对象列表|取车图片-检车确认,取车图片-车身拍照,年检已过-上传照片,年检未过-车灯照片,年检未过-排气照片,年检未过-外观照片,车图片-检车确认,还车图片-车身拍照|  
 ```
 {
     'data':
@@ -2781,30 +2736,7 @@ return:
         'return_time':'2018-07-08 12:23:34',
         'confirm_time':'2018-07-08 12:23:34',
         'cancel_time':'2018-07-08 12:23:34',
-        'pic_get_confirm1_url':'/aklsdjalk.jpg',
-        'pic_get_confirm2_url':'/aklsdjalk.jpg',
-        'pic_get_car1_url':'/aklsdjalk.jpg',
-        'pic_get_car2_url':'/aklsdjalk.jpg',
-        'pic_get_car3_url':'/aklsdjalk.jpg',
-        'pic_get_car4_url':'/aklsdjalk.jpg',
-        'pic_get_car5_url':'/aklsdjalk.jpg',
-        'pic_get_car6_url':'/aklsdjalk.jpg',
-        'pic_survey_upload1_url':'/aklsdjalk.jpg',
-        'pic_survey_upload2_url':'/aklsdjalk.jpg',
-        'pic_survey_lamp1_url':'/aklsdjalk.jpg',
-        'pic_survey_lamp2_url':'/aklsdjalk.jpg',
-        'pic_survey_exhaust1_url':'/aklsdjalk.jpg',
-        'pic_survey_exhaust2_url':'/aklsdjalk.jpg',
-        'pic_survey_appearance1_url':'/aklsdjalk.jpg',
-        'pic_survey_appearance2_url':'/aklsdjalk.jpg',
-        'pic_return_confirm2_url':'/aklsdjalk.jpg',
-        'pic_greturn_confirm2_url':'/aklsdjalk.jpg',
-        'pic_return_car1_url':'/aklsdjalk.jpg',
-        'pic_return_car2_url':'/aklsdjalk.jpg',
-        'pic_return_car3_url':'/aklsdjalk.jpg',
-        'pic_return_car4_url':'/aklsdjalk.jpg',
-        'pic_return_car5_url':'/aklsdjalk.jpg',
-        'pic_return_car6_url':'/aklsdjalk.jpg',
+        'pic_list':'/aklsdjalk.jpg'
     }]
 }
 ```
