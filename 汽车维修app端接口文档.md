@@ -104,6 +104,7 @@
     * [开始年检](#driver_order_survey_post)
     * [年检已过](#driver_order_success_post)
     * [年检未过](#driver_order_fail_post)
+    * [到达还车](#driver_order_arrive_post)
     * [确认换车](#driver_order_return_post)
   - [账户](#driver_account)
     * [查询明细列表信息](#driver_account_list_get)
@@ -968,6 +969,27 @@ return:
 }
 ```
 
+<h4 id="service_product_detail_get">查询物品详情页面</h4>
+
+url:/api/service/product_detail/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|  
+|---|---|---|---|---|  
+|id|int|id|无|1|   
+```
+{
+}
+```
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+```
+页面信息
+```
+
 <h3 id="service_ordercar">购物车信息</h3>
 
 <h4 id="service_ordercar_list_get">查询购物车物品列表信息</h4>
@@ -1680,6 +1702,27 @@ return:
         'is_bar':true
     }
 }
+```
+
+<h4 id="service_news_detail_get">查询资讯详情页面</h4>
+
+url:/api/service/news_detail/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|  
+|---|---|---|---|---|  
+|id|int|id|无|1|   
+```
+{
+}
+```
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+```
+页面信息
 ```
 
 <h2 id="maintain">维修厂</h2>
@@ -2427,6 +2470,8 @@ return:
 |type|char(50)|类型|upkeep:保养，maintain:维修|  
 |subscribe_time|datetime|预约时间|无|  
 |now_price|float|价格|无|  
+|state|int|价格|状态|  
+|is_comment|bool|是否评论|无|  
 ```
 {
     'data':
@@ -2681,7 +2726,19 @@ return:
 |return_time|datetime|还车时间|无|  
 |confirm_time|datetime|确认时间|无|  
 |cancel_time|datetime|取消时间|无|  
-|pic_list|list|图片备注对象列表|取车图片-检车确认,取车图片-车身拍照,年检已过-上传照片,年检未过-车灯照片,年检未过-排气照片,年检未过-外观照片,车图片-检车确认,还车图片-车身拍照|  
+|pic_list|list|图片备注对象列表|get_confirm:取车图片-检车确认,get_car:取车图片-车身拍照,survey_upload:年检已过-上传照片,survey_lamp:年检未过-车灯照片,survey_exhaust:年检未过-排气照片,survey_appearance:年检未过-外观照片,return_confirm:还车图片-检车确认,return_car:还车图片-车身拍照|  
+
+pic：
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|id|无|  
+|create_time|datetime|创建时间|无|  
+|update_time|datetime|修改时间|无|  
+|type|datetime|类型|无|  
+|pic_url|datetime|图片url|无|  
+|note|datetime|备注|无|  
+
 ```
 {
     'data':
@@ -2736,7 +2793,14 @@ return:
         'return_time':'2018-07-08 12:23:34',
         'confirm_time':'2018-07-08 12:23:34',
         'cancel_time':'2018-07-08 12:23:34',
-        'pic_list':'/aklsdjalk.jpg'
+        'pic_list':[{
+            'id':1,
+            'create_time':'2018-07-08 12:23:34',
+            'update_time':'2018-07-08 12:23:34',
+            'type':'survey_lamp',
+            'pic_url':'2018-07-08 12:23:34',
+            'note':'车钥匙'
+        }]
     }]
 }
 ```
@@ -2822,30 +2886,19 @@ return:
 |return_time|datetime|还车时间|无|  
 |confirm_time|datetime|确认时间|无|  
 |cancel_time|datetime|取消时间|无|  
-|pic_get_confirm1_url|char(50)|取车图片-检车确认1照片url|/url,获取图片|  
-|pic_get_confirm2_url|char(50)|取车图片-检车确认2照片url|/url,获取图片|  
-|pic_get_car1_url|char(50)|取车图片-车身拍照1照片url|/url,获取图片|  
-|pic_get_car2_url|char(50)|取车图片-车身拍照2照片url|/url,获取图片|  
-|pic_get_car3_url|char(50)|取车图片-车身拍照3照片url|/url,获取图片|  
-|pic_get_car4_url|char(50)|取车图片-车身拍照4照片url|/url,获取图片|  
-|pic_get_car5_url|char(50)|取车图片-车身拍照5照片url|/url,获取图片|  
-|pic_get_car6_url|char(50)|取车图片-车身拍照6照片url|/url,获取图片|  
-|pic_survey_upload1_url|char(50)|年检已过-上传照片1照片url|/url,获取图片|  
-|pic_survey_upload2_url|char(50)|年检已过-上传照片2照片url|/url,获取图片|  
-|pic_survey_lamp1_url|char(50)|年检未过-车灯照片1照片url|/url,获取图片|  
-|pic_survey_lamp2_url|char(50)|年检未过-车灯照片2照片url|/url,获取图片|  
-|pic_survey_exhaust1_url|char(50)|年检未过-排气照片1照片url|/url,获取图片|  
-|pic_survey_exhaust2_url|char(50)|年检未过-排气照片2照片url|/url,获取图片|  
-|pic_survey_appearance1_url|char(50)|年检未过-外观照片1照片url|/url,获取图片|  
-|pic_survey_appearance2_url|char(50)|年检未过-外观照片2照片url|/url,获取图片|  
-|pic_return_confirm2_url|char(50)|还车图片-检车确认1照片url|/url,获取图片|  
-|pic_greturn_confirm2_url|char(50)|还车图片-检车确认2照片url|/url,获取图片|  
-|pic_return_car1_url|char(50)|还车图片-车身拍照1照片url|/url,获取图片|  
-|pic_return_car2_url|char(50)|还车图片-车身拍照2照片url|/url,获取图片|  
-|pic_return_car3_url|char(50)|还车图片-车身拍照3照片url|/url,获取图片|  
-|pic_return_car4_url|char(50)|还车图片-车身拍照4照片url|/url,获取图片|  
-|pic_return_car5_url|char(50)|还车图片-车身拍照5照片url|/url,获取图片|  
-|pic_return_car6_url|char(50)|还车图片-车身拍照6照片url|/url,获取图片|  
+|pic_list|list|图片备注对象列表|get_confirm:取车图片-检车确认,get_car:取车图片-车身拍照,survey_upload:年检已过-上传照片,survey_lamp:年检未过-车灯照片,survey_exhaust:年检未过-排气照片,survey_appearance:年检未过-外观照片,return_confirm:还车图片-检车确认,return_car:还车图片-车身拍照|  
+
+pic：
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|id|无|  
+|create_time|datetime|创建时间|无|  
+|update_time|datetime|修改时间|无|  
+|type|datetime|类型|无|  
+|pic_url|datetime|图片url|无|  
+|note|datetime|备注|无|  
+
 ```
 {
     'data':
@@ -2900,30 +2953,14 @@ return:
         'return_time':'2018-07-08 12:23:34',
         'confirm_time':'2018-07-08 12:23:34',
         'cancel_time':'2018-07-08 12:23:34',
-        'pic_get_confirm1_url':'/aklsdjalk.jpg',
-        'pic_get_confirm2_url':'/aklsdjalk.jpg',
-        'pic_get_car1_url':'/aklsdjalk.jpg',
-        'pic_get_car2_url':'/aklsdjalk.jpg',
-        'pic_get_car3_url':'/aklsdjalk.jpg',
-        'pic_get_car4_url':'/aklsdjalk.jpg',
-        'pic_get_car5_url':'/aklsdjalk.jpg',
-        'pic_get_car6_url':'/aklsdjalk.jpg',
-        'pic_survey_upload1_url':'/aklsdjalk.jpg',
-        'pic_survey_upload2_url':'/aklsdjalk.jpg',
-        'pic_survey_lamp1_url':'/aklsdjalk.jpg',
-        'pic_survey_lamp2_url':'/aklsdjalk.jpg',
-        'pic_survey_exhaust1_url':'/aklsdjalk.jpg',
-        'pic_survey_exhaust2_url':'/aklsdjalk.jpg',
-        'pic_survey_appearance1_url':'/aklsdjalk.jpg',
-        'pic_survey_appearance2_url':'/aklsdjalk.jpg',
-        'pic_return_confirm2_url':'/aklsdjalk.jpg',
-        'pic_greturn_confirm2_url':'/aklsdjalk.jpg',
-        'pic_return_car1_url':'/aklsdjalk.jpg',
-        'pic_return_car2_url':'/aklsdjalk.jpg',
-        'pic_return_car3_url':'/aklsdjalk.jpg',
-        'pic_return_car4_url':'/aklsdjalk.jpg',
-        'pic_return_car5_url':'/aklsdjalk.jpg',
-        'pic_return_car6_url':'/aklsdjalk.jpg',
+        'pic_list':[{
+            'id':1,
+            'create_time':'2018-07-08 12:23:34',
+            'update_time':'2018-07-08 12:23:34',
+            'type':'survey_lamp',
+            'pic_url':'2018-07-08 12:23:34',
+            'note':'车钥匙'
+        }]
     }
 }
 ```
@@ -3068,7 +3105,7 @@ return:
 |car_name|char(20)|车主姓名|无|  
 |car_brand|char(20)|品牌型号|无|  
 |car_code|char(20)|车牌|无|  
-|car_type|int|车量类型|0:小型蓝牌，1：七座以下|  
+|car_type|char(100)|车量类型|小型蓝牌，七座以下|  
 |surveystation|object|年检站|查询年检站信息|  
 |order_longitude|float|交接地点经度|无|  
 |order_latitude|float|交接地点纬度|无|  
@@ -3093,30 +3130,19 @@ return:
 |return_time|datetime|还车时间|无|  
 |confirm_time|datetime|确认时间|无|  
 |cancel_time|datetime|取消时间|无|  
-|pic_get_confirm1_url|char(50)|取车图片-检车确认1照片url|/url,获取图片|  
-|pic_get_confirm2_url|char(50)|取车图片-检车确认2照片url|/url,获取图片|  
-|pic_get_car1_url|char(50)|取车图片-车身拍照1照片url|/url,获取图片|  
-|pic_get_car2_url|char(50)|取车图片-车身拍照2照片url|/url,获取图片|  
-|pic_get_car3_url|char(50)|取车图片-车身拍照3照片url|/url,获取图片|  
-|pic_get_car4_url|char(50)|取车图片-车身拍照4照片url|/url,获取图片|  
-|pic_get_car5_url|char(50)|取车图片-车身拍照5照片url|/url,获取图片|  
-|pic_get_car6_url|char(50)|取车图片-车身拍照6照片url|/url,获取图片|  
-|pic_survey_upload1_url|char(50)|年检已过-上传照片1照片url|/url,获取图片|  
-|pic_survey_upload2_url|char(50)|年检已过-上传照片2照片url|/url,获取图片|  
-|pic_survey_lamp1_url|char(50)|年检未过-车灯照片1照片url|/url,获取图片|  
-|pic_survey_lamp2_url|char(50)|年检未过-车灯照片2照片url|/url,获取图片|  
-|pic_survey_exhaust1_url|char(50)|年检未过-排气照片1照片url|/url,获取图片|  
-|pic_survey_exhaust2_url|char(50)|年检未过-排气照片2照片url|/url,获取图片|  
-|pic_survey_appearance1_url|char(50)|年检未过-外观照片1照片url|/url,获取图片|  
-|pic_survey_appearance2_url|char(50)|年检未过-外观照片2照片url|/url,获取图片|  
-|pic_return_confirm2_url|char(50)|还车图片-检车确认1照片url|/url,获取图片|  
-|pic_greturn_confirm2_url|char(50)|还车图片-检车确认2照片url|/url,获取图片|  
-|pic_return_car1_url|char(50)|还车图片-车身拍照1照片url|/url,获取图片|  
-|pic_return_car2_url|char(50)|还车图片-车身拍照2照片url|/url,获取图片|  
-|pic_return_car3_url|char(50)|还车图片-车身拍照3照片url|/url,获取图片|  
-|pic_return_car4_url|char(50)|还车图片-车身拍照4照片url|/url,获取图片|  
-|pic_return_car5_url|char(50)|还车图片-车身拍照5照片url|/url,获取图片|  
-|pic_return_car6_url|char(50)|还车图片-车身拍照6照片url|/url,获取图片|  
+|pic_list|list|图片备注对象列表|get_confirm:取车图片-检车确认,get_car:取车图片-车身拍照,survey_upload:年检已过-上传照片,survey_lamp:年检未过-车灯照片,survey_exhaust:年检未过-排气照片,survey_appearance:年检未过-外观照片,return_confirm:还车图片-检车确认,return_car:还车图片-车身拍照|  
+
+pic：
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|id|无|  
+|create_time|datetime|创建时间|无|  
+|update_time|datetime|修改时间|无|  
+|type|datetime|类型|无|  
+|pic_url|datetime|图片url|无|  
+|note|datetime|备注|无|  
+
 ```
 {
     'data':
@@ -3171,30 +3197,14 @@ return:
         'return_time':'2018-07-08 12:23:34',
         'confirm_time':'2018-07-08 12:23:34',
         'cancel_time':'2018-07-08 12:23:34',
-        'pic_get_confirm1_url':'/aklsdjalk.jpg',
-        'pic_get_confirm2_url':'/aklsdjalk.jpg',
-        'pic_get_car1_url':'/aklsdjalk.jpg',
-        'pic_get_car2_url':'/aklsdjalk.jpg',
-        'pic_get_car3_url':'/aklsdjalk.jpg',
-        'pic_get_car4_url':'/aklsdjalk.jpg',
-        'pic_get_car5_url':'/aklsdjalk.jpg',
-        'pic_get_car6_url':'/aklsdjalk.jpg',
-        'pic_survey_upload1_url':'/aklsdjalk.jpg',
-        'pic_survey_upload2_url':'/aklsdjalk.jpg',
-        'pic_survey_lamp1_url':'/aklsdjalk.jpg',
-        'pic_survey_lamp2_url':'/aklsdjalk.jpg',
-        'pic_survey_exhaust1_url':'/aklsdjalk.jpg',
-        'pic_survey_exhaust2_url':'/aklsdjalk.jpg',
-        'pic_survey_appearance1_url':'/aklsdjalk.jpg',
-        'pic_survey_appearance2_url':'/aklsdjalk.jpg',
-        'pic_return_confirm2_url':'/aklsdjalk.jpg',
-        'pic_greturn_confirm2_url':'/aklsdjalk.jpg',
-        'pic_return_car1_url':'/aklsdjalk.jpg',
-        'pic_return_car2_url':'/aklsdjalk.jpg',
-        'pic_return_car3_url':'/aklsdjalk.jpg',
-        'pic_return_car4_url':'/aklsdjalk.jpg',
-        'pic_return_car5_url':'/aklsdjalk.jpg',
-        'pic_return_car6_url':'/aklsdjalk.jpg',
+        'pic_list':[{
+            'id':1,
+            'create_time':'2018-07-08 12:23:34',
+            'update_time':'2018-07-08 12:23:34',
+            'type':'survey_lamp',
+            'pic_url':'2018-07-08 12:23:34',
+            'note':'车钥匙'
+        }]
     }]
 }
 ```
@@ -3207,6 +3217,8 @@ param:
 
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
+|id|int|id|无|1|   
+ 
 
 return:  
 
@@ -3220,7 +3232,7 @@ return:
 |car_name|char(20)|车主姓名|无|  
 |car_brand|char(20)|品牌型号|无|  
 |car_code|char(20)|车牌|无|  
-|car_type|int|车量类型|0:小型蓝牌，1：七座以下|  
+|car_type|char(100)|车量类型|小型蓝牌，七座以下|  
 |surveystation|object|年检站|查询年检站信息|  
 |order_longitude|float|交接地点经度|无|  
 |order_latitude|float|交接地点纬度|无|  
@@ -3245,30 +3257,19 @@ return:
 |return_time|datetime|还车时间|无|  
 |confirm_time|datetime|确认时间|无|  
 |cancel_time|datetime|取消时间|无|  
-|pic_get_confirm1_url|char(50)|取车图片-检车确认1照片url|/url,获取图片|  
-|pic_get_confirm2_url|char(50)|取车图片-检车确认2照片url|/url,获取图片|  
-|pic_get_car1_url|char(50)|取车图片-车身拍照1照片url|/url,获取图片|  
-|pic_get_car2_url|char(50)|取车图片-车身拍照2照片url|/url,获取图片|  
-|pic_get_car3_url|char(50)|取车图片-车身拍照3照片url|/url,获取图片|  
-|pic_get_car4_url|char(50)|取车图片-车身拍照4照片url|/url,获取图片|  
-|pic_get_car5_url|char(50)|取车图片-车身拍照5照片url|/url,获取图片|  
-|pic_get_car6_url|char(50)|取车图片-车身拍照6照片url|/url,获取图片|  
-|pic_survey_upload1_url|char(50)|年检已过-上传照片1照片url|/url,获取图片|  
-|pic_survey_upload2_url|char(50)|年检已过-上传照片2照片url|/url,获取图片|  
-|pic_survey_lamp1_url|char(50)|年检未过-车灯照片1照片url|/url,获取图片|  
-|pic_survey_lamp2_url|char(50)|年检未过-车灯照片2照片url|/url,获取图片|  
-|pic_survey_exhaust1_url|char(50)|年检未过-排气照片1照片url|/url,获取图片|  
-|pic_survey_exhaust2_url|char(50)|年检未过-排气照片2照片url|/url,获取图片|  
-|pic_survey_appearance1_url|char(50)|年检未过-外观照片1照片url|/url,获取图片|  
-|pic_survey_appearance2_url|char(50)|年检未过-外观照片2照片url|/url,获取图片|  
-|pic_return_confirm2_url|char(50)|还车图片-检车确认1照片url|/url,获取图片|  
-|pic_greturn_confirm2_url|char(50)|还车图片-检车确认2照片url|/url,获取图片|  
-|pic_return_car1_url|char(50)|还车图片-车身拍照1照片url|/url,获取图片|  
-|pic_return_car2_url|char(50)|还车图片-车身拍照2照片url|/url,获取图片|  
-|pic_return_car3_url|char(50)|还车图片-车身拍照3照片url|/url,获取图片|  
-|pic_return_car4_url|char(50)|还车图片-车身拍照4照片url|/url,获取图片|  
-|pic_return_car5_url|char(50)|还车图片-车身拍照5照片url|/url,获取图片|  
-|pic_return_car6_url|char(50)|还车图片-车身拍照6照片url|/url,获取图片|  
+|pic_list|list|图片备注对象列表|get_confirm:取车图片-检车确认,get_car:取车图片-车身拍照,survey_upload:年检已过-上传照片,survey_lamp:年检未过-车灯照片,survey_exhaust:年检未过-排气照片,survey_appearance:年检未过-外观照片,return_confirm:还车图片-检车确认,return_car:还车图片-车身拍照|  
+
+pic：
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|id|无|  
+|create_time|datetime|创建时间|无|  
+|update_time|datetime|修改时间|无|  
+|type|datetime|类型|无|  
+|pic_url|datetime|图片url|无|  
+|note|datetime|备注|无|  
+
 ```
 {
     'data':
@@ -3323,30 +3324,14 @@ return:
         'return_time':'2018-07-08 12:23:34',
         'confirm_time':'2018-07-08 12:23:34',
         'cancel_time':'2018-07-08 12:23:34',
-        'pic_get_confirm1_url':'/aklsdjalk.jpg',
-        'pic_get_confirm2_url':'/aklsdjalk.jpg',
-        'pic_get_car1_url':'/aklsdjalk.jpg',
-        'pic_get_car2_url':'/aklsdjalk.jpg',
-        'pic_get_car3_url':'/aklsdjalk.jpg',
-        'pic_get_car4_url':'/aklsdjalk.jpg',
-        'pic_get_car5_url':'/aklsdjalk.jpg',
-        'pic_get_car6_url':'/aklsdjalk.jpg',
-        'pic_survey_upload1_url':'/aklsdjalk.jpg',
-        'pic_survey_upload2_url':'/aklsdjalk.jpg',
-        'pic_survey_lamp1_url':'/aklsdjalk.jpg',
-        'pic_survey_lamp2_url':'/aklsdjalk.jpg',
-        'pic_survey_exhaust1_url':'/aklsdjalk.jpg',
-        'pic_survey_exhaust2_url':'/aklsdjalk.jpg',
-        'pic_survey_appearance1_url':'/aklsdjalk.jpg',
-        'pic_survey_appearance2_url':'/aklsdjalk.jpg',
-        'pic_return_confirm2_url':'/aklsdjalk.jpg',
-        'pic_greturn_confirm2_url':'/aklsdjalk.jpg',
-        'pic_return_car1_url':'/aklsdjalk.jpg',
-        'pic_return_car2_url':'/aklsdjalk.jpg',
-        'pic_return_car3_url':'/aklsdjalk.jpg',
-        'pic_return_car4_url':'/aklsdjalk.jpg',
-        'pic_return_car5_url':'/aklsdjalk.jpg',
-        'pic_return_car6_url':'/aklsdjalk.jpg',
+        'pic_list':[{
+            'id':1,
+            'create_time':'2018-07-08 12:23:34',
+            'update_time':'2018-07-08 12:23:34',
+            'type':'survey_lamp',
+            'pic_url':'2018-07-08 12:23:34',
+            'note':'车钥匙'
+        }]
     }
 }
 ```
@@ -3403,14 +3388,10 @@ param:
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
 |id|int|id|无|1|  
-|pic_get_confirm1|文件流|取车图片-检车确认1照片|无|(文件流，base64)|  
-|pic_get_confirm2|文件流|取车图片-检车确认2照片|无|(文件流，base64)|  
-|pic_get_car1|文件流|取车图片-车身拍照1照片|无|(文件流，base64)|  
-|pic_get_car2|文件流)|取车图片-车身拍照2照片|无|(文件流，base64)|  
-|pic_get_car3|文件流|取车图片-车身拍照3照片|无|(文件流，base64)|  
-|pic_get_car4|文件流|取车图片-车身拍照4照片|无|(文件流，base64)|  
-|pic_get_car5|文件流|取车图片-车身拍照5照片|无|(文件流，base64)|  
-|pic_get_car6|文件流|取车图片-车身拍照6照片|无|(文件流，base64)|  
+|number|int|数量|多少个文件、类型、备注，三者需要一同出现，缺少其一则会被认为没有|1|  
+|pic1|文件流|图片|编号从1开始|(文件流)|  
+|type1|char(100)|类型|get_confirm:取车图片-检车确认,get_car:取车图片-车身拍照|get_confirm|  
+|note1|char(100)|备注|无|车钥匙|  
 
 return:  
 
@@ -3453,8 +3434,10 @@ param:
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
 |id|int|id|无|1|  
-|pic_survey_upload1|文件流|年检已过-上传照片1照片|无|(文件流，base64)|  
-|pic_survey_upload2|文件流|年检已过-上传照片2照片|无|(文件流，base64)|  
+|number|int|数量|多少个文件、类型、备注，三者需要一同出现，缺少其一则会被认为没有|1|  
+|pic1|文件流|图片|编号从1开始|(文件流)|  
+|type1|char(100)|类型|survey_upload:年检已过-上传照片|survey_upload|  
+|note1|char(100)|备注|无|车钥匙|  
 
 return:  
 
@@ -3476,13 +3459,32 @@ param:
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
 |id|int|id|无|1|  
-|pic_survey_lamp1|文件流|年检未过-车灯照片1照片|无|(文件流，base64)|  
-|pic_survey_lamp2|文件流|年检未过-车灯照片2照片|无|(文件流，base64)|  
-|pic_survey_exhaust1|文件流|年检未过-排气照片2照片|无|(文件流，base64)|  
-|pic_survey_exhaust2|文件流|年检未过-排气照片2照片|无|(文件流，base64)|  
-|pic_survey_appearance1|文件流|年检未过-外观照片2照片|无|(文件流，base64)|  
-|pic_survey_appearance2|文件流|年检未过-外观照片2照片|无|(文件流，base64)|  
+|number|int|数量|多少个文件、类型、备注，三者需要一同出现，缺少其一则会被认为没有|1|  
+|pic1|文件流|图片|编号从1开始|(文件流)|  
+|type1|char(100)|类型|survey_lamp:年检未过-车灯照片,survey_exhaust:年检未过-排气照片,survey_appearance:年检未过-外观照片|survey_lamp|  
+|note1|char(100)|备注|无|车钥匙|  
 
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+
+```
+{
+    'data':{}
+}
+```
+
+<h4 id="driver_order_arrive_post">到达还车</h4>
+
+url:/api/driver/order_arrive/  
+method:post  
+param:   
+
+|参数|类型|说明|备注|例子|  
+|---|---|---|---|---|  
+|id|int|id|无|1|  
 
 return:  
 
@@ -3504,14 +3506,10 @@ param:
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
 |id|int|id|无|1|  
-|pic_return_confirm2|文件流|还车图片-检车确认1照片|无|(文件流，base64)|  
-|pic_greturn_confirm2|文件流|还车图片-检车确认2照片|无|(文件流，base64)|  
-|pic_return_car1|文件流|还车图片-车身拍照1照片|无|(文件流，base64)|  
-|pic_return_car2|文件流|还车图片-车身拍照2照片|无|(文件流，base64)|  
-|pic_return_car3|文件流|还车图片-车身拍照3照片|无|(文件流，base64)|  
-|pic_return_car4|文件流|还车图片-车身拍照4照片|无|(文件流，base64)|  
-|pic_return_car5|文件流|还车图片-车身拍照5照片|无|(文件流，base64)|  
-|pic_return_car6|文件流|还车图片-车身拍照6照片|无|(文件流，base64)|  
+|number|int|数量|多少个文件、类型、备注，三者需要一同出现，缺少其一则会被认为没有|1|  
+|pic1|文件流|图片|编号从1开始|(文件流)|  
+|type1|char(100)|类型|return_confirm:还车图片-检车确认,return_car:还车图片-车身拍照|return_confirm|  
+|note1|char(100)|备注|无|车钥匙|  
 
 return:  
 
@@ -3620,7 +3618,6 @@ param:
 
 |参数|类型|说明|备注|例子|  
 |---|---|---|---|---|  
-|id|int|id|无|1|  
 |money|float|提现金额|无|1|  
 |via|char(100)|体现途径|alipay,weixin|weixin|  
 
