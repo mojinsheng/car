@@ -93,6 +93,7 @@
  6. [系统](#system)
   - [服务首页图片信息](#system_serviceimg_get)
   - [年检首页图片信息](#system_surveyimg_get) 
+  - [关于我们](#system_aboutus_get) 
  7. [司机端](#driver)
   - [订单](#driver_order)
     * [查询订单列表信息](#driver_order_list_get)
@@ -110,6 +111,7 @@
     * [查询明细列表信息](#driver_account_list_get)
     * [查询明细信息](#driver_account_get)
     * [明细操作信息-提现](#driver_account_method_post)
+    * [用户余额查询](#driver_balance_get)
 
 ```
 所有的后台返回值，都以这样子的结构返回
@@ -155,14 +157,15 @@ or
 3.然后每次请求都需要附带上user_id、timestamp、sign三个参数
 4.token有时效，快过期前，请使用刷新接口获得新的token，过期没有更换的话，就只能重新登陆获取了
 5.所有请求都带版本号，没带默认为0
+6.目前不需要登陆的有：登陆模块（除了刷新token接口），服务模块中的分类信息、物品信息、资讯分类信息、资讯信息，关于我们
 ```
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|--|  
-|user_id|int|用户id|登陆成功后返回|1|  
-|timestamp|char(50)|时间戳|app自己生成|1|  
-|sign|char(50)|签名|md5(token+timestamp)|asdadsa|  
-|system|char(50)|系统|默认android|ios|  
-|version|float|app版本|默认0|0.1|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|user_id|int|用户id|登陆成功后返回|1|必填|  
+|timestamp|char(50)|时间戳|app自己生成|1|必填|  
+|sign|char(50)|签名|md5(token+timestamp)|asdadsa|必填|  
+|system|char(50)|系统|默认android|ios|选填|  
+|version|float|app版本|默认0|0.1|选填|  
 
 <h3 id="login_register">用户注册</h3>
 
@@ -170,11 +173,11 @@ url:/api/login/register/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|phone|char(20)|电话号码|作为账号|12345678998|  
-|password|char(20)|密码|6-20，字母、数字、符号|123456789qwer|  
-|message|char(10)|短信验证码|6位数字|123456|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|phone|char(20)|电话号码|作为账号|12345678998|必填|  
+|password|char(20)|密码|6-20，字母、数字、符号|123456789qwer|必填|  
+|message|char(10)|短信验证码|6位数字|123456|必填|  
 
 return:  
 
@@ -192,11 +195,11 @@ url:/api/login/register_driver/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|phone|char(20)|电话号码|作为账号|12345678998|  
-|password|char(20)|密码|6-20，字母、数字、符号|123456789qwer|  
-|message|char(10)|短信验证码|6位数字|123456|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|phone|char(20)|电话号码|作为账号|12345678998|必填|  
+|password|char(20)|密码|6-20，字母、数字、符号|123456789qwer|必填|  
+|message|char(10)|短信验证码|6位数字|123456|必填|  
 
 return:  
 
@@ -214,11 +217,11 @@ url:/api/login/reset/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|phone|char(20)|电话号码|作为账号|12345678998|  
-|password|char(20)|密码|6-20，字母、数字、符号|123456789qwer|  
-|message|char(10)|短信验证码|6位数字|123456|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|phone|char(20)|电话号码|作为账号|12345678998|必填|  
+|password|char(20)|密码|6-20，字母、数字、符号|123456789qwer|必填|  
+|message|char(10)|短信验证码|6位数字|123456|必填|  
 
 return:  
 
@@ -236,11 +239,11 @@ url:/api/login/reset_driver/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|phone|char(20)|电话号码|作为账号|12345678998|  
-|password|char(20)|密码|6-20，字母、数字、符号|123456789qwer|  
-|message|char(10)|短信验证码|6位数字|123456|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|phone|char(20)|电话号码|作为账号|12345678998|必填|  
+|password|char(20)|密码|6-20，字母、数字、符号|123456789qwer|必填|  
+|message|char(10)|短信验证码|6位数字|123456|必填|  
 
 return:  
 
@@ -258,10 +261,10 @@ url:/api/login/message/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|phone|char(20)|电话号码|作为账号|12345678998|  
-|type|char(50)|类型|register：用户注册、reset：用户重置密码、register_driver：司机注册、reset_driver：司机重置密码|register|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|phone|char(20)|电话号码|作为账号|12345678998|必填|  
+|type|char(50)|类型|register：用户注册、reset：用户重置密码、register_driver：司机注册、reset_driver：司机重置密码|register|必填|  
 
 return:  
 
@@ -279,10 +282,10 @@ url:/api/login/login/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|--|  
-|phone|char(20)|电话号码|作为账号|12345678998|  
-|password|char(20)|密码|6-20，字母、数字、符号|123456|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|phone|char(20)|电话号码|作为账号|12345678998|必填|  
+|password|char(20)|密码|6-20，字母、数字、符号|123456|必填|  
 
 return:  
 
@@ -307,8 +310,8 @@ url:/api/login/refresh/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
 
 return:  
 
@@ -337,9 +340,9 @@ url:/api/user/user/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|    
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|  
 
 return:  
 
@@ -370,12 +373,12 @@ url:/api/user/user/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
-|phone|char(20)|电话号码|作为账号|12345678998|  
-|name|char(10)|昵称|无|admin|  
-|pic|文件流|照片文件|无|(文件流，base64)|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|  
+|phone|char(20)|电话号码|作为账号|12345678998|选填|  
+|name|char(10)|昵称|无|admin|选填|  
+|pic|文件流|照片文件|无|(文件流，base64)|选填|  
 
 return:  
 
@@ -395,9 +398,9 @@ url:/api/user/car/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|is_default|bool|是否为默认|无|true|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|is_default|bool|是否为默认|无|true|选填|  
 
 return:  
 
@@ -438,15 +441,15 @@ url:/api/user/car/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|pic|文件流|照片文件|无|(文件流，base64)|  
-|brand|char(100)|品牌|无|玛萨拉蒂|  
-|code|char(10)|车牌号码|无|粤A24351|  
-|engine|char(100)|发动机|无|TX21|  
-|buy_time|date|购车时间|无|2018-03-20|  
-|mileage|float|里程|无|12|  
-|is_default|bool|是否默认|无|false|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|code|char(10)|车牌号码|无|粤A24351|必填|  
+|pic|文件流|照片文件|无|(文件流，base64)|选填|  
+|brand|char(100)|品牌|无|玛萨拉蒂|选填|  
+|engine|char(100)|发动机|无|TX21|选填|  
+|buy_time|date|购车时间|无|2018-03-20|选填|  
+|mileage|float|里程|无|12|选填|  
+|is_default|bool|是否默认|无|false|选填|  
 
 return:  
 
@@ -464,9 +467,9 @@ url:/api/user/car/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|  
 
 return:  
 
@@ -507,16 +510,16 @@ url:/api/user/car/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
-|pic|文件流|照片文件|无|(文件流，base64)|  
-|brand|char(100)|品牌|无|玛萨拉蒂|  
-|code|char(10)|车牌号码|无|粤A24351|  
-|engine|char(100)|发动机|无|TX21|  
-|buy_time|date|购车时间|无|2018-03-20|  
-|mileage|float|里程|无|12|  
-|is_default|bool|是否默认|无|false|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|  
+|code|char(10)|车牌号码|无|粤A24351|选填|  
+|pic|文件流|照片文件|无|(文件流，base64)|选填|  
+|brand|char(100)|品牌|无|玛萨拉蒂|选填|  
+|engine|char(100)|发动机|无|TX21|选填|  
+|buy_time|date|购车时间|无|2018-03-20|选填|  
+|mileage|float|里程|无|12|选填|  
+|is_default|bool|是否默认|无|false|选填|  
 
 return:  
 
@@ -534,9 +537,9 @@ url:/api/user/car_delete/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|  
 
 return:  
 
@@ -556,8 +559,8 @@ url:/api/user/addressinfo/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
 
 return:  
 
@@ -590,9 +593,9 @@ url:/api/user/address/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|is_default|bool|是否为默认|无|true|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|is_default|bool|是否为默认|无|true|选填|  
 
 return:  
 
@@ -650,15 +653,15 @@ url:/api/user/address/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|name|char(10)|收货人姓名|无|张三|  
-|phone|char(15)|联系电话|无|123456789984|  
-|node1|int|第一级地址|无|1|  
-|node2|int|第二级地址|无|2|  
-|node3|int|第三级地址|无|3|  
-|address|char(100)|收货地址|无|广州市越秀区xxx|  
-|is_default|bool|是否默认|无|false|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|name|char(10)|收货人姓名|无|张三|必填|  
+|phone|char(15)|联系电话|无|123456789984|必填|  
+|node1|int|第一级地址|无|1|必填|  
+|node2|int|第二级地址|无|2|必填|  
+|node3|int|第三级地址|无|3|必填|  
+|address|char(100)|收货地址|无|广州市越秀区xxx|必填|  
+|is_default|bool|是否默认|无|false|必填|  
 
 return:  
 
@@ -676,9 +679,9 @@ url:/api/user/address/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|  
 
 return:  
 
@@ -736,16 +739,16 @@ url:/api/user/address/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
-|name|char(10)|收货人姓名|无|张三|  
-|phone|char(15)|联系电话|无|123456789984|  
-|node1|int|第一级地址|无|1|  
-|node2|int|第二级地址|无|2|  
-|node3|int|第三级地址|无|3|  
-|address|char(100)|收货地址|无|广州市越秀区xxx|  
-|is_default|bool|是否默认|无|false|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|  
+|name|char(10)|收货人姓名|无|张三|选填|  
+|phone|char(15)|联系电话|无|123456789984|选填|  
+|node1|int|第一级地址|无|1|选填|  
+|node2|int|第二级地址|无|2|选填|  
+|node3|int|第三级地址|无|3|选填|  
+|address|char(100)|收货地址|无|广州市越秀区xxx|选填|  
+|is_default|bool|是否默认|无|false|选填|  
 
 return:  
 
@@ -763,9 +766,9 @@ url:/api/user/address_delete/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|  
 
 return:  
 
@@ -787,10 +790,10 @@ url:/api/service/catalog/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|type|int|类型|0:商城，1:保险|0|  
-|p_id|int|父id|根节点id为0|0|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|type|int|类型|0:商城，1:保险|0|必填|    
+|p_id|int|父id|根节点id为0|0|必填|    
 
 return:  
 
@@ -824,9 +827,9 @@ url:/api/service/catalog/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|     
 
 return:  
 
@@ -862,11 +865,11 @@ url:/api/service/product/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|catalog_id|int|分类id|默认为0|1|  
-|price_order|int|价格排序|0：无，1:从低到高，2:从高到低|0|  
-|sale_order|int|销量排序|0：无，1:从低到高，2:从高到低|0|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|catalog_id|int|分类id|默认为0|1|选填|    
+|price_order|int|价格排序|0：无，1:从低到高，2:从高到低|0|选填|    
+|sale_order|int|销量排序|0：无，1:从低到高，2:从高到低|0|选填|    
 
 return:  
 
@@ -879,8 +882,16 @@ return:
 |pic_url|char(100)|封面照url|无|  
 |price|float|价格|无|  
 |special_price|float|特价|无|  
-|param|text|参数信息|无|  
-|type|text|车型信息|无|  
+|number|char(100)|编号|无|  
+|car_type|char(100)|适用车型|无|  
+|specification|char(500)|规格|无|  
+|brand|char(100)|品牌|无|  
+|sort|char(100)|类别|无|  
+|unit|char(100)|单位|无|  
+|production|char(100)|产地|无|  
+|category|char(100)|品类|无|  
+|car_type_list|char(500)|车型|无|  
+|detail_url|char(500)|详情页面url|无|  
 |catalog|object|分类|查看分类查询接口|  
 |amount|int|库存|无|  
 |sale|int|销量|无|  
@@ -896,8 +907,16 @@ return:
         'pic_url':'/asd.hpg',
         'price':1200,
         'special_price':1200,
-        'param':'顶配',
-        'type':'顶配',
+        'number':'顶配',
+        'car_type':'顶配',
+        'specification':'顶配',
+        'brand':'顶配',
+        'sort':'顶配',
+        'unit':'顶配',
+        'production':'顶配',
+        'category':'顶配',
+        'car_type_list':'顶配',
+        'detail_url':'/uashdjk/',
         'catalog':{
             'id':1,
             'create_time':'2018-07-08 12:23:34',
@@ -918,9 +937,9 @@ url:/api/service/product/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
 ```
 {
 }
@@ -936,8 +955,16 @@ return:
 |pic_url|char(100)|封面照url|无|  
 |price|float|价格|无|  
 |special_price|float|特价|无|  
-|param|text|参数信息|无|  
-|type|text|车型信息|无|  
+|number|char(100)|编号|无|  
+|car_type|char(100)|适用车型|无|  
+|specification|char(500)|规格|无|  
+|brand|char(100)|品牌|无|  
+|sort|char(100)|类别|无|  
+|unit|char(100)|单位|无|  
+|production|char(100)|产地|无|  
+|category|char(100)|品类|无|  
+|car_type_list|char(500)|车型|无|  
+|detail_url|char(500)|详情页面url|无|  
 |catalog|object|分类|查看分类查询接口|  
 |amount|int|库存|无|  
 |sale|int|销量|无|  
@@ -953,8 +980,16 @@ return:
         'pic_url':'/asd.hpg',
         'price':1200,
         'special_price':1200,
-        'param':'顶配',
-        'type':'顶配',
+        'number':'顶配',
+        'car_type':'顶配',
+        'specification':'顶配',
+        'brand':'顶配',
+        'sort':'顶配',
+        'unit':'顶配',
+        'production':'顶配',
+        'category':'顶配',
+        'car_type_list':'顶配',
+        'detail_url':'/uashdjk/',
         'catalog':{
             'id':1,
             'create_time':'2018-07-08 12:23:34',
@@ -975,9 +1010,9 @@ url:/api/service/product_detail/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
 ```
 {
 }
@@ -998,8 +1033,8 @@ url:/api/service/ordercar/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
 
 return:  
 
@@ -1026,8 +1061,16 @@ return:
             'pic_url':'/asd.hpg',
             'price':1200,
             'special_price':1200,
-            'param':'顶配',
-            'type':'顶配',
+            'number':'顶配',
+            'car_type':'顶配',
+            'specification':'顶配',
+            'brand':'顶配',
+            'sort':'顶配',
+            'unit':'顶配',
+            'production':'顶配',
+            'category':'顶配',
+            'car_type_list':'顶配',
+            'detail_url':'/uashdjk/',
             'catalog':{
                 'id':1,
                 'create_time':'2018-07-08 12:23:34',
@@ -1036,6 +1079,7 @@ return:
                 'p_id':0
             },
             'amount':666,
+            'sale':666,
             'pic_url_list':['/asd.hpg','/fasda.jpg']
         },
         'amount':666
@@ -1049,10 +1093,10 @@ url:/api/service/ordercar/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|product_id|int|物品id|无|1|  
-|amount|int|数量|会在这个商品已有的基础上添加amount个，可以添加负数，最终结果只能为0|123456789984|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|product_id|int|物品id|无|1|必填|  
+|amount|int|数量|会在这个商品已有的基础上添加amount个，可以添加负数，最终结果只能为0|123456789984|必填|  
 
 return:  
 
@@ -1070,9 +1114,9 @@ url:/api/service/ordercar/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
 
 return:  
 
@@ -1099,8 +1143,16 @@ return:
             'pic_url':'/asd.hpg',
             'price':1200,
             'special_price':1200,
-            'param':'顶配',
-            'type':'顶配',
+            'number':'顶配',
+            'car_type':'顶配',
+            'specification':'顶配',
+            'brand':'顶配',
+            'sort':'顶配',
+            'unit':'顶配',
+            'production':'顶配',
+            'category':'顶配',
+            'car_type_list':'顶配',
+            'detail_url':'/uashdjk/',
             'catalog':{
                 'id':1,
                 'create_time':'2018-07-08 12:23:34',
@@ -1109,6 +1161,7 @@ return:
                 'p_id':0
             },
             'amount':666,
+            'sale':666,
             'pic_url_list':['/asd.hpg','/fasda.jpg']
         },
         'amount':666
@@ -1122,10 +1175,10 @@ url:/api/service/ordercar/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|    
-|amount|int|数量|直接修改数量|123456789984|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|    
+|amount|int|数量|直接修改数量|123456789984|必填|  
 
 return:  
 
@@ -1143,9 +1196,9 @@ url:/api/service/ordercar_delete/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|支持使用,来拼接多个id，实现批量删除|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|支持使用,来拼接多个id，实现批量删除|1|必填|   
 
 return:  
 
@@ -1165,10 +1218,10 @@ url:/api/service/order/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|status|int|状态|-1:全部，0:待付款，1:待发货，2:待收货，3:已完成|1|  
-|is_comment|bool|是否评论|无|true|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|status|int|状态|-1:全部，0:待付款，1:待发货，2:待收货，3:已完成|1|必选填|  
+|is_comment|bool|是否评论|无|true|选填|  
 
 return:  
 
@@ -1244,8 +1297,16 @@ orderproduct_set:
                 'pic_url':'/asd.hpg',
                 'price':1200,
                 'special_price':1200,
-                'param':'顶配',
-                'type':'顶配',
+                'number':'顶配',
+                'car_type':'顶配',
+                'specification':'顶配',
+                'brand':'顶配',
+                'sort':'顶配',
+                'unit':'顶配',
+                'production':'顶配',
+                'category':'顶配',
+                'car_type_list':'顶配',
+                'detail_url':'/uashdjk/',
                 'catalog':{
                     'id':1,
                     'create_time':'2018-07-08 12:23:34',
@@ -1270,10 +1331,10 @@ url:/api/service/order/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|address_id|int|地址id|无|1|
-|order_car_list|char(200)|购物车id列表|使用,拼接|1,2,3,4,5,6|
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|address_id|int|地址id|无|1|必填|
+|order_car_list|char(200)|购物车id列表|使用,拼接|1,2,3,4,5,6|必填|
 
 return:  
 
@@ -1291,9 +1352,9 @@ url:/api/service/order/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|  
 
 return:  
 
@@ -1370,8 +1431,16 @@ orderproduct_set:
                 'pic_url':'/asd.hpg',
                 'price':1200,
                 'special_price':1200,
-                'param':'顶配',
-                'type':'顶配',
+                'number':'顶配',
+                'car_type':'顶配',
+                'specification':'顶配',
+                'brand':'顶配',
+                'sort':'顶配',
+                'unit':'顶配',
+                'production':'顶配',
+                'category':'顶配',
+                'car_type_list':'顶配',
+                'detail_url':'/uashdjk/',
                 'catalog':{
                     'id':1,
                     'create_time':'2018-07-08 12:23:34',
@@ -1396,11 +1465,11 @@ url:/api/service/order_method/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
-|method|char(20)|操作|pay:付款，finish：完成，comment:评论|pay|  
-|score|int|评分|大于等于0，小于等于5，当method为comment的时候需要|1|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
+|method|char(20)|操作|pay:付款，finish：完成，comment:评论|pay|必填|  
+|score|int|评分|大于等于0，小于等于5，当method为comment的时候需要|1|选填|  
 
 return:  
 
@@ -1418,9 +1487,9 @@ url:/api/service/order_delete/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
 
 return:  
 
@@ -1440,8 +1509,8 @@ url:/api/service/rules/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
 
 return:  
 
@@ -1475,9 +1544,9 @@ url:/api/service/rules/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
 
 return:  
 
@@ -1513,8 +1582,8 @@ url:/api/service/newscatalog/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
 
 return:  
 
@@ -1542,9 +1611,9 @@ url:/api/service/newscatalog/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
 
 return:  
 
@@ -1574,8 +1643,8 @@ url:/api/service/newsinfo/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|    
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|    
 
 return:  
 
@@ -1619,9 +1688,9 @@ url:/api/service/news/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|news_catalog_id|int|分类id|无|0|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|news_catalog_id|int|分类id|无|0|选填|  
 
 return:  
 
@@ -1636,6 +1705,7 @@ return:
 |pic_url|char(50)|封面url|无|  
 |pic_url_list|list|图片url列表|图片都放在这个文件夹下|  
 |is_bar|bool|是否是滚动资讯|会被显示在滚动区|  
+|detail_url|char(500)|详情页面url|无|  
 ```
 {
     'data':
@@ -1654,7 +1724,8 @@ return:
         'content':'没钱了',
         'pic_url':'asdla.jpg',
         'pic_url_list':['/asd.hpg','/fasda.jpg'],
-        'is_bar':true
+        'is_bar':true,
+        'detail_url':www.ajskdh.com/asdasda/
     }]
 }
 ```
@@ -1665,9 +1736,9 @@ url:/api/service/news/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
 
 return:  
 
@@ -1682,6 +1753,7 @@ return:
 |pic_url|char(50)|封面url|无|  
 |pic_url_list|list|图片url列表|图片都放在这个文件夹下|  
 |is_bar|bool|是否是滚动资讯|会被显示在滚动区|  
+|detail_url|char(500)|详情页面url|无|  
 ```
 {
     'data':
@@ -1699,7 +1771,8 @@ return:
         'content':'没钱了',
         'pic_url':'asdla.jpg',
         'pic_url_list':['/asd.hpg','/fasda.jpg'],
-        'is_bar':true
+        'is_bar':true,
+        'detail_url':www.ajskdh.com/asdasda/
     }
 }
 ```
@@ -1710,9 +1783,9 @@ url:/api/service/news_detail/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
 ```
 {
 }
@@ -1735,12 +1808,12 @@ url:/api/maintain/garage/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|name|char(50)|汽修厂名称|无|天河|  
-|orderby|char(100)|排序规则|all、distance、popular|popular|  
-|longitude|float|经度|必填|23|  
-|latitude|float|纬度|必填|123|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|name|char(50)|汽修厂名称|无|天河|选填|    
+|orderby|char(100)|排序规则|all、distance、popular|popular|必填|    
+|longitude|float|经度|必填|23|必填|    
+|latitude|float|纬度|必填|123|必填|    
 
 return:  
 
@@ -1758,8 +1831,9 @@ return:
 |phone|char(20)|固定电话|无|   
 |filter_price|float|过滤格|保养使用|  
 |popular|int|人气|无|  
+|score|float|评分|无|  
 |pic_url|char(50)|封面url|无|  
-|distance|float|距离|无|  
+|distance|float|距离|单位：km|  
 ```
 {
     'data':
@@ -1776,6 +1850,7 @@ return:
         'phone':'020-8888888',
         'filter_price':88,
         'popular':1,
+        'score':1,
         'pic_url':'asdla.jpg',
         'distance':10
     }]
@@ -1788,9 +1863,9 @@ url:/api/maintain/garage/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
 
 return:  
 
@@ -1808,8 +1883,9 @@ return:
 |phone|char(20)|固定电话|无|   
 |filter_price|float|过滤格|保养使用|  
 |popular|int|人气|无|  
+|score|float|评分|无|  
 |pic_url|char(50)|封面url|无|  
-|distance|float|距离|无|  
+|distance|float|距离|单位：km|  
 ```
 {
     'data':
@@ -1826,6 +1902,7 @@ return:
         'phone':'020-8888888',
         'filter_price':88,
         'popular':1,
+        'score':1,
         'pic_url':'asdla.jpg',
         'distance':10
     }
@@ -1840,9 +1917,9 @@ url:/api/maintain/oil/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|garage_id|int|汽修厂id|无|1|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|garage_id|int|汽修厂id|无|1|必填|  
 
 return:  
 
@@ -1878,9 +1955,9 @@ url:/api/maintain/oil/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|必填|  
 
 return:  
 
@@ -1918,9 +1995,9 @@ url:/api/maintain/upkeep/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|finish|int|是否完成|0表示所有，1表示未完成，2表示已完成|1|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|finish|int|是否完成|0表示所有，1表示未完成，2表示已完成|1|必填|  
 
 return:  
 
@@ -1977,8 +2054,11 @@ return:
             'address':'广州越秀区',
             'mobile_phone':'12345678998',
             'phone':'020-8888888',
-            'oil_block':70,
-            'work_price':88
+            'filter_price':88,
+            'popular':1,
+            'score':1,
+            'pic_url':'asdla.jpg',
+            'distance':10
         },
         'name':'张三',
         'phone':'12345678998',
@@ -2019,17 +2099,17 @@ url:/api/maintain/upkeep/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|garage_id|int|汽修厂id|无|1|  
-|car_id|int|汽车id|无|1|  
-|name|char(20)|联系人|无|张三|  
-|phone|char(20)|电话号码|无|12345678909|  
-|subscribe_time|datetime|预约时间|无|2018-07-08 12:23:34|  
-|longitude|float|经度|无|1|  
-|latitude|float|纬度|无|1|  
-|address|char(100)|地址|无|广州市越秀区|  
-|oil_id|int|机油id|无|1|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|garage_id|int|汽修厂id|无|1|必填|  
+|car_id|int|汽车id|无|1|必填|  
+|name|char(20)|联系人|无|张三|必填|  
+|phone|char(20)|电话号码|无|12345678909|必填|  
+|subscribe_time|datetime|预约时间|无|2018-07-08 12:23:34|必填|  
+|longitude|float|经度|无|1|必填|  
+|latitude|float|纬度|无|1|必填|  
+|address|char(100)|地址|无|广州市越秀区|必填|  
+|oil_id|int|机油id|无|1|必填|  
 
 return:  
 
@@ -2048,9 +2128,9 @@ url:/api/maintain/upkeep/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
 
 return:  
 
@@ -2097,7 +2177,7 @@ return:
         'create_time':'2018-07-08 12:23:34',
         'update_time':'2018-07-08 12:23:34',
         'garage':{
-            'id':1,
+        'id':1,
             'create_time':'2018-07-08 12:23:34',
             'update_time':'2018-07-08 12:23:34',
             'name':'1',
@@ -2107,8 +2187,11 @@ return:
             'address':'广州越秀区',
             'mobile_phone':'12345678998',
             'phone':'020-8888888',
-            'oil_block':70,
-            'work_price':88
+            'filter_price':88,
+            'popular':1,
+            'score':1,
+            'pic_url':'asdla.jpg',
+            'distance':10
         },
         'name':'张三',
         'phone':'12345678998',
@@ -2149,9 +2232,9 @@ url:/api/maintain/upkeep/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
 
 return:  
 
@@ -2169,11 +2252,11 @@ url:/api/maintain/upkeep_method/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
-|method|char(20)|操作|pay:付款，comment:评论|comment|  
-|score|int|评分|大于等于0，小于等于5，当method为comment的时候需要|1|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
+|method|char(20)|操作|pay:付款，comment:评论|comment|必填|  
+|score|int|评分|大于等于0，小于等于5，当method为comment的时候需要|1|选填|  
 
 return:  
 
@@ -2193,9 +2276,9 @@ url:/api/maintain/maintain/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|finish|int|是否完成|0表示所有，1表示未完成，2表示已完成|1|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|finish|int|是否完成|0表示所有，1表示未完成，2表示已完成|1|必填|  
 
 return:  
 
@@ -2288,18 +2371,18 @@ url:/api/maintain/maintain/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|garage_id|int|汽修厂id|无|1|  
-|name|char(20)|名称|无|张三|  
-|phone|char(20)|电话号码|无|12345678998|  
-|longitude|float|经度|无|104|  
-|latitude|float|纬度|无|23|  
-|address|char(100)|地址|无|广州天河区|  
-|subscribe_time|datetime|预约时间|无|2018-07-08 12:23:34|  
-|content|text|内容|无|修理|  
-|number|int|数量|多少个文件|1|  
-|pic1|文件流|图片|编号从1开始|(文件流)|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|garage_id|int|汽修厂id|无|1|必填|  
+|name|char(20)|名称|无|张三|必填|  
+|phone|char(20)|电话号码|无|12345678998|必填|  
+|longitude|float|经度|无|104|必填|  
+|latitude|float|纬度|无|23|必填|  
+|address|char(100)|地址|无|广州天河区|必填|  
+|subscribe_time|datetime|预约时间|无|2018-07-08 12:23:34|必填|  
+|content|text|内容|无|修理|必填|  
+|number|int|数量|多少个文件|1|必填|  
+|pic1|文件流|图片|编号从1开始|(文件流)|选填|  
 
 return:  
 
@@ -2318,9 +2401,9 @@ url:/api/maintain/maintain/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
 
 return:  
 
@@ -2413,9 +2496,9 @@ url:/api/maintain/maintain_delete/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
 
 return:  
 
@@ -2433,11 +2516,11 @@ url:/api/maintain/maintain_method/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
-|method|char(20)|操作|pay:付款，comment:评论|comment|  
-|score|int|评分|大于等于0，小于等于5，当method微comment的时候需要|1|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
+|method|char(20)|操作|pay:付款，comment:评论|comment|必填|  
+|score|int|评分|大于等于0，小于等于5，当method微comment的时候需要|1|选填|  
 
 return:  
 
@@ -2455,10 +2538,10 @@ url:/api/maintain/list/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|state|int|状态|-1:全部，0:未支付，1:等待服务，2:服务中，3:已完成|1|  
-|is_comment|bool|是否评论|无|true|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|state|int|状态|-1:全部，0:未支付，1:等待服务，2:服务中，3:已完成|1|必填|  
+|is_comment|bool|是否评论|无|true|选填|  
 
 return:  
 
@@ -2497,8 +2580,8 @@ url:/api/survey/surveystation/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
 
 return:  
 
@@ -2534,9 +2617,9 @@ url:/api/survey/surveystation/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|  
 
 return:  
 
@@ -2574,8 +2657,8 @@ url:/api/survey/combo/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
 
 return:  
 
@@ -2624,9 +2707,9 @@ url:/api/survey/combo/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|  
 
 return:  
 
@@ -2677,9 +2760,9 @@ url:/api/survey/survey/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|finish|int|是否完成|0表示所有，1表示未完成，2表示已完成|1|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|finish|int|是否完成|0表示所有，1表示未完成，2表示已完成|1|必填|  
 
 '''
 代驾取车：0:等待支付，1:等待接单，2:等待取车  
@@ -2717,6 +2800,8 @@ return:
 |state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检结束，6.到达还车，7.已还车，8.已完成，9.已取消|  
 |is_success|bool|年检是否成功|无|  
 |drive_user_id|int|接单用户id|无|  
+|drive_user_pic_url|char(100)|接单用户头像url|无|  
+|drive_user_name|char(100)|接单用户名称|无|  
 |order_time|datetime|下单时间|无|  
 |receive_time|datetime|接单时间|无|  
 |get_time|datetime|取车时间|无|  
@@ -2726,18 +2811,21 @@ return:
 |return_time|datetime|还车时间|无|  
 |confirm_time|datetime|确认时间|无|  
 |cancel_time|datetime|取消时间|无|  
-|pic_list|list|图片备注对象列表|get_confirm:取车图片-检车确认,get_car:取车图片-车身拍照,survey_upload:年检已过-上传照片,survey_lamp:年检未过-车灯照片,survey_exhaust:年检未过-排气照片,survey_appearance:年检未过-外观照片,return_confirm:还车图片-检车确认,return_car:还车图片-车身拍照|  
+|surveypic_list|list|图片备注对象列表|get_confirm:取车图片-检车确认,get_car:取车图片-车身拍照,survey_upload:年检已过-上传照片,survey_lamp:年检未过-车灯照片,survey_exhaust:年检未过-排气照片,survey_appearance:年检未过-外观照片,return_confirm:还车图片-检车确认,return_car:还车图片-车身拍照|  
 
-pic：
+surveypic_list:
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
-|id|int|id|无|  
-|create_time|datetime|创建时间|无|  
-|update_time|datetime|修改时间|无|  
-|type|datetime|类型|无|  
-|pic_url|datetime|图片url|无|  
-|note|datetime|备注|无|  
+|type|char(100)|类型|无|  
+|obj_list|list|列表|无|  
+
+obj:
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|pic_url|char(100)|图片url|无|  
+|note|char(100)|备注|无|  
 
 ```
 {
@@ -2784,6 +2872,8 @@ pic：
         'state':1,
         'is_success':true,
         'drive_user_id':1,
+        'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
+        'drive_user_name':'李四',
         'order_time':'2018-07-08 12:23:34',
         'receive_time':'2018-07-08 12:23:34',
         'get_time':'2018-07-08 12:23:34',
@@ -2793,13 +2883,12 @@ pic：
         'return_time':'2018-07-08 12:23:34',
         'confirm_time':'2018-07-08 12:23:34',
         'cancel_time':'2018-07-08 12:23:34',
-        'pic_list':[{
-            'id':1,
-            'create_time':'2018-07-08 12:23:34',
-            'update_time':'2018-07-08 12:23:34',
-            'type':'survey_lamp',
-            'pic_url':'2018-07-08 12:23:34',
-            'note':'车钥匙'
+        'surveypic_list':[{
+            'type':'asjkdh',
+            'obj_list':[{
+                'pic_url':'/123.jpg',
+                'note':'khaljsdhfashjfl'
+            }]
         }]
     }]
 }
@@ -2811,22 +2900,22 @@ url:/api/survey/survey/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|name|char(20)|联系人|无|张三|  
-|phone|char(20)|联系人电话|无|12345678998|  
-|car_name|char(20)|车主姓名|无|张三|  
-|car_brand|char(20)|品牌型号|无|玛萨拉蒂|  
-|car_code|char(20)|车牌|无|粤A23452|  
-|car_type|char(100)|车量类型|小型蓝牌，七座以下|  
-|surveystation_id|int|年检站id|无|1|  
-|order_longitude|float|交接地点经度|无|233|  
-|order_latitude|float|交接地点纬度|无|322|  
-|order_address|char(100)|交接地点|无|广州白云区|  
-|subscribe_time|datetime|预约日期|13点前表示上午，13点后表示下午|2018-07-08 12:23:34|  
-|is_self|bool|是否自驾|无|false|  
-|combo_id|int|套餐id|无|1|  
-|comboitem_list|char(100)|套餐选项id|使用,拼接|1,2|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|name|char(20)|联系人|无|张三|必填|  
+|phone|char(20)|联系人电话|无|12345678998|必填|  
+|car_name|char(20)|车主姓名|无|张三|必填|  
+|car_brand|char(20)|品牌型号|无|玛萨拉蒂|必填|  
+|car_code|char(20)|车牌|无|粤A23452|必填|  
+|car_type|char(100)|车量类型|小型蓝牌，七座以下|必填|  
+|surveystation_id|int|年检站id|无|1|必填|  
+|order_longitude|float|交接地点经度|无|233|必填|  
+|order_latitude|float|交接地点纬度|无|322|必填|  
+|order_address|char(100)|交接地点|无|广州白云区|必填|  
+|subscribe_time|datetime|预约日期|13点前表示上午，13点后表示下午|2018-07-08 12:23:34|必填|  
+|is_self|bool|是否自驾|无|false|必填|  
+|combo_id|int|套餐id|无|1|必填|  
+|comboitem_list|char(100)|套餐选项id|使用,拼接|1,2|必填|  
 
 return:  
 
@@ -2845,9 +2934,9 @@ url:/api/survey/survey/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
 
 return:  
 
@@ -2877,6 +2966,8 @@ return:
 |state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检结束，6.到达还车，7.已还车，8.已完成，9.已取消|  
 |is_success|bool|年检是否成功|无|  
 |drive_user_id|int|接单用户id|无|  
+|drive_user_pic_url|char(100)|接单用户头像url|无|  
+|drive_user_name|char(100)|接单用户名称|无|  
 |order_time|datetime|下单时间|无|  
 |receive_time|datetime|接单时间|无|  
 |get_time|datetime|取车时间|无|  
@@ -2886,18 +2977,21 @@ return:
 |return_time|datetime|还车时间|无|  
 |confirm_time|datetime|确认时间|无|  
 |cancel_time|datetime|取消时间|无|  
-|pic_list|list|图片备注对象列表|get_confirm:取车图片-检车确认,get_car:取车图片-车身拍照,survey_upload:年检已过-上传照片,survey_lamp:年检未过-车灯照片,survey_exhaust:年检未过-排气照片,survey_appearance:年检未过-外观照片,return_confirm:还车图片-检车确认,return_car:还车图片-车身拍照|  
+|surveypic_list|list|图片备注对象列表|get_confirm:取车图片-检车确认,get_car:取车图片-车身拍照,survey_upload:年检已过-上传照片,survey_lamp:年检未过-车灯照片,survey_exhaust:年检未过-排气照片,survey_appearance:年检未过-外观照片,return_confirm:还车图片-检车确认,return_car:还车图片-车身拍照|  
 
-pic：
+surveypic_list:
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
-|id|int|id|无|  
-|create_time|datetime|创建时间|无|  
-|update_time|datetime|修改时间|无|  
-|type|datetime|类型|无|  
-|pic_url|datetime|图片url|无|  
-|note|datetime|备注|无|  
+|type|char(100)|类型|无|  
+|obj_list|list|列表|无|  
+
+obj:
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|pic_url|char(100)|图片url|无|  
+|note|char(100)|备注|无|  
 
 ```
 {
@@ -2944,6 +3038,8 @@ pic：
         'state':1,
         'is_success':true,
         'drive_user_id':1,
+        'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
+        'drive_user_name':'李四',
         'order_time':'2018-07-08 12:23:34',
         'receive_time':'2018-07-08 12:23:34',
         'get_time':'2018-07-08 12:23:34',
@@ -2953,13 +3049,12 @@ pic：
         'return_time':'2018-07-08 12:23:34',
         'confirm_time':'2018-07-08 12:23:34',
         'cancel_time':'2018-07-08 12:23:34',
-        'pic_list':[{
-            'id':1,
-            'create_time':'2018-07-08 12:23:34',
-            'update_time':'2018-07-08 12:23:34',
-            'type':'survey_lamp',
-            'pic_url':'2018-07-08 12:23:34',
-            'note':'车钥匙'
+        'surveypic_list':[{
+            'type':'asjkdh',
+            'obj_list':[{
+                'pic_url':'/123.jpg',
+                'note':'khaljsdhfashjfl'
+            }]
         }]
     }
 }
@@ -2971,9 +3066,9 @@ url:/api/survey/survey_delete/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
 
 return:  
 
@@ -2991,15 +3086,15 @@ url:/api/survey/survey_method/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|查询费用不需要添加id|1|   
-|method|char(20)|操作|get:查询费用，pay:支付（自驾代驾），return:确认还车（代驾），survey：到达年检（自驾）|get|  
-|longitude|float|经度|无|123|  
-|latitude|float|纬度|无|23|  
-|surveystation_id|int|年检站id|无|1|  
-|combo_id|int|套餐id|无|1|  
-|comboitem_list|char(100)|套餐选项id|使用,拼接|1,2|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|查询费用不需要添加id|1|必填|   
+|method|char(20)|操作|get:查询费用，pay:支付（自驾代驾），return:确认还车（代驾），survey：到达年检（自驾）|get|必填|  
+|longitude|float|经度|无|123|选填|  
+|latitude|float|纬度|无|23|选填|  
+|surveystation_id|int|年检站id|无|1|选填|  
+|combo_id|int|套餐id|无|1|选填|  
+|comboitem_list|char(100)|套餐选项id|使用,拼接|1,2|选填|  
 
 return:  
 
@@ -3035,8 +3130,8 @@ url:/api/system/serviceimg/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|   
 
 return:  
 
@@ -3060,8 +3155,8 @@ url:/api/system/surveyimg/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|   
 
 return:  
 
@@ -3079,6 +3174,25 @@ return:
 }
 ```
 
+<h3 id="system_aboutus_get">关于我们</h3>
+
+url:/api/system/aboutus/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|   
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+
+```
+{
+}
+```
+
 <h2 id="driver">司机端</h2>
 
 <h3 id="driver_order">订单</h3>
@@ -3089,9 +3203,9 @@ url:/api/driver/order/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|type|char(100)|类型|order：可以接的单，driver：已接订单|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|type|char(100)|类型|order：可以接的单，driver：已接订单|必填|  
 
 return:  
 
@@ -3121,6 +3235,8 @@ return:
 |state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检结束，6.到达还车，7.已还车，8.已完成，9.已取消|  
 |is_success|bool|年检是否成功|无|  
 |drive_user_id|int|接单用户id|无|  
+|drive_user_pic_url|char(100)|接单用户头像url|无|  
+|drive_user_name|char(100)|接单用户名称|无|  
 |order_time|datetime|下单时间|无|  
 |receive_time|datetime|接单时间|无|  
 |get_time|datetime|取车时间|无|  
@@ -3130,18 +3246,21 @@ return:
 |return_time|datetime|还车时间|无|  
 |confirm_time|datetime|确认时间|无|  
 |cancel_time|datetime|取消时间|无|  
-|pic_list|list|图片备注对象列表|get_confirm:取车图片-检车确认,get_car:取车图片-车身拍照,survey_upload:年检已过-上传照片,survey_lamp:年检未过-车灯照片,survey_exhaust:年检未过-排气照片,survey_appearance:年检未过-外观照片,return_confirm:还车图片-检车确认,return_car:还车图片-车身拍照|  
+|surveypic_list|list|图片备注对象列表|get_confirm:取车图片-检车确认,get_car:取车图片-车身拍照,survey_upload:年检已过-上传照片,survey_lamp:年检未过-车灯照片,survey_exhaust:年检未过-排气照片,survey_appearance:年检未过-外观照片,return_confirm:还车图片-检车确认,return_car:还车图片-车身拍照|  
 
-pic：
+surveypic_list:
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
-|id|int|id|无|  
-|create_time|datetime|创建时间|无|  
-|update_time|datetime|修改时间|无|  
-|type|datetime|类型|无|  
-|pic_url|datetime|图片url|无|  
-|note|datetime|备注|无|  
+|type|char(100)|类型|无|  
+|obj_list|list|列表|无|  
+
+obj:
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|pic_url|char(100)|图片url|无|  
+|note|char(100)|备注|无|  
 
 ```
 {
@@ -3188,6 +3307,8 @@ pic：
         'state':1,
         'is_success':true,
         'drive_user_id':1,
+        'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
+        'drive_user_name':'李四',
         'order_time':'2018-07-08 12:23:34',
         'receive_time':'2018-07-08 12:23:34',
         'get_time':'2018-07-08 12:23:34',
@@ -3197,13 +3318,12 @@ pic：
         'return_time':'2018-07-08 12:23:34',
         'confirm_time':'2018-07-08 12:23:34',
         'cancel_time':'2018-07-08 12:23:34',
-        'pic_list':[{
-            'id':1,
-            'create_time':'2018-07-08 12:23:34',
-            'update_time':'2018-07-08 12:23:34',
-            'type':'survey_lamp',
-            'pic_url':'2018-07-08 12:23:34',
-            'note':'车钥匙'
+        'surveypic_list':[{
+            'type':'asjkdh',
+            'obj_list':[{
+                'pic_url':'/123.jpg',
+                'note':'khaljsdhfashjfl'
+            }]
         }]
     }]
 }
@@ -3215,9 +3335,9 @@ url:/api/driver/order/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
  
 
 return:  
@@ -3248,6 +3368,8 @@ return:
 |state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检结束，6.到达还车，7.已还车，8.已完成，9.已取消|  
 |is_success|bool|年检是否成功|无|  
 |drive_user_id|int|接单用户id|无|  
+|drive_user_pic_url|char(100)|接单用户头像url|无|  
+|drive_user_name|char(100)|接单用户名称|无|  
 |order_time|datetime|下单时间|无|  
 |receive_time|datetime|接单时间|无|  
 |get_time|datetime|取车时间|无|  
@@ -3257,18 +3379,21 @@ return:
 |return_time|datetime|还车时间|无|  
 |confirm_time|datetime|确认时间|无|  
 |cancel_time|datetime|取消时间|无|  
-|pic_list|list|图片备注对象列表|get_confirm:取车图片-检车确认,get_car:取车图片-车身拍照,survey_upload:年检已过-上传照片,survey_lamp:年检未过-车灯照片,survey_exhaust:年检未过-排气照片,survey_appearance:年检未过-外观照片,return_confirm:还车图片-检车确认,return_car:还车图片-车身拍照|  
+|surveypic_set|list|图片备注对象列表|get_confirm:取车图片-检车确认,get_car:取车图片-车身拍照,survey_upload:年检已过-上传照片,survey_lamp:年检未过-车灯照片,survey_exhaust:年检未过-排气照片,survey_appearance:年检未过-外观照片,return_confirm:还车图片-检车确认,return_car:还车图片-车身拍照|  
 
-pic：
+surveypic_list:
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
-|id|int|id|无|  
-|create_time|datetime|创建时间|无|  
-|update_time|datetime|修改时间|无|  
-|type|datetime|类型|无|  
-|pic_url|datetime|图片url|无|  
-|note|datetime|备注|无|  
+|type|char(100)|类型|无|  
+|obj_list|list|列表|无|  
+
+obj:
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|pic_url|char(100)|图片url|无|  
+|note|char(100)|备注|无|  
 
 ```
 {
@@ -3315,6 +3440,8 @@ pic：
         'state':1,
         'is_success':true,
         'drive_user_id':1,
+        'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
+        'drive_user_name':'李四',
         'order_time':'2018-07-08 12:23:34',
         'receive_time':'2018-07-08 12:23:34',
         'get_time':'2018-07-08 12:23:34',
@@ -3324,13 +3451,12 @@ pic：
         'return_time':'2018-07-08 12:23:34',
         'confirm_time':'2018-07-08 12:23:34',
         'cancel_time':'2018-07-08 12:23:34',
-        'pic_list':[{
-            'id':1,
-            'create_time':'2018-07-08 12:23:34',
-            'update_time':'2018-07-08 12:23:34',
-            'type':'survey_lamp',
-            'pic_url':'2018-07-08 12:23:34',
-            'note':'车钥匙'
+        'surveypic_list':[{
+            'type':'asjkdh',
+            'obj_list':[{
+                'pic_url':'/123.jpg',
+                'note':'khaljsdhfashjfl'
+            }]
         }]
     }
 }
@@ -3342,9 +3468,9 @@ url:/api/driver/order_grab/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|  
 
 return:  
 
@@ -3364,9 +3490,9 @@ url:/api/driver/order_cancel/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|  
 
 return:  
 
@@ -3385,13 +3511,13 @@ url:/api/driver/order_get/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|  
-|number|int|数量|多少个文件、类型、备注，三者需要一同出现，缺少其一则会被认为没有|1|  
-|pic1|文件流|图片|编号从1开始|(文件流)|  
-|type1|char(100)|类型|get_confirm:取车图片-检车确认,get_car:取车图片-车身拍照|get_confirm|  
-|note1|char(100)|备注|无|车钥匙|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|  
+|number|int|数量|多少个文件、类型、备注，三者需要一同出现，缺少其一则会被认为没有|1|必填|  
+|pic1|文件流|图片|编号从1开始|(文件流)|选填|  
+|type1|char(100)|类型|get_confirm:取车图片-检车确认,get_car:取车图片-车身拍照|get_confirm|选填|  
+|note1|char(100)|备注|无|车钥匙|选填|  
 
 return:  
 
@@ -3410,9 +3536,9 @@ url:/api/driver/order_survey/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|  
 
 return:  
 
@@ -3431,13 +3557,13 @@ url:/api/driver/order_success/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|  
-|number|int|数量|多少个文件、类型、备注，三者需要一同出现，缺少其一则会被认为没有|1|  
-|pic1|文件流|图片|编号从1开始|(文件流)|  
-|type1|char(100)|类型|survey_upload:年检已过-上传照片|survey_upload|  
-|note1|char(100)|备注|无|车钥匙|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|  
+|number|int|数量|多少个文件、类型、备注，三者需要一同出现，缺少其一则会被认为没有|1|必填|  
+|pic1|文件流|图片|编号从1开始|(文件流)|选填|  
+|type1|char(100)|类型|survey_upload:年检已过-上传照片|survey_upload|选填|  
+|note1|char(100)|备注|无|车钥匙|选填|  
 
 return:  
 
@@ -3456,13 +3582,13 @@ url:/api/driver/order_fail/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|  
-|number|int|数量|多少个文件、类型、备注，三者需要一同出现，缺少其一则会被认为没有|1|  
-|pic1|文件流|图片|编号从1开始|(文件流)|  
-|type1|char(100)|类型|survey_lamp:年检未过-车灯照片,survey_exhaust:年检未过-排气照片,survey_appearance:年检未过-外观照片|survey_lamp|  
-|note1|char(100)|备注|无|车钥匙|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|  
+|number|int|数量|多少个文件、类型、备注，三者需要一同出现，缺少其一则会被认为没有|1|必填|  
+|pic1|文件流|图片|编号从1开始|(文件流)|选填|  
+|type1|char(100)|类型|survey_lamp:年检未过-车灯照片,survey_exhaust:年检未过-排气照片,survey_appearance:年检未过-外观照片|survey_lamp|选填|  
+|note1|char(100)|备注|无|车钥匙|选填|  
 
 
 return:  
@@ -3482,9 +3608,9 @@ url:/api/driver/order_arrive/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|  
 
 return:  
 
@@ -3503,13 +3629,13 @@ url:/api/driver/order_return/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|  
-|number|int|数量|多少个文件、类型、备注，三者需要一同出现，缺少其一则会被认为没有|1|  
-|pic1|文件流|图片|编号从1开始|(文件流)|  
-|type1|char(100)|类型|return_confirm:还车图片-检车确认,return_car:还车图片-车身拍照|return_confirm|  
-|note1|char(100)|备注|无|车钥匙|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|  
+|number|int|数量|多少个文件、类型、备注，三者需要一同出现，缺少其一则会被认为没有|1|必填|  
+|pic1|文件流|图片|编号从1开始|(文件流)|选填|  
+|type1|char(100)|类型|return_confirm:还车图片-检车确认,return_car:还车图片-车身拍照|return_confirm|选填|  
+|note1|char(100)|备注|无|车钥匙|选填|  
 
 return:  
 
@@ -3531,8 +3657,8 @@ url:/api/driver/account/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
 
 return:  
 
@@ -3573,9 +3699,9 @@ url:/api/driver/account/
 method:get  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|id|int|id|无|1|   
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
 
 return:  
 
@@ -3616,10 +3742,10 @@ url:/api/driver/account/
 method:post  
 param:   
 
-|参数|类型|说明|备注|例子|  
-|---|---|---|---|---|  
-|money|float|提现金额|无|1|  
-|via|char(100)|体现途径|alipay,weixin|weixin|  
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|money|float|提现金额|无|1|必填|  
+|via|char(100)|体现途径|alipay,weixin|weixin|必填|  
 
 return:  
 
@@ -3629,5 +3755,30 @@ return:
 ```
 {
     'data':{}
+}
+```
+
+<h4 id="driver_balance_get">用户余额查询</h4>
+
+url:/api/driver/balance/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|balance|float|余额|无|  
+
+```
+{
+    'data':
+    {
+        'balance':11231,
+    }
 }
 ```
