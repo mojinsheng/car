@@ -1883,7 +1883,7 @@ return:
 |phone|char(20)|固定电话|无|   
 |filter_price|float|过滤格|保养使用|  
 |popular|int|人气|无|  
-|score|float|评分|无|  
+|score|int|评分|无|  
 |pic_url|char(50)|封面url|无|  
 |distance|float|距离|单位：km|  
 ```
@@ -2034,8 +2034,17 @@ return:
 |oil_L|int|升|无|  
 |oil_price|float|原价|无|  
 |oil_new_price|float|特价|无|  
-|car_brand|char(100)|车辆品牌|无|玛萨拉蒂|  
-|car_code|char(10)|车牌号码|无|粤A24351|  
+|car_brand|char(100)|车辆品牌|无|  
+|car_code|char(10)|车牌号码|无|  
+|upkeeppic_set|list|汽修站提交的图片与附加信息对象数组|无|  
+
+upkeeppic_set：
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|pic_url|char(100)|图片url|无|  
+|note|char(100)|备注|无|  
+
 ```
 {
     'data':
@@ -2088,7 +2097,11 @@ return:
         'oil_price':1,
         'oil_new_price':1,
         'car_brand':'玛萨拉蒂',
-        'car_code':'粤A24351'
+        'car_code':'粤A24351',
+        'upkeeppic_set':[{
+            'pic_url':'/asdfas.jpg',
+            'note':'车钥匙'
+        }]
     }]
 }
 ```
@@ -2169,6 +2182,14 @@ return:
 |oil_new_price|float|特价|无|  
 |car_brand|char(100)|车辆品牌|无|玛萨拉蒂|  
 |car_code|char(10)|车牌号码|无|粤A24351|  
+|upkeeppic_set|list|汽修站提交的图片与附加信息对象数组|无|  
+
+upkeeppic_set：
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|pic_url|char(100)|图片url|无|  
+|note|char(100)|备注|无|  
 ```
 {
     'data':
@@ -2221,7 +2242,11 @@ return:
         'oil_price':1,
         'oil_new_price':1,
         'car_brand':'玛萨拉蒂',
-        'car_code':'粤A24351'
+        'car_code':'粤A24351',
+        'upkeeppic_set':[{
+            'pic_url':'/asdfas.jpg',
+            'note':'车钥匙'
+        }]
     }
 }
 ```
@@ -2314,6 +2339,14 @@ return:
 |service_materials|text|服务材料|无|  
 |deal_id|char(10)|交易单号|无|  
 |order_id|char(10)|订单单号|无|  
+|maintainpic_set|list|汽修站提交的图片与附加信息对象数组|无|  
+
+maintainpic_set:
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|pic_url|char(100)|图片url|无|  
+|note|char(100)|备注|无|  
 ```
 {
     'data':
@@ -2360,7 +2393,11 @@ return:
         'service_item':'装轮胎',
         'service_materials':'轮胎',
         'deal_id':'182731725',
-        'order_id':'8927918238271'
+        'order_id':'8927918238271',
+        'maintainpic_set':[{
+            'pic_url':'/asdfas.jpg',
+            'note':'车钥匙'
+        }]
     }]
 }
 ```
@@ -2439,6 +2476,14 @@ return:
 |service_materials|text|服务材料|无|  
 |deal_id|char(10)|交易单号|无|  
 |order_id|char(10)|订单单号|无|  
+|maintainpic_set|list|汽修站提交的图片与附加信息对象数组|无|  
+
+maintainpic_set:
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|pic_url|char(100)|图片url|无|  
+|note|char(100)|备注|无|  
 ```
 {
     'data':
@@ -2485,7 +2530,11 @@ return:
         'service_item':'装轮胎',
         'service_materials':'轮胎',
         'deal_id':'182731725',
-        'order_id':'8927918238271'
+        'order_id':'8927918238271',
+        'maintainpic_set':[{
+            'pic_url':'/asdfas.jpg',
+            'note':'车钥匙'
+        }]
     }
 }
 ```
