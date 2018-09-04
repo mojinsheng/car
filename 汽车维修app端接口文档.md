@@ -867,9 +867,9 @@ param:
 
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
-|catalog_id|int|分类id|默认为0|1|选填|    
-|price_order|int|价格排序|0：无，1:从低到高，2:从高到低|0|选填|    
-|sale_order|int|销量排序|0：无，1:从低到高，2:从高到低|0|选填|    
+|catalog_id|int|分类id|无|1|选填|    
+|price_order|int|价格排序|1:从低到高，2:从高到低|1|选填|    
+|sale_order|int|销量排序|1:从低到高，2:从高到低|2|选填|    
 
 return:  
 
@@ -1645,6 +1645,7 @@ param:
 
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|    
+|news_catalog_id|int|分类id|无|0|选填|  
 
 return:  
 
@@ -1659,6 +1660,8 @@ return:
 |pic_url|char(50)|封面url|无|  
 |pic_url_list|list|图片url列表|图片都放在这个文件夹下|  
 |is_bar|bool|是否是滚动资讯|会被显示在滚动区|  
+|detail_url|char(500)|详情页面url|无|  
+
 ```
 {
     'data':
@@ -1677,7 +1680,8 @@ return:
         'content':'没钱了',
         'pic_url':'asdla.jpg',
         'pic_url_list':['/asd.hpg','/fasda.jpg'],
-        'is_bar':true
+        'is_bar':true,
+        'detail_url':'www.ajskdh.com/asdasda/'
     }]
 }
 ```
@@ -1725,7 +1729,7 @@ return:
         'pic_url':'asdla.jpg',
         'pic_url_list':['/asd.hpg','/fasda.jpg'],
         'is_bar':true,
-        'detail_url':www.ajskdh.com/asdasda/
+        'detail_url':'www.ajskdh.com/asdasda/'
     }]
 }
 ```
@@ -1772,7 +1776,7 @@ return:
         'pic_url':'asdla.jpg',
         'pic_url_list':['/asd.hpg','/fasda.jpg'],
         'is_bar':true,
-        'detail_url':www.ajskdh.com/asdasda/
+        'detail_url':'www.ajskdh.com/asdasda/'
     }
 }
 ```
@@ -2253,7 +2257,7 @@ upkeeppic_set：
 
 <h4 id="maintain_upkeep_delete">删除保养订单信息</h4>
 
-url:/api/maintain/upkeep/  
+url:/api/maintain/upkeep_delete/  
 method:get  
 param:   
 
@@ -2814,7 +2818,8 @@ param:
 |finish|int|是否完成|0表示所有，1表示未完成，2表示已完成|1|必填|  
 
 '''
-代驾取车：0:等待支付，1:等待接单，2:等待取车  
+无：0:等待支付  
+代驾取车：1:等待接单，2:等待取车  
 开始年检：3.等待年检，4.正在年检，5.年检结束  
 检完还车：6.到达还车，7.已还车，8.已完成  
 代驾：0-1-2-3-4-5-6-7-8  
@@ -3255,6 +3260,7 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |type|char(100)|类型|order：可以接的单，driver：已接订单|必填|  
+|finish|int|是否完成|0表示所有，1表示未完成，2表示已完成|1|当type=driver的时候必填|  
 
 return:  
 
