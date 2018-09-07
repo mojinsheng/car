@@ -13,6 +13,7 @@
     * [查询自身信息](#user_user_get)
     * [修改自身信息](#user_user_put)
   - [车辆信息](#user_car)
+    * [查询车辆二级地址信息](#user_caraddress_list_get)
     * [查询所有车辆信息](#user_car_list_get)
     * [添加车辆信息](#user_car_list_post)
     * [查询车辆信息](#user_car_get)
@@ -69,13 +70,13 @@
     * [生成保养订单信息](#maintain_upkeep_list_post)
     * [查询保养信息](#maintain_upkeep_get)
     * [删除保养订单信息](#maintain_upkeep_delete)
-    * [付款、评论保养订单信息](#maintain_upkeep_method_post)
+    * [付款、完成、评论保养订单信息](#maintain_upkeep_method_post)
   - [维修](#maintain_maintain)
     * [查询维修列表信息](#maintain_maintain_list_get)
     * [生成维修订单信息](#maintain_maintain_list_post)
     * [查询维修信息](#maintain_maintain_get)
     * [删除维修订单信息](#maintain_maintain_delete)
-    * [付款、评论维修订单信息](#maintain_maintain_method_post)
+    * [付款、完成、评论维修订单信息](#maintain_maintain_method_post)
   - [保养、维修订单列表信息](#maintain_list_get)  
  5. [年检](#survey)
   - [年检站信息](#survey_surveystation)
@@ -392,6 +393,48 @@ return:
 
 <h3 id="user_car">车辆信息</h3>
 
+<h4 id="user_caraddress_list_get">查询车辆二级地址信息</h4>
+
+url:/api/user/caraddress/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|id|无|  
+|province|char(50)|名称|无|  
+|carcity_set|list|城市对象列表|无|  
+
+carcity_set:
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|id|无|  
+|city_name|char(50)|名称|无|  
+|city_code|char(50)|代码|无|  
+
+```
+{
+    'data':
+    [{
+        "id": 1,
+        "province": "北京",
+        "carcity_set": [
+            {
+                "id": 1,
+                "city_name": "北京",
+                "city_code": "BJ"
+            }
+        ]
+    }]
+}
+```
+
 <h4 id="user_car_list_get">查询所有车辆信息</h4>
 
 url:/api/user/car/  
@@ -414,8 +457,10 @@ return:
 |code|char(10)|车牌号码|无|  
 |engine|char(100)|发动机|无|  
 |buy_time|date|购车时间|无|  
-|mileage|float|里程|无|  
 |is_default|bool|是否默认|无|  
+|city_code|char(100)|城市代码|无|  
+|classsno|char(100)|车架号|无|  
+|hpzl|char(5)|号牌类型|02:小型车，01:大型车,16:教练车|  
 
 ```
 {
@@ -429,8 +474,10 @@ return:
         'code':'粤A24351',
         'engine':'TX21',
         'buy_time':'2018-03-20',
-        'mileage':'12',
-        'is_default':false
+        'is_default':false,
+        'city_code':'SH',
+        'classsno':'121231',
+        'hpzl':'02'
     }]
 }
 ```
@@ -446,10 +493,12 @@ param:
 |code|char(10)|车牌号码|无|粤A24351|必填|  
 |pic|文件流|照片文件|无|(文件流，base64)|选填|  
 |brand|char(100)|品牌|无|玛萨拉蒂|选填|  
-|engine|char(100)|发动机|无|TX21|选填|  
+|engine|char(100)|发动机|无|TX21|必填|  
 |buy_time|date|购车时间|无|2018-03-20|选填|  
-|mileage|float|里程|无|12|选填|  
 |is_default|bool|是否默认|无|false|选填|  
+|city_code|char(100)|城市代码|无|SH|必填|  
+|classsno|char(100)|车架号|无|affa123fd|必填|  
+|hpzl|char(5)|号牌类型|02:小型车，01:大型车,16:教练车|02|必填|  
 
 return:  
 
@@ -483,8 +532,10 @@ return:
 |code|char(10)|车牌号码|无|  
 |engine|char(100)|发动机|无|  
 |buy_time|date|购车时间|无|  
-|mileage|float|里程|无|  
 |is_default|bool|是否默认|无|  
+|city_code|char(100)|城市代码|无|  
+|classsno|char(100)|车架号|无|  
+|hpzl|char(5)|号牌类型|02:小型车，01:大型车,16:教练车|  
 
 ```
 {
@@ -498,8 +549,10 @@ return:
         'code':'粤A24351',
         'engine':'TX21',
         'buy_time':'2018-03-20',
-        'mileage':'12',
-        'is_default':false
+        'is_default':false,
+        'city_code':'SH',
+        'classsno':'121231',
+        'hpzl':'02'
     }
 }
 ```
@@ -518,8 +571,10 @@ param:
 |brand|char(100)|品牌|无|玛萨拉蒂|选填|  
 |engine|char(100)|发动机|无|TX21|选填|  
 |buy_time|date|购车时间|无|2018-03-20|选填|  
-|mileage|float|里程|无|12|选填|  
 |is_default|bool|是否默认|无|false|选填|  
+|city_code|char(100)|城市代码|无|SH|选填|  
+|classsno|char(100)|车架号|无|affa123fd|选填|  
+|hpzl|char(5)|号牌类型|02:小型车，01:大型车,16:教练车|02|选填|  
 
 return:  
 
@@ -611,6 +666,7 @@ return:
 |node3|object|第三级地址|查看三级地址信息|  
 |address|char(100)|收货地址|无|  
 |is_default|bool|是否默认|false|  
+
 ```
 {
     'data':
@@ -1993,6 +2049,15 @@ return:
 
 <h3 id="maintain_upkeep">保养</h3>
 
+```
+流程：  
+用户提交订单->用户付款->维修厂点击开始保养->维修厂填写保养报告->维修厂点击保养结束->用户确认完成订单->用户评价  
+未支付：用户提交订单，并付款后，结束此状态，进入下一个状态。  
+等待服务：用户付款以后进入此状态，然后维修厂点击开始保养，需要填写取车时间，结束此状态，进入下一个状态。  
+服务中：当is_upkeep=0，则表示保养未完成，维修厂可以填写保养报告。当维修厂点击保养结束，is_upkeep=1，表示保养完成，用户则可以选择完成订单，结束此状态，进入下一个状态。  
+已完成：用户已经确认完成订单，订单结束，可以开始评价，is_comment表示是否评价了。  
+```
+
 <h4 id="maintain_upkeep_list_get">查询保养列表信息</h4>
 
 url:/api/maintain/upkeep/  
@@ -2024,12 +2089,15 @@ return:
 |state|int|状态|0:未支付，1:等待服务，2:服务中，3:已完成|  
 |is_delete|bool|删除状态|无|  
 |is_comment|bool|评论状态|无|  
+|is_upkeep|bool|维修状态|无|  
 |score|int|评分|大于等于0，小于等于5|  
 |order_time|datetime|下单时间|无|  
 |pay_time|datetime|付款时间|无|  
+|get_time|datetime|取车时间|无|  
 |service_time|datetime|服务时间|无|  
-|comment_time|datetime|评论时间|无|  
+|maintain_time|datetime|完成服务时间|无|  
 |over_time|datetime|完成时间|无|   
+|comment_time|datetime|评论时间|无|  
 |service_item|char(100)|服务项目|无|  
 |service_materials|text|服务材料|无|  
 |deal_id|char(100)|交易单号|无|  
@@ -2086,12 +2154,15 @@ upkeeppic_set：
         'state':1,
         'is_delete':true,
         'is_comment':false,
+        'is_upkeep':false,
         'score':1,
         'order_time':'2018-07-08 12:23:34',
         'pay_time':'2018-07-08 12:23:34',
+        'get_time':'2018-07-08 12:23:34',
         'service_time':'2018-07-08 12:23:34',
-        'comment_time':'2018-07-08 12:23:34',
+        'maintain_time':'2018-07-08 12:23:34',
         'over_time':'2018-07-08 12:23:34',
+        'comment_time':'2018-07-08 12:23:34',
         'service_item':'装轮胎',
         'service_materials':'轮胎',
         'deal_id':'182731725',
@@ -2170,12 +2241,15 @@ return:
 |state|int|状态|0:未支付，1:等待服务，2:服务中，3:已完成|  
 |is_delete|bool|删除状态|无|  
 |is_comment|bool|评论状态|无|  
+|is_upkeep|bool|维修状态|无|  
 |score|int|评分|大于等于0，小于等于5|  
 |order_time|datetime|下单时间|无|  
 |pay_time|datetime|付款时间|无|  
+|get_time|datetime|取车时间|无|  
 |service_time|datetime|服务时间|无|  
-|comment_time|datetime|评论时间|无|  
+|maintain_time|datetime|完成服务时间|无|  
 |over_time|datetime|完成时间|无|   
+|comment_time|datetime|评论时间|无|  
 |service_item|char(100)|服务项目|无|  
 |service_materials|text|服务材料|无|  
 |deal_id|char(100)|交易单号|无|  
@@ -2184,8 +2258,8 @@ return:
 |oil_L|int|升|无|  
 |oil_price|float|原价|无|  
 |oil_new_price|float|特价|无|  
-|car_brand|char(100)|车辆品牌|无|玛萨拉蒂|  
-|car_code|char(10)|车牌号码|无|粤A24351|  
+|car_brand|char(100)|车辆品牌|无|  
+|car_code|char(10)|车牌号码|无|  
 |upkeeppic_set|list|汽修站提交的图片与附加信息对象数组|无|  
 
 upkeeppic_set：
@@ -2194,6 +2268,7 @@ upkeeppic_set：
 |---|---|---|---|  
 |pic_url|char(100)|图片url|无|  
 |note|char(100)|备注|无|  
+
 ```
 {
     'data':
@@ -2202,7 +2277,7 @@ upkeeppic_set：
         'create_time':'2018-07-08 12:23:34',
         'update_time':'2018-07-08 12:23:34',
         'garage':{
-        'id':1,
+            'id':1,
             'create_time':'2018-07-08 12:23:34',
             'update_time':'2018-07-08 12:23:34',
             'name':'1',
@@ -2231,12 +2306,15 @@ upkeeppic_set：
         'state':1,
         'is_delete':true,
         'is_comment':false,
+        'is_upkeep':false,
         'score':1,
         'order_time':'2018-07-08 12:23:34',
         'pay_time':'2018-07-08 12:23:34',
+        'get_time':'2018-07-08 12:23:34',
         'service_time':'2018-07-08 12:23:34',
-        'comment_time':'2018-07-08 12:23:34',
+        'maintain_time':'2018-07-08 12:23:34',
         'over_time':'2018-07-08 12:23:34',
+        'comment_time':'2018-07-08 12:23:34',
         'service_item':'装轮胎',
         'service_materials':'轮胎',
         'deal_id':'182731725',
@@ -2275,7 +2353,7 @@ return:
 }
 ```
 
-<h4 id="maintain_upkeep_method_post">付款、评论保养订单信息</h4>
+<h4 id="maintain_upkeep_method_post">付款、完成、评论保养订单信息</h4>
 
 url:/api/maintain/upkeep_method/  
 method:post  
@@ -2284,7 +2362,7 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |id|int|id|无|1|必填|   
-|method|char(20)|操作|pay:付款，comment:评论|comment|必填|  
+|method|char(20)|操作|pay:付款，finish:完成，comment:评论|comment|必填|  
 |score|int|评分|大于等于0，小于等于5，当method为comment的时候需要|1|选填|  
 
 return:  
@@ -2298,6 +2376,15 @@ return:
 ```
 
 <h3 id="maintain_maintain">维修</h3>
+
+```
+流程：  
+用户提交订单->维修厂设定金额->用户付款->维修厂点击开始维修->维修厂填写维修报告->维修厂点击维修结束->用户确认完成订单->用户评价  
+未支付：用户提交订单，price=-1，此时用户还不能付款。维修厂设置金额后，用户方可付款，结束此状态，进入下一个状态。  
+等待服务：用户付款以后进入此状态，然后维修厂点击开始维修，需要填写取车时间，结束此状态，进入下一个状态。  
+服务中：当is_maintain=0，则表示维修未完成，维修厂可以填写维修报告。当维修厂点击维修结束，is_maintain=1，表示维修完成，用户则可以选择完成订单，结束此状态，进入下一个状态。  
+已完成：用户已经确认完成订单，订单结束，可以开始评价，is_comment表示是否评价了。  
+```
 
 <h4 id="maintain_maintain_list_get">查询维修列表信息</h4>
 
@@ -2331,12 +2418,15 @@ return:
 |state|int|状态|0:未支付，1:等待服务，2:服务中，3:已完成|  
 |is_delete|bool|删除状态|无|  
 |is_comment|bool|评论状态|无|  
+|is_maintain|bool|维修状态|无|  
 |score|int|评分|大于等于0，小于等于5|  
 |order_time|datetime|下单时间|无|  
 |pay_time|datetime|付款时间|无|  
+|get_time|datetime|取车时间|无|  
 |service_time|datetime|服务时间|无|  
-|comment_time|datetime|评论时间|无|  
+|upkeep_time|datetime|完成服务时间|无|  
 |over_time|datetime|完成时间|无|  
+|comment_time|datetime|评论时间|无|  
 |car_code|char(10)|车牌|无|  
 |car_type|char(100)|车型|无|  
 |service_item|char(100)|服务项目|无|  
@@ -2387,12 +2477,15 @@ maintainpic_set:
         'state':1,
         'is_delete':true,
         'is_comment':false,
+        'is_maintain':false,
         'score':1,
         'order_time':'2018-07-08 12:23:34',
         'pay_time':'2018-07-08 12:23:34',
+        'get_time':'2018-07-08 12:23:34',
         'service_time':'2018-07-08 12:23:34',
-        'comment_time':'2018-07-08 12:23:34',
+        'upkeep_time':'2018-07-08 12:23:34',
         'over_time':'2018-07-08 12:23:34',
+        'comment_time':'2018-07-08 12:23:34',
         'car_code':'粤A88888',
         'service_item':'装轮胎',
         'service_materials':'轮胎',
@@ -2459,7 +2552,6 @@ return:
 |longitude|float|经度|无|104|  
 |latitude|float|纬度|无|23|  
 |address|char(100)|地址|无|广州天河区|  
-|car_type|char(100)|车型|无|  
 |subscribe_time|datetime|预约时间|无|  
 |content|text|内容|无|  
 |pic_url_list|list|图片列表|无|  
@@ -2469,13 +2561,17 @@ return:
 |state|int|状态|0:未支付，1:等待服务，2:服务中，3:已完成|  
 |is_delete|bool|删除状态|无|  
 |is_comment|bool|评论状态|无|  
+|is_maintain|bool|维修状态|无|  
 |score|int|评分|大于等于0，小于等于5|  
 |order_time|datetime|下单时间|无|  
 |pay_time|datetime|付款时间|无|  
+|get_time|datetime|取车时间|无|  
 |service_time|datetime|服务时间|无|  
-|comment_time|datetime|评论时间|无|  
+|upkeep_time|datetime|完成服务时间|无|  
 |over_time|datetime|完成时间|无|  
+|comment_time|datetime|评论时间|无|  
 |car_code|char(10)|车牌|无|  
+|car_type|char(100)|车型|无|  
 |service_item|char(100)|服务项目|无|  
 |service_materials|text|服务材料|无|  
 |deal_id|char(10)|交易单号|无|  
@@ -2524,12 +2620,15 @@ maintainpic_set:
         'state':1,
         'is_delete':true,
         'is_comment':false,
+        'is_maintain':false,
         'score':1,
         'order_time':'2018-07-08 12:23:34',
         'pay_time':'2018-07-08 12:23:34',
+        'get_time':'2018-07-08 12:23:34',
         'service_time':'2018-07-08 12:23:34',
-        'comment_time':'2018-07-08 12:23:34',
+        'upkeep_time':'2018-07-08 12:23:34',
         'over_time':'2018-07-08 12:23:34',
+        'comment_time':'2018-07-08 12:23:34',
         'car_code':'粤A88888',
         'service_item':'装轮胎',
         'service_materials':'轮胎',
@@ -2563,7 +2662,7 @@ return:
 }
 ```
 
-<h4 id="maintain_maintain_method_post">付款、评论维修订单信息</h4>
+<h4 id="maintain_maintain_method_post">付款、完成、评论维修订单信息</h4>
 
 url:/api/maintain/maintain_method/  
 method:post  
@@ -2572,7 +2671,7 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |id|int|id|无|1|必填|   
-|method|char(20)|操作|pay:付款，comment:评论|comment|必填|  
+|method|char(20)|操作|pay:付款，finish:完成，comment:评论|comment|必填|  
 |score|int|评分|大于等于0，小于等于5，当method微comment的时候需要|1|选填|  
 
 return:  
@@ -2856,6 +2955,7 @@ return:
 |drive_user_id|int|接单用户id|无|  
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
+|drive_user_phone|char(100)|接单用户联系电话|无|  
 |order_time|datetime|下单时间|无|  
 |receive_time|datetime|接单时间|无|  
 |get_time|datetime|取车时间|无|  
@@ -2928,6 +3028,7 @@ obj:
         'drive_user_id':1,
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
+        'drive_user_phone':'12312',
         'order_time':'2018-07-08 12:23:34',
         'receive_time':'2018-07-08 12:23:34',
         'get_time':'2018-07-08 12:23:34',
@@ -3022,6 +3123,7 @@ return:
 |drive_user_id|int|接单用户id|无|  
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
+|drive_user_phone|char(100)|接单用户联系电话|无|  
 |order_time|datetime|下单时间|无|  
 |receive_time|datetime|接单时间|无|  
 |get_time|datetime|取车时间|无|  
@@ -3094,6 +3196,7 @@ obj:
         'drive_user_id':1,
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
+        'drive_user_phone':'12312',
         'order_time':'2018-07-08 12:23:34',
         'receive_time':'2018-07-08 12:23:34',
         'get_time':'2018-07-08 12:23:34',
@@ -3292,6 +3395,7 @@ return:
 |drive_user_id|int|接单用户id|无|  
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
+|drive_user_phone|char(100)|接单用户联系电话|无|  
 |order_time|datetime|下单时间|无|  
 |receive_time|datetime|接单时间|无|  
 |get_time|datetime|取车时间|无|  
@@ -3364,6 +3468,7 @@ obj:
         'drive_user_id':1,
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
+        'drive_user_phone':'12312',
         'order_time':'2018-07-08 12:23:34',
         'receive_time':'2018-07-08 12:23:34',
         'get_time':'2018-07-08 12:23:34',
@@ -3425,6 +3530,7 @@ return:
 |drive_user_id|int|接单用户id|无|  
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
+|drive_user_phone|char(100)|接单用户联系电话|无|  
 |order_time|datetime|下单时间|无|  
 |receive_time|datetime|接单时间|无|  
 |get_time|datetime|取车时间|无|  
@@ -3497,6 +3603,7 @@ obj:
         'drive_user_id':1,
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
+        'drive_user_phone':'12312',
         'order_time':'2018-07-08 12:23:34',
         'receive_time':'2018-07-08 12:23:34',
         'get_time':'2018-07-08 12:23:34',
