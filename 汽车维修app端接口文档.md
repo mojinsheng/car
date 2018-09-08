@@ -89,8 +89,9 @@
     * [查询年检订单列表信息](#survey_survey_list_get)
     * [提交年检订单信息](#survey_survey_list_post)
     * [查询年检订单信息](#survey_survey_get)
-    * [*删除年检订单信息](#survey_survey_delete)
-    * [年检订单操作信息-查询费用、支付、确认还车](#survey_survey_method_post)
+    * [自驾年检订单操作信息-取消、查询费用、支付、确认到达、完成订单](#survey_survey_selfmethod_post)
+    * [代驾年检订单操作信息-取消、查询费用、支付、失败支付、确认还车](#survey_survey_behalfmethod_post)
+    * [自驾咨询电话](#survey_survey_phone_get)
  6. [系统](#system)
   - [服务首页图片信息](#system_serviceimg_get)
   - [年检首页图片信息](#system_surveyimg_get) 
@@ -99,6 +100,8 @@
   - [订单](#driver_order)
     * [查询订单列表信息](#driver_order_list_get)
     * [查询订单信息](#driver_order_get)
+    * [查询提交图片的类别名称信息](#driver_order_picname_get)
+    * [查询年检检查项信息](#driver_order_surveyitem_get)
     * [抢单](#driver_order_grab_post)
     * [*听单](#driver_order_wait_post)
     * [取消订单](#driver_order_cancel_post)
@@ -2906,6 +2909,22 @@ comboitem_set:
 
 <h3 id="survey_survey">年检订单信息</h3>
 
+```
+流程：  
+代驾：用户提交订单->用户付款，等待抢单->司机抢单->司机确认取车->司机开始年检，随后司机输入年检结果，如果年检成功才会跳进下一个状态(survey_state:四种状态，0:还没有开始或是正在进行，1：成功，2：不成功，3：复查)->年检成功->司机确认到达->司机确认还车->用户确认完成  
+自驾：用户提交订单->用户付款->自行开车过去，点击开始年检->年检完成，点击确认完成订单  
+
+详情：0:等待支付，1:等待接单  
+代驾取车：2:等待取车  
+开始年检：3.等待年检，4.正在年检，5.年检成功  
+检完还车：6.到达还车，7.已还车，8.已完成  
+代驾：0-1-2-3-4-5-6-7-8  
+自驾：0-3-4-8  
+
+用户取消订单：代驾方面，“等待支付”、“等待接单”阶段可以取消订单，订单将被删除。自驾则是“等待支付”阶段可以取消订单，订单将被删除  
+司机取消订单：“等待取车”阶段可以取消订单，订单将回到“等待接单”  
+```
+
 <h4 id="survey_survey_list_get">查询年检订单列表信息</h4>
 
 url:/api/survey/survey/  
@@ -2915,15 +2934,6 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |finish|int|是否完成|0表示所有，1表示未完成，2表示已完成|1|必填|  
-
-'''
-无：0:等待支付  
-代驾取车：1:等待接单，2:等待取车  
-开始年检：3.等待年检，4.正在年检，5.年检结束  
-检完还车：6.到达还车，7.已还车，8.已完成  
-代驾：0-1-2-3-4-5-6-7-8  
-自驾：0-3-8  
-'''
 
 return:  
 
@@ -2950,8 +2960,8 @@ return:
 |combo_price|float|套餐费用|无|  
 |survey_price|float|年检费用|无|  
 |total_price|float|总计费用|无|  
-|state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检结束，6.到达还车，7.已还车，8.已完成，9.已取消|  
-|is_success|bool|年检是否成功|无|  
+|state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检成功，6.到达还车，7.已还车，8.已完成|  
+|survey_state|int|年检状态|无|  
 |drive_user_id|int|接单用户id|无|  
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
@@ -2965,16 +2975,46 @@ return:
 |return_time|datetime|还车时间|无|  
 |confirm_time|datetime|确认时间|无|  
 |cancel_time|datetime|取消时间|无|  
-|surveypic_list|list|图片备注对象列表|get_confirm:取车图片-检车确认,get_car:取车图片-车身拍照,survey_upload:年检已过-上传照片,survey_lamp:年检未过-车灯照片,survey_exhaust:年检未过-排气照片,survey_appearance:年检未过-外观照片,return_confirm:还车图片-检车确认,return_car:还车图片-车身拍照|  
+|get_confirm|object|取车图片-检车确认|无|  
+|get_car|object|取车图片-车身拍照|无|  
+|survey_upload|object|年检已过-上传照片|无|  
+|return_confirm|object|还车图片-检车确认|无|  
+|return_car|object|还车图片-车身拍照|无|  
+|failure_object|object|失败信息对象|无|  
 
-surveypic_list:
+
+
+get_confirm、get_car、survey_upload、return_confirm、return_car:  
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
-|type|char(100)|类型|无|  
+|name|char(100)|类别名称|无|  
 |obj_list|list|列表|无|  
 
 obj:
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|pic_url|char(100)|图片url|无|  
+|note|char(100)|备注|无|  
+
+failure_object：  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|name|char(100)|补充项|无|  
+|price|float|总计费用|无|  
+|failureitem_list|list|失败详情|无|  
+
+failureitem：  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|name|char(100)|名称|无|  
+|price|float|费用|无|  
+|failurepic_list|list|图片对象列表|无|  
+
+failurepic:
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
@@ -3010,7 +3050,6 @@ obj:
         'subscribe_time':'2018-07-08 12:23:34',
         'is_self':true,
         'combo':{
-
         },
         'surveycomboitem_set':[{
             'id':1,
@@ -3024,7 +3063,7 @@ obj:
         'survey_price':1,
         'total_price':1,
         'state':1,
-        'is_success':true,
+        'survey_state':0,
         'drive_user_id':1,
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
@@ -3038,13 +3077,53 @@ obj:
         'return_time':'2018-07-08 12:23:34',
         'confirm_time':'2018-07-08 12:23:34',
         'cancel_time':'2018-07-08 12:23:34',
-        'surveypic_list':[{
-            'type':'asjkdh',
+        'get_confirm':{
+            'name':'取车图片-检车确认',
             'obj_list':[{
-                'pic_url':'/123.jpg',
-                'note':'khaljsdhfashjfl'
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
             }]
-        }]
+        },
+        'get_car':{
+            'name':'取车图片-车身拍照',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'survey_upload':{
+            'name':'年检已过-上传照片',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'return_confirm':{
+            'name':'还车图片-检车确认',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'return_car':{
+            'name':'还车图片-车身拍照',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'failure_object':{
+            'name':'补充项',
+            'price':123,
+            'failureitem_list':[{
+                'name':'名称',
+                'price':'费用',
+                'failurepic_list':[{
+                    'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                    'note':'asfdasdfasd'
+                }]
+            }]
+        }
     }]
 }
 ```
@@ -3118,8 +3197,8 @@ return:
 |combo_price|float|套餐费用|无|  
 |survey_price|float|年检费用|无|  
 |total_price|float|总计费用|无|  
-|state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检结束，6.到达还车，7.已还车，8.已完成，9.已取消|  
-|is_success|bool|年检是否成功|无|  
+|state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检成功，6.到达还车，7.已还车，8.已完成|  
+|survey_state|int|年检状态|无|  
 |drive_user_id|int|接单用户id|无|  
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
@@ -3133,13 +3212,20 @@ return:
 |return_time|datetime|还车时间|无|  
 |confirm_time|datetime|确认时间|无|  
 |cancel_time|datetime|取消时间|无|  
-|surveypic_list|list|图片备注对象列表|get_confirm:取车图片-检车确认,get_car:取车图片-车身拍照,survey_upload:年检已过-上传照片,survey_lamp:年检未过-车灯照片,survey_exhaust:年检未过-排气照片,survey_appearance:年检未过-外观照片,return_confirm:还车图片-检车确认,return_car:还车图片-车身拍照|  
+|get_confirm|object|取车图片-检车确认|无|  
+|get_car|object|取车图片-车身拍照|无|  
+|survey_upload|object|年检已过-上传照片|无|  
+|return_confirm|object|还车图片-检车确认|无|  
+|return_car|object|还车图片-车身拍照|无|  
+|failure_object|object|失败信息对象|无|  
 
-surveypic_list:
+
+
+get_confirm、get_car、survey_upload、return_confirm、return_car:  
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
-|type|char(100)|类型|无|  
+|name|char(100)|类别名称|无|  
 |obj_list|list|列表|无|  
 
 obj:
@@ -3149,10 +3235,33 @@ obj:
 |pic_url|char(100)|图片url|无|  
 |note|char(100)|备注|无|  
 
+failure_object：  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|name|char(100)|补充项|无|  
+|price|float|总计费用|无|  
+|failureitem_list|list|失败详情|无|  
+
+failureitem：  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|name|char(100)|名称|无|  
+|price|float|费用|无|  
+|failurepic_list|list|图片对象列表|无|  
+
+failurepic:
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|pic_url|char(100)|图片url|无|  
+|note|char(100)|备注|无|  
+
 ```
 {
     'data':
-    {
+    [{
         'id':1,
         'create_time':'2018-07-08 12:23:34',
         'update_time':'2018-07-08 12:23:34',
@@ -3178,7 +3287,6 @@ obj:
         'subscribe_time':'2018-07-08 12:23:34',
         'is_self':true,
         'combo':{
-
         },
         'surveycomboitem_set':[{
             'id':1,
@@ -3192,7 +3300,7 @@ obj:
         'survey_price':1,
         'total_price':1,
         'state':1,
-        'is_success':true,
+        'survey_state':0,
         'drive_user_id':1,
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
@@ -3206,47 +3314,67 @@ obj:
         'return_time':'2018-07-08 12:23:34',
         'confirm_time':'2018-07-08 12:23:34',
         'cancel_time':'2018-07-08 12:23:34',
-        'surveypic_list':[{
-            'type':'asjkdh',
+        'get_confirm':{
+            'name':'取车图片-检车确认',
             'obj_list':[{
-                'pic_url':'/123.jpg',
-                'note':'khaljsdhfashjfl'
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
             }]
-        }]
-    }
+        },
+        'get_car':{
+            'name':'取车图片-车身拍照',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'survey_upload':{
+            'name':'年检已过-上传照片',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'return_confirm':{
+            'name':'还车图片-检车确认',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'return_car':{
+            'name':'还车图片-车身拍照',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'failure_object':{
+            'name':'补充项',
+            'price':123,
+            'failureitem_list':[{
+                'name':'名称',
+                'price':'费用',
+                'failurepic_list':[{
+                    'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                    'note':'asfdasdfasd'
+                }]
+            }]
+        }
+    }]
 }
 ```
 
-<h4 id="survey_survey_delete">删除年检订单信息</h4>
+<h4 id="survey_survey_selfmethod_post">自驾年检订单操作信息-取消、查询费用、支付、确认到达、完成订单</h4>
 
-url:/api/survey/survey_delete/  
-method:get  
-param:   
-
-|参数|类型|说明|备注|例子|是否必填|  
-|---|---|---|---|---|---|  
-|id|int|id|无|1|必填|   
-
-return:  
-
-|参数|类型|说明|备注|  
-|---|---|---|---|  
-```
-{
-    'data':{}
-}
-```
-
-<h4 id="survey_survey_method_post">年检订单操作信息-查询费用、支付、确认还车、自驾完成</h4>
-
-url:/api/survey/survey_method/  
+url:/api/survey/survey_selfmethod/  
 method:post  
 param:   
 
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |id|int|id|查询费用不需要添加id|1|必填|   
-|method|char(20)|操作|get:查询费用，pay:支付（自驾代驾），return:确认还车（代驾），survey：到达年检（自驾）|get|必填|  
+|method|char(20)|操作|cancel：取消，get：查询费用，pay：支付，survey：确认到达，finish：完成订单|get|必填|  
 |longitude|float|经度|无|123|选填|  
 |latitude|float|纬度|无|23|选填|  
 |surveystation_id|int|年检站id|无|1|选填|  
@@ -3275,6 +3403,71 @@ return:
         'combo_price':1
         'survey_price':1
         'combo_price':1
+    }
+}
+```
+
+<h4 id="survey_survey_behalfmethod_post">代驾年检订单操作信息-取消、查询费用、支付、失败支付、确认还车</h4>
+
+url:/api/survey/survey_behalfmethod/  
+method:post  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|查询费用不需要添加id|1|必填|   
+|method|char(20)|操作|cancel：取消，get：查询费用，pay：支付，failure_pay：失败支付，return：确认还车|get|必填|  
+|longitude|float|经度|无|123|选填|  
+|latitude|float|纬度|无|23|选填|  
+|surveystation_id|int|年检站id|无|1|选填|  
+|combo_id|int|套餐id|无|1|选填|  
+|comboitem_list|char(100)|套餐选项id|使用,拼接|1,2|选填|  
+
+return:  
+
+```
+如果是查询费用，data里面才会有结构返回
+1.参数中有年检站参数，会计算年检费用
+2.存在年检站参数、经纬度、套餐id，会计算基础费用
+3.存在套餐id、套餐项id列表，会计算套餐费用
+```
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|base_price|float|基础费用|无|  
+|combo_price|float|套餐费用|无|  
+|survey_price|float|年检费用|无|  
+|total_price|float|总计费用|无|  
+```
+{
+    'data':{
+        'base_price':1,
+        'combo_price':1
+        'survey_price':1
+        'combo_price':1
+    }
+}
+```
+
+<h4 id="survey_survey_phone_get">自驾咨询电话</h4>
+
+url:/api/survey/survey_phone/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|phone|char(100)|固定电话|无|  
+|moblie_phone|char(100)|手机号码|无|  
+
+```
+{
+    'data':{
+        'phone':'12331',
+        'moblie_phone':'12331'
     }
 }
 ```
@@ -3390,8 +3583,8 @@ return:
 |combo_price|float|套餐费用|无|  
 |survey_price|float|年检费用|无|  
 |total_price|float|总计费用|无|  
-|state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检结束，6.到达还车，7.已还车，8.已完成，9.已取消|  
-|is_success|bool|年检是否成功|无|  
+|state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检成功，6.到达还车，7.已还车，8.已完成|  
+|survey_state|int|年检状态|无|  
 |drive_user_id|int|接单用户id|无|  
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
@@ -3405,16 +3598,46 @@ return:
 |return_time|datetime|还车时间|无|  
 |confirm_time|datetime|确认时间|无|  
 |cancel_time|datetime|取消时间|无|  
-|surveypic_list|list|图片备注对象列表|get_confirm:取车图片-检车确认,get_car:取车图片-车身拍照,survey_upload:年检已过-上传照片,survey_lamp:年检未过-车灯照片,survey_exhaust:年检未过-排气照片,survey_appearance:年检未过-外观照片,return_confirm:还车图片-检车确认,return_car:还车图片-车身拍照|  
+|get_confirm|object|取车图片-检车确认|无|  
+|get_car|object|取车图片-车身拍照|无|  
+|survey_upload|object|年检已过-上传照片|无|  
+|return_confirm|object|还车图片-检车确认|无|  
+|return_car|object|还车图片-车身拍照|无|  
+|failure_object|object|失败信息对象|无|  
 
-surveypic_list:
+
+
+get_confirm、get_car、survey_upload、return_confirm、return_car:  
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
-|type|char(100)|类型|无|  
+|name|char(100)|类别名称|无|  
 |obj_list|list|列表|无|  
 
 obj:
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|pic_url|char(100)|图片url|无|  
+|note|char(100)|备注|无|  
+
+failure_object：  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|name|char(100)|补充项|无|  
+|price|float|总计费用|无|  
+|failureitem_list|list|失败详情|无|  
+
+failureitem：  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|name|char(100)|名称|无|  
+|price|float|费用|无|  
+|failurepic_list|list|图片对象列表|无|  
+
+failurepic:
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
@@ -3450,7 +3673,6 @@ obj:
         'subscribe_time':'2018-07-08 12:23:34',
         'is_self':true,
         'combo':{
-
         },
         'surveycomboitem_set':[{
             'id':1,
@@ -3464,7 +3686,7 @@ obj:
         'survey_price':1,
         'total_price':1,
         'state':1,
-        'is_success':true,
+        'survey_state':0,
         'drive_user_id':1,
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
@@ -3478,13 +3700,53 @@ obj:
         'return_time':'2018-07-08 12:23:34',
         'confirm_time':'2018-07-08 12:23:34',
         'cancel_time':'2018-07-08 12:23:34',
-        'surveypic_list':[{
-            'type':'asjkdh',
+        'get_confirm':{
+            'name':'取车图片-检车确认',
             'obj_list':[{
-                'pic_url':'/123.jpg',
-                'note':'khaljsdhfashjfl'
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
             }]
-        }]
+        },
+        'get_car':{
+            'name':'取车图片-车身拍照',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'survey_upload':{
+            'name':'年检已过-上传照片',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'return_confirm':{
+            'name':'还车图片-检车确认',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'return_car':{
+            'name':'还车图片-车身拍照',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'failure_object':{
+            'name':'补充项',
+            'price':123,
+            'failureitem_list':[{
+                'name':'名称',
+                'price':'费用',
+                'failurepic_list':[{
+                    'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                    'note':'asfdasdfasd'
+                }]
+            }]
+        }
     }]
 }
 ```
@@ -3525,8 +3787,8 @@ return:
 |combo_price|float|套餐费用|无|  
 |survey_price|float|年检费用|无|  
 |total_price|float|总计费用|无|  
-|state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检结束，6.到达还车，7.已还车，8.已完成，9.已取消|  
-|is_success|bool|年检是否成功|无|  
+|state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检成功，6.到达还车，7.已还车，8.已完成|  
+|survey_state|int|年检状态|无|  
 |drive_user_id|int|接单用户id|无|  
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
@@ -3540,13 +3802,20 @@ return:
 |return_time|datetime|还车时间|无|  
 |confirm_time|datetime|确认时间|无|  
 |cancel_time|datetime|取消时间|无|  
-|surveypic_set|list|图片备注对象列表|get_confirm:取车图片-检车确认,get_car:取车图片-车身拍照,survey_upload:年检已过-上传照片,survey_lamp:年检未过-车灯照片,survey_exhaust:年检未过-排气照片,survey_appearance:年检未过-外观照片,return_confirm:还车图片-检车确认,return_car:还车图片-车身拍照|  
+|get_confirm|object|取车图片-检车确认|无|  
+|get_car|object|取车图片-车身拍照|无|  
+|survey_upload|object|年检已过-上传照片|无|  
+|return_confirm|object|还车图片-检车确认|无|  
+|return_car|object|还车图片-车身拍照|无|  
+|failure_object|object|失败信息对象|无|  
 
-surveypic_list:
+
+
+get_confirm、get_car、survey_upload、return_confirm、return_car:  
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
-|type|char(100)|类型|无|  
+|name|char(100)|类别名称|无|  
 |obj_list|list|列表|无|  
 
 obj:
@@ -3556,10 +3825,33 @@ obj:
 |pic_url|char(100)|图片url|无|  
 |note|char(100)|备注|无|  
 
+failure_object：  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|name|char(100)|补充项|无|  
+|price|float|总计费用|无|  
+|failureitem_list|list|失败详情|无|  
+
+failureitem：  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|name|char(100)|名称|无|  
+|price|float|费用|无|  
+|failurepic_list|list|图片对象列表|无|  
+
+failurepic:
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|pic_url|char(100)|图片url|无|  
+|note|char(100)|备注|无|  
+
 ```
 {
     'data':
-    {
+    [{
         'id':1,
         'create_time':'2018-07-08 12:23:34',
         'update_time':'2018-07-08 12:23:34',
@@ -3585,7 +3877,6 @@ obj:
         'subscribe_time':'2018-07-08 12:23:34',
         'is_self':true,
         'combo':{
-
         },
         'surveycomboitem_set':[{
             'id':1,
@@ -3599,7 +3890,7 @@ obj:
         'survey_price':1,
         'total_price':1,
         'state':1,
-        'is_success':true,
+        'survey_state':0,
         'drive_user_id':1,
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
@@ -3613,14 +3904,116 @@ obj:
         'return_time':'2018-07-08 12:23:34',
         'confirm_time':'2018-07-08 12:23:34',
         'cancel_time':'2018-07-08 12:23:34',
-        'surveypic_list':[{
-            'type':'asjkdh',
+        'get_confirm':{
+            'name':'取车图片-检车确认',
             'obj_list':[{
-                'pic_url':'/123.jpg',
-                'note':'khaljsdhfashjfl'
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
             }]
-        }]
+        },
+        'get_car':{
+            'name':'取车图片-车身拍照',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'survey_upload':{
+            'name':'年检已过-上传照片',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'return_confirm':{
+            'name':'还车图片-检车确认',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'return_car':{
+            'name':'还车图片-车身拍照',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'failure_object':{
+            'name':'补充项',
+            'price':123,
+            'failureitem_list':[{
+                'name':'名称',
+                'price':'费用',
+                'failurepic_list':[{
+                    'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                    'note':'asfdasdfasd'
+                }]
+            }]
+        }
+    }]
+}
+```
+
+<h4 id="driver_order_picname_get">查询提交图片的类别名称信息</h4>
+
+url:/api/driver/picname/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|get_confirm|char(50)|取车图片-检车确认|无|  
+|get_car|char(50)|取车图片-车身拍照|无|  
+|survey_upload|char(50)|年检已过-上传照片|无|  
+|return_confirm|char(50)|还车图片-检车确认|无|  
+|return_car|char(50)|还车图片-车身拍照|无|  
+
+```
+{
+    'data':{
+        'get_confirm':'取车图片-检车确认',
+        'get_car':'取车图片-车身拍照',
+        'survey_upload':'年检已过-上传照片',
+        'return_confirm':'还车图片-检车确认',
+        'return_car':'还车图片-车身拍照'
     }
+}
+```
+
+<h4 id="driver_order_surveyitem_get">查询年检检查项信息</h4>
+
+url:/api/driver/surveyitem/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|id|无|  
+|create_time|datetime|创建时间|无|  
+|update_time|datetime|修改时间|无|  
+|name|char(50)|项目名称|无|  
+|price|float|费用|无|  
+
+```
+{
+    'data':[{
+        'id':1,
+        'create_time':'2018-07-08 12:23:34',
+        'update_time':'2018-07-08 12:23:34',
+        'name':'车身',
+        'price':122
+    }]
 }
 ```
 
@@ -3747,9 +4140,9 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |id|int|id|无|1|必填|  
-|number|int|数量|多少个文件、类型、备注，三者需要一同出现，缺少其一则会被认为没有|1|必填|  
+|number|int|数量|多少个文件、检查项id、备注，三者需要一同出现，缺少其一则会被认为没有|1|必填|  
 |pic1|文件流|图片|编号从1开始|(文件流)|选填|  
-|type1|char(100)|类型|survey_lamp:年检未过-车灯照片,survey_exhaust:年检未过-排气照片,survey_appearance:年检未过-外观照片|survey_lamp|选填|  
+|item_id1|int|检查项id|来自于年检检查项|1|选填|  
 |note1|char(100)|备注|无|车钥匙|选填|  
 
 
