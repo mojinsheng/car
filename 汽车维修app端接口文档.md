@@ -47,6 +47,7 @@
     * [查询订单信息](#service_order_get)
     * [删除订单信息](#service_order_delete)
     * [付款、完成、评论订单信息](#service_order_method_post)
+    * [查询订单快递信息](#service_orderlogistics_get)    * 
   - [违章记录信息](#service_rules)
     * [查询违章记录列表信息](#service_rules_list_get)
     * [查询违章记录信息](#service_rules_get)
@@ -1297,7 +1298,6 @@ return:
 |status|int|状态|0:待付款，1:待发货，2:待收货，3:已完成|  
 |is_delete|int|删除状态，0:未删除，1:已删除|无|  
 |is_comment|int|评价状态，0:未删除，1:已删除|无|  
-|logistics_info|text|物流信息|无|  
 |all_price|float|小计金额|无|  
 |point_price|float|积分兑换|无|  
 |now_price|float|实际付款|无|  
@@ -1334,7 +1334,6 @@ orderproduct_set:
         'status':0,
         'is_delete':0,
         'is_comment':0,
-        'logistics_info':'asdasd',
         'all_price':300,
         'point_price':20,
         'now_price':280,
@@ -1430,7 +1429,6 @@ return:
 |status|int|状态|0:待付款，1:待发货，2:待收货，3:已完成|  
 |is_delete|int|删除状态，0:未删除，1:已删除|无|  
 |is_comment|int|评价状态，0:未删除，1:已删除|无|  
-|logistics_info|text|物流信息|无|  
 |all_price|float|小计金额|无|  
 |point_price|float|积分兑换|无|  
 |now_price|float|实际付款|无|  
@@ -1467,7 +1465,6 @@ orderproduct_set:
         'status':0,
         'is_delete':0,
         'is_comment':0,
-        'logistics_info':'asdasd',
         'all_price':300,
         'point_price':20,
         'now_price':280,
@@ -1518,6 +1515,26 @@ orderproduct_set:
 }
 ```
 
+<h4 id="service_order_delete">删除订单信息</h4>
+
+url:/api/service/order_delete/   
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+```
+{
+    'data':{}
+}
+```
+
 <h4 id="service_order_method_post">付款、完成、评论订单信息</h4>
 
 url:/api/service/order_method/  
@@ -1540,9 +1557,9 @@ return:
 }
 ```
 
-<h4 id="service_order_delete">删除订单信息</h4>
+<h4 id="service_orderlogistics_get">查询订单快递信息</h4>
 
-url:/api/service/order_delete/   
+url:/api/service/orderlogistics/  
 method:get  
 param:   
 
@@ -1554,9 +1571,15 @@ return:
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
+|time|char(100)|时间|无|  
+|status|char(100)|内容|无|  
+
 ```
 {
-    'data':{}
+    'data':[{
+        'time':'2015-10-20 10:24:04',
+        'status':'顺丰速运 已收取快件'
+    }]
 }
 ```
 
