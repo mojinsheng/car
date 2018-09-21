@@ -14,6 +14,7 @@
     * [修改自身信息](#user_user_put)
   - [车辆信息](#user_car)
     * [查询车辆二级地址信息](#user_caraddress_list_get)
+    * [查询车辆品牌信息](#user_carbrand_list_get)
     * [查询所有车辆信息](#user_car_list_get)
     * [添加车辆信息](#user_car_list_post)
     * [查询车辆信息](#user_car_get)
@@ -47,7 +48,7 @@
     * [查询订单信息](#service_order_get)
     * [删除订单信息](#service_order_delete)
     * [付款、完成、评论订单信息](#service_order_method_post)
-    * [查询订单快递信息](#service_orderlogistics_get)    * 
+    * [查询订单快递信息](#service_orderlogistics_get)
   - [违章记录信息](#service_rules)
     * [查询违章记录列表信息](#service_rules_list_get)
     * [查询违章记录信息](#service_rules_get)
@@ -71,13 +72,13 @@
     * [生成保养订单信息](#maintain_upkeep_list_post)
     * [查询保养信息](#maintain_upkeep_get)
     * [删除保养订单信息](#maintain_upkeep_delete)
-    * [付款、完成、评论保养订单信息](#maintain_upkeep_method_post)
+    * [查询交易状态、付款、完成、评论保养订单信息](#maintain_upkeep_method_post)
   - [维修](#maintain_maintain)
     * [查询维修列表信息](#maintain_maintain_list_get)
     * [生成维修订单信息](#maintain_maintain_list_post)
     * [查询维修信息](#maintain_maintain_get)
     * [删除维修订单信息](#maintain_maintain_delete)
-    * [付款、完成、评论维修订单信息](#maintain_maintain_method_post)
+    * [查询交易状态、付款、完成、评论维修订单信息](#maintain_maintain_method_post)
   - [保养、维修订单列表信息](#maintain_list_get)  
  5. [年检](#survey)
   - [年检站信息](#survey_surveystation)
@@ -93,10 +94,13 @@
     * [自驾年检订单操作信息-取消、查询费用、支付、确认到达、完成订单](#survey_survey_selfmethod_post)
     * [代驾年检订单操作信息-取消、查询费用、支付、失败支付、确认还车](#survey_survey_behalfmethod_post)
     * [自驾咨询电话](#survey_survey_phone_get)
+    * [年检须知](#survey_survey_info_get)
  6. [系统](#system)
   - [服务首页图片信息](#system_serviceimg_get)
   - [年检首页图片信息](#system_surveyimg_get) 
+  - [封面图片信息](#system_cover_get) 
   - [关于我们](#system_aboutus_get) 
+  - [注册用户协议](#system_useragreement_get) 
  7. [司机端](#driver)
   - [订单](#driver_order)
     * [查询订单列表信息](#driver_order_list_get)
@@ -104,7 +108,6 @@
     * [查询提交图片的类别名称信息](#driver_order_picname_get)
     * [查询年检检查项信息](#driver_order_surveyitem_get)
     * [抢单](#driver_order_grab_post)
-    * [*听单](#driver_order_wait_post)
     * [取消订单](#driver_order_cancel_post)
     * [确认取车](#driver_order_get_post)
     * [开始年检](#driver_order_survey_post)
@@ -112,6 +115,8 @@
     * [年检未过](#driver_order_fail_post)
     * [到达还车](#driver_order_arrive_post)
     * [确认换车](#driver_order_return_post)
+    * [查询订单列表信息-服务端推送](#ws_driver_order)
+    * [听单-服务端推送](#ws_driver_listen)
   - [账户](#driver_account)
     * [查询明细列表信息](#driver_account_list_get)
     * [查询明细信息](#driver_account_get)
@@ -162,15 +167,16 @@ or
 3.然后每次请求都需要附带上user_id、timestamp、sign三个参数
 4.token有时效，快过期前，请使用刷新接口获得新的token，过期没有更换的话，就只能重新登陆获取了
 5.所有请求都带版本号，没带默认为0
-6.目前不需要登陆的有：登陆模块（除了刷新token接口），服务模块中的分类信息、物品信息、资讯分类信息、资讯信息，关于我们
+6.目前不需要登陆的有：登陆模块（除了刷新token接口），服务模块中的分类信息、物品信息、资讯分类信息、资讯信息，系统模块中的封面图片信息、关于我们、注册用户协议
 ```
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |user_id|int|用户id|登陆成功后返回|1|必填|  
 |timestamp|char(50)|时间戳|app自己生成|1|必填|  
 |sign|char(50)|签名|md5(token+timestamp)|asdadsa|必填|  
-|system|char(50)|系统|默认android|ios|选填|  
-|version|float|app版本|默认0|0.1|选填|  
+|system|char(50)|系统|android,ios|ios|选填|  
+|app_type|char(50)|用户端类型|user,driver|user|选填|  
+|version|char(50)|版本|xx.yyzz|1.0000|选填|  
 
 <h3 id="login_register">用户注册</h3>
 
@@ -439,6 +445,71 @@ carcity_set:
 }
 ```
 
+<h4 id="user_carbrand_list_get">查询车辆品牌信息</h4>
+
+url:/api/user/carbrand/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|A|list|A排序下的品牌对象列表|无|  
+|B|list|B排序下的品牌对象列表|无|  
+......
+
+A:
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|id|无|  
+|name|char(100)|名称|无|  
+|cartype_set|list|车型对象列表|无|  
+
+cartype:
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|id|无|  
+|name|char(100)|名称|无|  
+|carstyle_set|list|款式对象列表|无|  
+
+carstyle:
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|id|无|  
+|name|char(100)|名称|无|  
+|year|int|年份|无|  
+
+```
+{
+    'data':
+    {
+        'A':[{
+            'id':1
+            'name':'阿斯顿马丁',
+            'cartype_set':[{
+                'id':1,
+                'name':'Rapide',
+                'carstyle_set':[{
+                    'id':1,
+                    'name':'限量款',
+                    'year':'2016',
+                }]
+            }]
+        }],
+        'B':[],
+        'C':[],
+        ......
+    }
+}
+```
+
 <h4 id="user_car_list_get">查询所有车辆信息</h4>
 
 url:/api/user/car/  
@@ -457,10 +528,12 @@ return:
 |create_time|datetime|创建时间|无|  
 |update_time|datetime|修改时间|无|  
 |pic_url|char(50)|照片url|/url,获取图片|  
-|brand|char(100)|品牌|无|  
+|brand_name|char(100)|品牌|无|  
+|car_brand_id|int|品牌id|无|  
+|car_type_id|int|车型id|无|  
+|car_style_id|int|款式id|无|  
 |code|char(10)|车牌号码|无|  
 |engine|char(100)|发动机|无|  
-|buy_time|date|购车时间|无|  
 |is_default|bool|是否默认|无|  
 |city_code|char(100)|城市代码|无|  
 |classsno|char(100)|车架号|无|  
@@ -477,10 +550,12 @@ return:
         'create_time':'2018-07-08 12:23:34',
         'update_time':'2018-07-08 12:23:34',
         'pic_url':'/alsdfh.jpg',
-        'brand':'玛萨拉蒂',
+        'brand_name':'玛萨拉蒂',
+        'car_brand_id':'3',
+        'car_type_id':'2',
+        'car_style_id':'1',
         'code':'粤A24351',
         'engine':'TX21',
-        'buy_time':'2018-03-20',
         'is_default':false,
         'city_code':'SH',
         'classsno':'121231',
@@ -502,9 +577,8 @@ param:
 |---|---|---|---|---|---|  
 |code|char(10)|车牌号码|无|粤A24351|必填|  
 |pic|文件流|照片文件|无|(文件流，base64)|选填|  
-|brand|char(100)|品牌|无|玛萨拉蒂|选填|  
+|car_style|int|车辆款式|无|1|必填|  
 |engine|char(100)|发动机|无|TX21|必填|  
-|buy_time|date|购车时间|无|2018-03-20|选填|  
 |is_default|bool|是否默认|无|false|选填|  
 |city_code|char(100)|城市代码|无|SH|必填|  
 |classsno|char(100)|车架号|无|affa123fd|必填|  
@@ -538,10 +612,12 @@ return:
 |create_time|datetime|创建时间|无|  
 |update_time|datetime|修改时间|无|  
 |pic_url|char(50)|照片url|/url,获取图片|  
-|brand|char(100)|品牌|无|  
+|brand_name|char(100)|品牌|无|  
+|car_brand_id|int|品牌id|无|  
+|car_type_id|int|车型id|无|  
+|car_style_id|int|款式id|无|  
 |code|char(10)|车牌号码|无|  
 |engine|char(100)|发动机|无|  
-|buy_time|date|购车时间|无|  
 |is_default|bool|是否默认|无|  
 |city_code|char(100)|城市代码|无|  
 |classsno|char(100)|车架号|无|  
@@ -558,10 +634,12 @@ return:
         'create_time':'2018-07-08 12:23:34',
         'update_time':'2018-07-08 12:23:34',
         'pic_url':'/alsdfh.jpg',
-        'brand':'玛萨拉蒂',
+        'brand_name':'玛萨拉蒂',
+        'car_brand_id':'3',
+        'car_type_id':'2',
+        'car_style_id':'1',
         'code':'粤A24351',
         'engine':'TX21',
-        'buy_time':'2018-03-20',
         'is_default':false,
         'city_code':'SH',
         'classsno':'121231',
@@ -584,9 +662,8 @@ param:
 |id|int|id|无|1|必填|  
 |code|char(10)|车牌号码|无|粤A24351|选填|  
 |pic|文件流|照片文件|无|(文件流，base64)|选填|  
-|brand|char(100)|品牌|无|玛萨拉蒂|选填|  
+|car_style|int|车辆款式|无|1|选填|  
 |engine|char(100)|发动机|无|TX21|选填|  
-|buy_time|date|购车时间|无|2018-03-20|选填|  
 |is_default|bool|是否默认|无|false|选填|  
 |city_code|char(100)|城市代码|无|SH|选填|  
 |classsno|char(100)|车架号|无|affa123fd|选填|  
@@ -1547,7 +1624,7 @@ return:
 }
 ```
 
-<h4 id="service_order_method_post">付款、完成、评论订单信息</h4>
+<h4 id="service_order_method_post">查询交易状态、付款、完成、评论订单信息</h4>
 
 url:/api/service/order_method/  
 method:post  
@@ -1556,16 +1633,24 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |id|int|id|无|1|必填|   
-|method|char(20)|操作|pay:付款，finish：完成，comment:评论|pay|必填|  
+|method|char(20)|操作|order_status:查询交易状态，pay:付款，finish：完成，comment:评论|pay|必填|  
 |score|int|评分|大于等于0，小于等于5，当method为comment的时候需要|1|选填|  
+|order_method|char(100)|支付方式|alipay：支付宝，weixin：微信|alipay|pay的时候必填|  
 
 return:  
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
+|status|int|状态|order_status返回,0未支付，1正在支付，2支付成功，3支付失败重新支付，4支付超时|  
+|time|int|交易还剩多少秒|order_status返回|  
+|params|char(1000)|交易码|用于手机端交易|  
+
 ```
 {
-    'data':{}
+    'data':{
+        'status':0,
+        'time':0
+    }
 }
 ```
 
@@ -1932,6 +2017,8 @@ return:
 |score|float|评分|无|  
 |pic_url|char(50)|封面url|无|  
 |distance|float|距离|单位：km|  
+|type|int|类型：0既可以维修又可以保养，1只维修，2只保养|无|  
+
 ```
 {
     'data':
@@ -1950,7 +2037,8 @@ return:
         'popular':1,
         'score':1,
         'pic_url':'asdla.jpg',
-        'distance':10
+        'distance':10,
+        'type':0
     }]
 }
 ```
@@ -1984,6 +2072,8 @@ return:
 |score|int|评分|无|  
 |pic_url|char(50)|封面url|无|  
 |distance|float|距离|单位：km|  
+|type|int|类型：0既可以维修又可以保养，1只维修，2只保养|无|  
+
 ```
 {
     'data':
@@ -2002,7 +2092,8 @@ return:
         'popular':1,
         'score':1,
         'pic_url':'asdla.jpg',
-        'distance':10
+        'distance':10,
+        'type':0
     }
 }
 ```
@@ -2133,7 +2224,7 @@ return:
 |pay_time|datetime|付款时间|无|  
 |get_time|datetime|取车时间|无|  
 |service_time|datetime|服务时间|无|  
-|maintain_time|datetime|完成服务时间|无|  
+|upkeep_time|datetime|完成服务时间|无|  
 |over_time|datetime|完成时间|无|   
 |comment_time|datetime|评论时间|无|  
 |service_item|char(100)|服务项目|无|  
@@ -2177,7 +2268,8 @@ upkeeppic_set：
             'popular':1,
             'score':1,
             'pic_url':'asdla.jpg',
-            'distance':10
+            'distance':10,
+            'type':0
         },
         'name':'张三',
         'phone':'12345678998',
@@ -2198,7 +2290,7 @@ upkeeppic_set：
         'pay_time':'2018-07-08 12:23:34',
         'get_time':'2018-07-08 12:23:34',
         'service_time':'2018-07-08 12:23:34',
-        'maintain_time':'2018-07-08 12:23:34',
+        'upkeep_time':'2018-07-08 12:23:34',
         'over_time':'2018-07-08 12:23:34',
         'comment_time':'2018-07-08 12:23:34',
         'service_item':'装轮胎',
@@ -2236,6 +2328,7 @@ param:
 |latitude|float|纬度|无|1|必填|  
 |address|char(100)|地址|无|广州市越秀区|必填|  
 |oil_id|int|机油id|无|1|必填|  
+|oil_amount|int|数量|无|1|必填|  
 
 return:  
 
@@ -2285,7 +2378,7 @@ return:
 |pay_time|datetime|付款时间|无|  
 |get_time|datetime|取车时间|无|  
 |service_time|datetime|服务时间|无|  
-|maintain_time|datetime|完成服务时间|无|  
+|upkeep_time|datetime|完成服务时间|无|  
 |over_time|datetime|完成时间|无|   
 |comment_time|datetime|评论时间|无|  
 |service_item|char(100)|服务项目|无|  
@@ -2329,7 +2422,8 @@ upkeeppic_set：
             'popular':1,
             'score':1,
             'pic_url':'asdla.jpg',
-            'distance':10
+            'distance':10,
+            'type':0
         },
         'name':'张三',
         'phone':'12345678998',
@@ -2350,7 +2444,7 @@ upkeeppic_set：
         'pay_time':'2018-07-08 12:23:34',
         'get_time':'2018-07-08 12:23:34',
         'service_time':'2018-07-08 12:23:34',
-        'maintain_time':'2018-07-08 12:23:34',
+        'upkeep_time':'2018-07-08 12:23:34',
         'over_time':'2018-07-08 12:23:34',
         'comment_time':'2018-07-08 12:23:34',
         'service_item':'装轮胎',
@@ -2391,7 +2485,7 @@ return:
 }
 ```
 
-<h4 id="maintain_upkeep_method_post">付款、完成、评论保养订单信息</h4>
+<h4 id="maintain_upkeep_method_post">查询交易状态、付款、完成、评论保养订单信息</h4>
 
 url:/api/maintain/upkeep_method/  
 method:post  
@@ -2400,16 +2494,24 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |id|int|id|无|1|必填|   
-|method|char(20)|操作|pay:付款，finish:完成，comment:评论|comment|必填|  
+|method|char(20)|操作|order_status:查询交易状态，pay:付款，finish:完成，comment:评论|comment|必填|  
 |score|int|评分|大于等于0，小于等于5，当method为comment的时候需要|1|选填|  
+|order_method|char(100)|支付方式|alipay：支付宝，weixin：微信|alipay|pay的时候必填|  
 
 return:  
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
+|status|int|状态|order_status返回,0未支付，1正在支付，2支付成功，3支付失败重新支付，4支付超时|  
+|time|int|交易还剩多少秒|order_status返回|  
+|params|char(1000)|交易码|用于手机端交易|  
+
 ```
 {
-    'data':{}
+    'data':{
+        'status':0,
+        'time':0
+    }
 }
 ```
 
@@ -2462,7 +2564,7 @@ return:
 |pay_time|datetime|付款时间|无|  
 |get_time|datetime|取车时间|无|  
 |service_time|datetime|服务时间|无|  
-|upkeep_time|datetime|完成服务时间|无|  
+|maintain_time|datetime|完成服务时间|无|  
 |over_time|datetime|完成时间|无|  
 |comment_time|datetime|评论时间|无|  
 |car_code|char(10)|车牌|无|  
@@ -2497,8 +2599,12 @@ maintainpic_set:
             'address':'广州越秀区',
             'mobile_phone':'12345678998',
             'phone':'020-8888888',
-            'oil_block':70,
-            'work_price':88
+            'filter_price':88,
+            'popular':1,
+            'score':1,
+            'pic_url':'asdla.jpg',
+            'distance':10,
+            'type':0
         },
         'name':'张三',
         'phone':'粤A23452',
@@ -2521,7 +2627,7 @@ maintainpic_set:
         'pay_time':'2018-07-08 12:23:34',
         'get_time':'2018-07-08 12:23:34',
         'service_time':'2018-07-08 12:23:34',
-        'upkeep_time':'2018-07-08 12:23:34',
+        'maintain_time':'2018-07-08 12:23:34',
         'over_time':'2018-07-08 12:23:34',
         'comment_time':'2018-07-08 12:23:34',
         'car_code':'粤A88888',
@@ -2605,7 +2711,7 @@ return:
 |pay_time|datetime|付款时间|无|  
 |get_time|datetime|取车时间|无|  
 |service_time|datetime|服务时间|无|  
-|upkeep_time|datetime|完成服务时间|无|  
+|maintain_time|datetime|完成服务时间|无|  
 |over_time|datetime|完成时间|无|  
 |comment_time|datetime|评论时间|无|  
 |car_code|char(10)|车牌|无|  
@@ -2640,8 +2746,12 @@ maintainpic_set:
             'address':'广州越秀区',
             'mobile_phone':'12345678998',
             'phone':'020-8888888',
-            'oil_block':70,
-            'work_price':88
+            'filter_price':88,
+            'popular':1,
+            'score':1,
+            'pic_url':'asdla.jpg',
+            'distance':10,
+            'type':0
         },
         'name':'张三',
         'phone':'粤A23452',
@@ -2664,7 +2774,7 @@ maintainpic_set:
         'pay_time':'2018-07-08 12:23:34',
         'get_time':'2018-07-08 12:23:34',
         'service_time':'2018-07-08 12:23:34',
-        'upkeep_time':'2018-07-08 12:23:34',
+        'maintain_time':'2018-07-08 12:23:34',
         'over_time':'2018-07-08 12:23:34',
         'comment_time':'2018-07-08 12:23:34',
         'car_code':'粤A88888',
@@ -2700,7 +2810,7 @@ return:
 }
 ```
 
-<h4 id="maintain_maintain_method_post">付款、完成、评论维修订单信息</h4>
+<h4 id="maintain_maintain_method_post">查询交易状态、付款、完成、评论维修订单信息</h4>
 
 url:/api/maintain/maintain_method/  
 method:post  
@@ -2709,16 +2819,24 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |id|int|id|无|1|必填|   
-|method|char(20)|操作|pay:付款，finish:完成，comment:评论|comment|必填|  
+|method|char(20)|操作|order_status:查询交易状态，pay:付款，finish:完成，comment:评论|comment|必填|  
 |score|int|评分|大于等于0，小于等于5，当method微comment的时候需要|1|选填|  
+|order_method|char(100)|支付方式|alipay：支付宝，weixin：微信|alipay|pay的时候必填|  
 
 return:  
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
+|status|int|状态|order_status返回,0未支付，1正在支付，2支付成功，3支付失败重新支付，4支付超时|  
+|time|int|交易还剩多少秒|order_status返回|  
+|params|char(1000)|交易码|用于手机端交易|  
+
 ```
 {
-    'data':{}
+    'data':{
+        'status':0,
+        'time':0
+    }
 }
 ```
 
@@ -3396,7 +3514,7 @@ failurepic:
 }
 ```
 
-<h4 id="survey_survey_selfmethod_post">自驾年检订单操作信息-取消、查询费用、支付、确认到达、完成订单</h4>
+<h4 id="survey_survey_selfmethod_post">自驾年检订单操作信息-查询交易状态、取消、查询费用、支付、确认到达、完成订单</h4>
 
 url:/api/survey/survey_selfmethod/  
 method:post  
@@ -3405,12 +3523,13 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |id|int|id|查询费用不需要添加id|1|必填|   
-|method|char(20)|操作|cancel：取消，get：查询费用，pay：支付，survey：确认到达，finish：完成订单|get|必填|  
+|method|char(20)|操作|order_status:查询交易状态，cancel：取消，get：查询费用，pay：支付，survey：确认到达，finish：完成订单|get|必填|  
 |longitude|float|经度|无|123|选填|  
 |latitude|float|纬度|无|23|选填|  
 |surveystation_id|int|年检站id|无|1|选填|  
 |combo_id|int|套餐id|无|1|选填|  
 |comboitem_list|char(100)|套餐选项id|使用,拼接|1,2|选填|  
+|order_method|char(100)|支付方式|alipay：支付宝，weixin：微信|alipay|pay的时候必填|  
 
 return:  
 
@@ -3427,6 +3546,10 @@ return:
 |combo_price|float|套餐费用|无|  
 |survey_price|float|年检费用|无|  
 |total_price|float|总计费用|无|  
+|status|int|状态|order_status返回,0未支付，1正在支付，2支付成功，3支付失败重新支付，4支付超时|  
+|time|int|交易还剩多少秒|order_status返回|  
+|params|char(1000)|交易码|用于手机端交易|  
+
 ```
 {
     'data':{
@@ -3438,7 +3561,7 @@ return:
 }
 ```
 
-<h4 id="survey_survey_behalfmethod_post">代驾年检订单操作信息-取消、查询费用、支付、失败支付、确认还车</h4>
+<h4 id="survey_survey_behalfmethod_post">代驾年检订单操作信息-查询交易状态、取消、查询费用、支付、失败支付、确认还车</h4>
 
 url:/api/survey/survey_behalfmethod/  
 method:post  
@@ -3447,12 +3570,13 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |id|int|id|查询费用不需要添加id|1|必填|   
-|method|char(20)|操作|cancel：取消，get：查询费用，pay：支付，failure_pay：失败支付，return：确认还车|get|必填|  
+|method|char(20)|操作|order_status:查询交易状态，cancel：取消，get：查询费用，pay：支付，failure_pay：失败支付，return：确认还车|get|必填|  
 |longitude|float|经度|无|123|选填|  
 |latitude|float|纬度|无|23|选填|  
 |surveystation_id|int|年检站id|无|1|选填|  
 |combo_id|int|套餐id|无|1|选填|  
 |comboitem_list|char(100)|套餐选项id|使用,拼接|1,2|选填|  
+|order_method|char(100)|支付方式|alipay：支付宝，weixin：微信|alipay|pay的时候必填|  
 
 return:  
 
@@ -3469,6 +3593,10 @@ return:
 |combo_price|float|套餐费用|无|  
 |survey_price|float|年检费用|无|  
 |total_price|float|总计费用|无|  
+|status|int|状态|order_status返回,0未支付，1正在支付，2支付成功，3支付失败重新支付，4支付超时|  
+|time|int|交易还剩多少秒|order_status返回|  
+|params|char(1000)|交易码|用于手机端交易|  
+
 ```
 {
     'data':{
@@ -3499,6 +3627,29 @@ param:
     'data':{
         'phone':'12331',
         'moblie_phone':'12331'
+    }
+}
+```
+
+<h4 id="survey_survey_info_get">年检须知</h4>
+
+url:/api/survey/survey_info/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|   
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|url|char(100)|页面url|无|  
+
+```
+{
+    'data':{
+        'url':'www.safad.con/sdad/'
     }
 }
 ```
@@ -3555,6 +3706,38 @@ return:
 }
 ```
 
+<h3 id="system_cover_get">封面图片信息</h3>
+
+url:/api/system/cover/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|   
+|system|char(50)|系统|android,ios|ios|选填|  
+|app_type|char(50)|用户端类型|user,driver|user|选填|  
+|version|char(50)|版本|xx.yyzz|1.0000|选填|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|update_time|datetime|修改时间|无|  
+|pic_url_list|list|图片路径|无|  
+
+```
+{
+    'data':{
+        'update_time':'2018-07-08 12:23:34',
+        'pic_url_list':[
+            'alshajfsd/sadf.jpg',
+            'alshajfsd/sadf.jpg',
+            'alshajfsd/sadf.jpg'
+        ]
+    }
+}
+```
+
 <h3 id="system_aboutus_get">关于我们</h3>
 
 url:/api/system/aboutus/  
@@ -3568,9 +3751,36 @@ return:
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
+|url|char(100)|页面url|无|  
 
 ```
 {
+    'data':{
+        'url':'www.safad.con/sdad/'
+    }
+}
+```
+
+<h3 id="system_useragreement_get">注册用户协议</h3>
+
+url:/api/system/useragreement/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|   
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|url|char(100)|页面url|无|  
+
+```
+{
+    'data':{
+        'url':'www.safad.con/sdad/'
+    }
 }
 ```
 
@@ -4226,6 +4436,233 @@ return:
 ```
 {
     'data':{}
+}
+```
+
+<h4 id="ws_driver_order">查询订单列表信息-服务端推送</h4>
+
+url:/ws/driver/order/<user_id>/<timestampe>/<sign>/  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|user_id|int|用户id|登陆成功后返回|1|必填|  
+|timestamp|char(50)|时间戳|app自己生成|1|必填|  
+|sign|char(50)|签名|md5(token+timestamp)|asdadsa|必填|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|id|无|  
+|create_time|datetime|创建时间|无|  
+|update_time|datetime|修改时间|无|  
+|name|char(20)|联系人|无|  
+|phone|char(20)|联系人电话|无|   
+|car_name|char(20)|车主姓名|无|  
+|car_brand|char(20)|品牌型号|无|  
+|car_code|char(20)|车牌|无|  
+|car_type|char(100)|车量类型|小型蓝牌，七座以下|  
+|surveystation|object|年检站|查询年检站信息|  
+|order_longitude|float|交接地点经度|无|  
+|order_latitude|float|交接地点纬度|无|  
+|order_address|char(100)|交接地点|无|  
+|subscribe_time|datetime|预约日期|无|  
+|is_self|bool|是否自驾|无|  
+|combo|object|套餐对象|查看套餐接口|  
+|surveycomboitem_set|list|套餐项列表|查看套餐接口|  
+|base_price|float|基础费用|无|  
+|combo_price|float|套餐费用|无|  
+|survey_price|float|年检费用|无|  
+|total_price|float|总计费用|无|  
+|state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检成功，6.到达还车，7.已还车，8.已完成|  
+|survey_state|int|年检状态|0:还没有开始或是正在进行，1：成功，2：不成功，3：复查|  
+|drive_user_id|int|接单用户id|无|  
+|drive_user_pic_url|char(100)|接单用户头像url|无|  
+|drive_user_name|char(100)|接单用户名称|无|  
+|drive_user_phone|char(100)|接单用户联系电话|无|  
+|order_time|datetime|下单时间|无|  
+|receive_time|datetime|接单时间|无|  
+|get_time|datetime|取车时间|无|  
+|arrive_survey_time|datetime|到达年检时间|无|  
+|survey_time|datetime|年检结束时间|无|  
+|arrive_return_time|datetime|到达还车时间|无|  
+|return_time|datetime|还车时间|无|  
+|confirm_time|datetime|确认时间|无|  
+|get_confirm|object|取车图片-检车确认|无|  
+|get_car|object|取车图片-车身拍照|无|  
+|survey_upload|object|年检已过-上传照片|无|  
+|return_confirm|object|还车图片-检车确认|无|  
+|return_car|object|还车图片-车身拍照|无|  
+|failure_list|list|失败信息对象列表|无|  
+
+
+
+get_confirm、get_car、survey_upload、return_confirm、return_car:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|name|char(100)|类别名称|无|  
+|obj_list|list|列表|无|  
+
+obj:
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|pic_url|char(100)|图片url|无|  
+|note|char(100)|备注|无|  
+
+failure_list：  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|name|char(100)|补充项|无|  
+|price|float|总计费用|无|  
+|failureitem_list|list|失败详情|无|  
+
+failureitem：  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|name|char(100)|名称|无|  
+|price|float|费用|无|  
+|failurepic_list|list|图片对象列表|无|  
+
+failurepic:
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|pic_url|char(100)|图片url|无|  
+|note|char(100)|备注|无|  
+
+```
+{
+    'data':
+    [{
+        'id':1,
+        'create_time':'2018-07-08 12:23:34',
+        'update_time':'2018-07-08 12:23:34',
+        'name':'张三',
+        'phone':'12345678998',
+        'car_name':'张三',
+        'car_brand':'玛萨拉蒂',
+        'car_code':'粤A23452',
+        'car_type':'小型蓝牌',
+        'surveystation':{
+            'id':1,
+            'create_time':'2018-07-08 12:23:34',
+            'update_time':'2018-07-08 12:23:34',
+            'name':'张三年检站',
+            'longitude':223,
+            'latitude':322,
+            'address':'广州越秀区',
+            'price':1
+        },
+        'order_longitude':23,
+        'order_latitude':123,
+        'order_address':'广州白云区',
+        'subscribe_time':'2018-07-08 12:23:34',
+        'is_self':true,
+        'combo':{
+        },
+        'surveycomboitem_set':[{
+            'id':1,
+            'create_time':'2018-07-08 12:23:34',
+            'update_time':'2018-07-08 12:23:34',
+            'name':'轮胎',
+            'price':200
+        }],
+        'base_price':1,
+        'combo_price':1,
+        'survey_price':1,
+        'total_price':1,
+        'state':1,
+        'survey_state':0,
+        'drive_user_id':1,
+        'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
+        'drive_user_name':'李四',
+        'drive_user_phone':'12312',
+        'order_time':'2018-07-08 12:23:34',
+        'receive_time':'2018-07-08 12:23:34',
+        'get_time':'2018-07-08 12:23:34',
+        'arrive_survey_time':'2018-07-08 12:23:34',
+        'survey_time':'2018-07-08 12:23:34',
+        'arrive_return_time':'2018-07-08 12:23:34',
+        'return_time':'2018-07-08 12:23:34',
+        'confirm_time':'2018-07-08 12:23:34',
+        'get_confirm':{
+            'name':'取车图片-检车确认',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'get_car':{
+            'name':'取车图片-车身拍照',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'survey_upload':{
+            'name':'年检已过-上传照片',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'return_confirm':{
+            'name':'还车图片-检车确认',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'return_car':{
+            'name':'还车图片-车身拍照',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'failure_list':[{
+            'name':'补充项',
+            'price':123,
+            'failureitem_list':[{
+                'name':'名称',
+                'price':'费用',
+                'failurepic_list':[{
+                    'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                    'note':'asfdasdfasd'
+                }]
+            }]
+        }]
+    }]
+}
+```
+
+<h4 id="ws_driver_listen">听单-服务端推送</h4>
+
+url:/api/driver/listen/<user_id>/<timestampe>/<sign>/  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|user_id|int|用户id|登陆成功后返回|1|必填|  
+|timestamp|char(50)|时间戳|app自己生成|1|必填|  
+|sign|char(50)|签名|md5(token+timestamp)|asdadsa|必填|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|订单id|无|  
+
+```
+{
+    'data':{
+        'id':0
+    }
 }
 ```
 
