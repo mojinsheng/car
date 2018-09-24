@@ -103,6 +103,8 @@
   - [注册用户协议](#system_useragreement_get) 
  7. [司机端](#driver)
   - [订单](#driver_order)
+    * [查询资格信息](#driver_order_certification_get)
+    * [进行资格认证](#driver_order_certification_post)
     * [查询订单列表信息](#driver_order_list_get)
     * [查询订单信息](#driver_order_get)
     * [查询提交图片的类别名称信息](#driver_order_picname_get)
@@ -118,6 +120,7 @@
     * [查询订单列表信息-服务端推送](#ws_driver_order)
     * [听单-服务端推送](#ws_driver_listen)
   - [账户](#driver_account)
+    * [修改绑定的支付宝账号](#driver_account_alipay_get)
     * [查询明细列表信息](#driver_account_list_get)
     * [查询明细信息](#driver_account_get)
     * [明细操作信息-提现](#driver_account_method_post)
@@ -365,6 +368,7 @@ return:
 |pic_url|char(50)|照片url|/url,获取图片|  
 |point|int|积分|无|  
 |is_pass|bool|是否过审|无|  
+|alipay|char(100)|支付宝账号(账号中间带*隐藏)|无|  
 ```
 {
     'data':{
@@ -372,8 +376,9 @@ return:
         'phone':'12345678998',
         'name':'admin',
         'pic':'/alsdfh.jpg',
-        'point':'20',
-        'is_pass':false
+        'point':20,
+        'is_pass':false,
+        'alipay':'jaksdhksj***kajshd'
     }
 }
 ```
@@ -1643,6 +1648,8 @@ return:
 |---|---|---|---|  
 |status|int|状态|order_status返回,0未支付，1正在支付，2支付成功，3支付失败重新支付，4支付超时|  
 |time|int|交易还剩多少秒|order_status返回|  
+|to|char(100)|商家的名字|order_status返回|  
+|order_code|char(100)|交易订单号|order_status返回|  
 |params|char(1000)|交易码|用于手机端交易|  
 
 ```
@@ -3788,6 +3795,52 @@ return:
 
 <h3 id="driver_order">订单</h3>
 
+<h3 id="driver_order_certification_get">查询资格信息</h3>
+
+url:/api/driver/order_certification/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|   
+|id|int|id|无|1|必填|   
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|state|int|审核状态|0:未审核，1:正在审核，2:审核成功|  
+
+```
+{
+    'data':{
+        'state':0
+    }
+}
+```
+
+<h3 id="driver_order_certification_post">进行资格认证</h3>
+
+url:/api/driver/order_certification/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|   
+|id|int|id|无|1|必填|   
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+
+```
+{
+    'data':{
+    }
+}
+```
+
 <h4 id="driver_order_list_get">查询订单列表信息</h4>
 
 url:/api/driver/order/  
@@ -4441,7 +4494,8 @@ return:
 
 <h4 id="ws_driver_order">查询订单列表信息-服务端推送</h4>
 
-url:/ws/driver/order/<user_id>/<timestampe>/<sign>/  
+使用websocket连接  
+url:/ws/driver/order/<:user_id>/<:timestampe>/<:sign>/  
 param:   
 
 |参数|类型|说明|备注|例子|是否必填|  
@@ -4643,7 +4697,8 @@ failurepic:
 
 <h4 id="ws_driver_listen">听单-服务端推送</h4>
 
-url:/api/driver/listen/<user_id>/<timestampe>/<sign>/  
+使用websocket连接  
+url:/api/driver/listen/<:user_id>/<:timestampe>/<:sign>/  
 param:   
 
 |参数|类型|说明|备注|例子|是否必填|  
@@ -4668,6 +4723,29 @@ return:
 
 
 <h3 id="driver_account">账户</h3>
+
+<h3 id="driver_account_alipay_get">修改绑定的支付宝账号</h3>
+
+url:/api/driver/account_alipay/  
+method:post  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|   
+|id|int|id|无|1|必填|   
+|alipay_acoount|char(100)|账号|无|1|必填|   
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+
+```
+{
+    'data':{
+    }
+}
+```
 
 <h4 id="driver_account_list_get">查询明细列表信息</h4>
 
@@ -4763,7 +4841,7 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |money|float|提现金额|无|1|必填|  
-|via|char(100)|体现途径|alipay,weixin|weixin|必填|  
+|via|char(100)|体现途径|alipay|alipay|必填|  
 
 return:  
 
