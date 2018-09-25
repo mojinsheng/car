@@ -1650,13 +1650,17 @@ return:
 |time|int|交易还剩多少秒|order_status返回|  
 |to|char(100)|商家的名字|order_status返回|  
 |order_code|char(100)|交易订单号|order_status返回|  
+|price|float|交易金额|order_status返回|  
 |params|char(1000)|交易码|用于手机端交易|  
 
 ```
 {
     'data':{
         'status':0,
-        'time':0
+        'time':0,
+        'to':0,
+        'order_code':'asdqwdqw',
+        'price':12
     }
 }
 ```
@@ -2228,14 +2232,13 @@ return:
 |is_upkeep|bool|维修状态|无|  
 |score|int|评分|大于等于0，小于等于5|  
 |order_time|datetime|下单时间|无|  
+|start_order_time|datetime|接单时间|无|  
 |pay_time|datetime|付款时间|无|  
 |get_time|datetime|取车时间|无|  
 |service_time|datetime|服务时间|无|  
 |upkeep_time|datetime|完成服务时间|无|  
 |over_time|datetime|完成时间|无|   
 |comment_time|datetime|评论时间|无|  
-|service_item|char(100)|服务项目|无|  
-|service_materials|text|服务材料|无|  
 |deal_id|char(100)|交易单号|无|  
 |order_id|char(100)|订单单号|无|  
 |oil_name|char(50)|机油名称|无|  
@@ -2294,14 +2297,13 @@ upkeeppic_set：
         'is_upkeep':false,
         'score':1,
         'order_time':'2018-07-08 12:23:34',
+        'start_order_time':'2018-07-08 12:23:34',
         'pay_time':'2018-07-08 12:23:34',
         'get_time':'2018-07-08 12:23:34',
         'service_time':'2018-07-08 12:23:34',
         'upkeep_time':'2018-07-08 12:23:34',
         'over_time':'2018-07-08 12:23:34',
         'comment_time':'2018-07-08 12:23:34',
-        'service_item':'装轮胎',
-        'service_materials':'轮胎',
         'deal_id':'182731725',
         'order_id':'8927918238271',
         'oil_name':'没油',
@@ -2382,14 +2384,13 @@ return:
 |is_upkeep|bool|维修状态|无|  
 |score|int|评分|大于等于0，小于等于5|  
 |order_time|datetime|下单时间|无|  
+|start_order_time|datetime|接单时间|无|  
 |pay_time|datetime|付款时间|无|  
 |get_time|datetime|取车时间|无|  
 |service_time|datetime|服务时间|无|  
 |upkeep_time|datetime|完成服务时间|无|  
 |over_time|datetime|完成时间|无|   
 |comment_time|datetime|评论时间|无|  
-|service_item|char(100)|服务项目|无|  
-|service_materials|text|服务材料|无|  
 |deal_id|char(100)|交易单号|无|  
 |order_id|char(100)|订单单号|无|  
 |oil_name|char(50)|机油名称|无|  
@@ -2448,14 +2449,13 @@ upkeeppic_set：
         'is_upkeep':false,
         'score':1,
         'order_time':'2018-07-08 12:23:34',
+        'start_order_time':'2018-07-08 12:23:34',
         'pay_time':'2018-07-08 12:23:34',
         'get_time':'2018-07-08 12:23:34',
         'service_time':'2018-07-08 12:23:34',
         'upkeep_time':'2018-07-08 12:23:34',
         'over_time':'2018-07-08 12:23:34',
         'comment_time':'2018-07-08 12:23:34',
-        'service_item':'装轮胎',
-        'service_materials':'轮胎',
         'deal_id':'182731725',
         'order_id':'8927918238271',
         'oil_name':'没油',
@@ -2511,13 +2511,19 @@ return:
 |---|---|---|---|  
 |status|int|状态|order_status返回,0未支付，1正在支付，2支付成功，3支付失败重新支付，4支付超时|  
 |time|int|交易还剩多少秒|order_status返回|  
+|to|char(100)|商家的名字|order_status返回|  
+|order_code|char(100)|交易订单号|order_status返回|  
+|price|float|交易金额|order_status返回|  
 |params|char(1000)|交易码|用于手机端交易|  
 
 ```
 {
     'data':{
         'status':0,
-        'time':0
+        'time':0,
+        'to':0,
+        'order_code':'asdqwdqw',
+        'price':10
     }
 }
 ```
@@ -2566,8 +2572,10 @@ return:
 |is_delete|bool|删除状态|无|  
 |is_comment|bool|评论状态|无|  
 |is_maintain|bool|维修状态|无|  
+|is_setting|bool|是否设置维修清单|无|  
 |score|int|评分|大于等于0，小于等于5|  
 |order_time|datetime|下单时间|无|  
+|start_order_time|datetime|接单时间|无|  
 |pay_time|datetime|付款时间|无|  
 |get_time|datetime|取车时间|无|  
 |service_time|datetime|服务时间|无|  
@@ -2576,11 +2584,11 @@ return:
 |comment_time|datetime|评论时间|无|  
 |car_code|char(10)|车牌|无|  
 |car_type|char(100)|车型|无|  
-|service_item|char(100)|服务项目|无|  
-|service_materials|text|服务材料|无|  
 |deal_id|char(10)|交易单号|无|  
 |order_id|char(10)|订单单号|无|  
 |maintainpic_set|list|汽修站提交的图片与附加信息对象数组|无|  
+|maintainitem_set|list|汽修站给出的维修项信息对象数组|无|  
+|maintainitem_set_now|list|用户选择的维修项信息对象数组|无|  
 
 maintainpic_set:
 
@@ -2588,6 +2596,15 @@ maintainpic_set:
 |---|---|---|---|  
 |pic_url|char(100)|图片url|无|  
 |note|char(100)|备注|无|  
+
+maintainitem_set
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|id|无|  
+|name|char(100)|图片url|无|  
+|price|char(100)|备注|无|  
+
 ```
 {
     'data':
@@ -2629,8 +2646,10 @@ maintainpic_set:
         'is_delete':true,
         'is_comment':false,
         'is_maintain':false,
+        'is_setting':false,
         'score':1,
         'order_time':'2018-07-08 12:23:34',
+        'start_order_time':'2018-07-08 12:23:34',
         'pay_time':'2018-07-08 12:23:34',
         'get_time':'2018-07-08 12:23:34',
         'service_time':'2018-07-08 12:23:34',
@@ -2638,13 +2657,21 @@ maintainpic_set:
         'over_time':'2018-07-08 12:23:34',
         'comment_time':'2018-07-08 12:23:34',
         'car_code':'粤A88888',
-        'service_item':'装轮胎',
-        'service_materials':'轮胎',
         'deal_id':'182731725',
         'order_id':'8927918238271',
         'maintainpic_set':[{
             'pic_url':'/asdfas.jpg',
             'note':'车钥匙'
+        }],
+        'maintainpic_set':[{
+            'id':12,
+            'name':'车轮',
+            'price':123
+        }],
+        'maintainitem_set_now':[{
+            'id':12,
+            'name':'车轮',
+            'price':123
         }]
     }]
 }
@@ -2659,13 +2686,14 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |garage_id|int|汽修厂id|无|1|必填|  
+|car_id|int|汽车id|无|1|必填|  
 |name|char(20)|名称|无|张三|必填|  
 |phone|char(20)|电话号码|无|12345678998|必填|  
 |longitude|float|经度|无|104|必填|  
 |latitude|float|纬度|无|23|必填|  
 |address|char(100)|地址|无|广州天河区|必填|  
 |subscribe_time|datetime|预约时间|无|2018-07-08 12:23:34|必填|  
-|content|text|内容|无|修理|必填|  
+|n|text|内容|无|修理|必填|  
 |number|int|数量|多少个文件|1|必填|  
 |pic1|文件流|图片|编号从1开始|(文件流)|选填|  
 
@@ -2713,8 +2741,10 @@ return:
 |is_delete|bool|删除状态|无|  
 |is_comment|bool|评论状态|无|  
 |is_maintain|bool|维修状态|无|  
+|is_setting|bool|是否设置维修清单|无|  
 |score|int|评分|大于等于0，小于等于5|  
 |order_time|datetime|下单时间|无|  
+|start_order_time|datetime|接单时间|无|  
 |pay_time|datetime|付款时间|无|  
 |get_time|datetime|取车时间|无|  
 |service_time|datetime|服务时间|无|  
@@ -2723,8 +2753,6 @@ return:
 |comment_time|datetime|评论时间|无|  
 |car_code|char(10)|车牌|无|  
 |car_type|char(100)|车型|无|  
-|service_item|char(100)|服务项目|无|  
-|service_materials|text|服务材料|无|  
 |deal_id|char(10)|交易单号|无|  
 |order_id|char(10)|订单单号|无|  
 |maintainpic_set|list|汽修站提交的图片与附加信息对象数组|无|  
@@ -2776,8 +2804,10 @@ maintainpic_set:
         'is_delete':true,
         'is_comment':false,
         'is_maintain':false,
+        'is_setting':false,
         'score':1,
         'order_time':'2018-07-08 12:23:34',
+        'start_order_time':'2018-07-08 12:23:34',
         'pay_time':'2018-07-08 12:23:34',
         'get_time':'2018-07-08 12:23:34',
         'service_time':'2018-07-08 12:23:34',
@@ -2785,8 +2815,6 @@ maintainpic_set:
         'over_time':'2018-07-08 12:23:34',
         'comment_time':'2018-07-08 12:23:34',
         'car_code':'粤A88888',
-        'service_item':'装轮胎',
-        'service_materials':'轮胎',
         'deal_id':'182731725',
         'order_id':'8927918238271',
         'maintainpic_set':[{
@@ -2817,7 +2845,7 @@ return:
 }
 ```
 
-<h4 id="maintain_maintain_method_post">查询交易状态、付款、完成、评论维修订单信息</h4>
+<h4 id="maintain_maintain_method_post">查询交易状态、修改维修项、付款、完成、评论维修订单信息</h4>
 
 url:/api/maintain/maintain_method/  
 method:post  
@@ -2826,9 +2854,10 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |id|int|id|无|1|必填|   
-|method|char(20)|操作|order_status:查询交易状态，pay:付款，finish:完成，comment:评论|comment|必填|  
+|method|char(20)|操作|order_status:查询交易状态，item_list：修改维修项，pay:付款，finish:完成，comment:评论|comment|必填|  
 |score|int|评分|大于等于0，小于等于5，当method微comment的时候需要|1|选填|  
 |order_method|char(100)|支付方式|alipay：支付宝，weixin：微信|alipay|pay的时候必填|  
+|item_list|char(100)|维修项列表字符串|用,拼接|1,2,3,4|item_list的时候必填|  
 
 return:  
 
@@ -2836,13 +2865,19 @@ return:
 |---|---|---|---|  
 |status|int|状态|order_status返回,0未支付，1正在支付，2支付成功，3支付失败重新支付，4支付超时|  
 |time|int|交易还剩多少秒|order_status返回|  
+|to|char(100)|商家的名字|order_status返回|  
+|order_code|char(100)|交易订单号|order_status返回|  
+|price|float|交易金额|order_status返回|  
 |params|char(1000)|交易码|用于手机端交易|  
 
 ```
 {
     'data':{
         'status':0,
-        'time':0
+        'time':0,
+        'to':0,
+        'order_code':'asdqwdqw',
+        'price':10
     }
 }
 ```
