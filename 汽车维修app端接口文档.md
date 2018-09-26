@@ -120,7 +120,9 @@
     * [查询订单列表信息-服务端推送](#ws_driver_order)
     * [听单-服务端推送](#ws_driver_listen)
   - [账户](#driver_account)
-    * [修改绑定的支付宝账号](#driver_account_alipay_get)
+    * [查询绑定的支付宝账号](#driver_account_alipay_get)
+    * [获取绑定的支付宝账号信息](#driver_account_alipay_info_get)
+    * [进行支付宝账号绑定](#driver_account_alipay_post)
     * [查询明细列表信息](#driver_account_list_get)
     * [查询明细信息](#driver_account_get)
     * [明细操作信息-提现](#driver_account_method_post)
@@ -368,7 +370,6 @@ return:
 |pic_url|char(50)|照片url|/url,获取图片|  
 |point|int|积分|无|  
 |is_pass|bool|是否过审|无|  
-|alipay|char(100)|支付宝账号(账号中间带*隐藏)|无|  
 ```
 {
     'data':{
@@ -377,8 +378,7 @@ return:
         'name':'admin',
         'pic':'/alsdfh.jpg',
         'point':20,
-        'is_pass':false,
-        'alipay':'jaksdhksj***kajshd'
+        'is_pass':false
     }
 }
 ```
@@ -1714,6 +1714,7 @@ return:
 |create_time|datetime|创建时间|无|  
 |update_time|datetime|修改时间|无|  
 |car_brand|char(100)|车辆品牌|无|  
+|car_code|char(100)|车牌号|无|  
 |amount|int|违章次数|无|  
 |score|int|扣分|无|  
 |price|float|罚款|无|  
@@ -1725,6 +1726,7 @@ return:
         'create_time':'2018-07-08 12:23:34',
         'update_time':'2018-07-08 12:23:34',
         'car_brand':'玛萨拉蒂',
+        'car_code':'粤A23456',
         'amount':1,
         'score':1,
         'price':200
@@ -1750,6 +1752,7 @@ return:
 |create_time|datetime|创建时间|无|  
 |update_time|datetime|修改时间|无|  
 |car_brand|char(100)|车辆品牌|无|  
+|car_code|char(100)|车牌号|无|  
 |amount|int|违章次数|无|  
 |score|int|扣分|无|  
 |price|float|罚款|无|  
@@ -1761,6 +1764,7 @@ return:
         'create_time':'2018-07-08 12:23:34',
         'update_time':'2018-07-08 12:23:34',
         'car_brand':'玛萨拉蒂',
+        'car_code':'粤A23456',
         'amount':1,
         'score':1,
         'price':200
@@ -4378,7 +4382,6 @@ return:
 }
 ```
 
-<h4 id="driver_order_wait_post">听单</h4>
 <h4 id="driver_order_cancel_post">取消订单</h4>
 
 url:/api/driver/order_cancel/  
@@ -4775,7 +4778,57 @@ return:
 
 <h3 id="driver_account">账户</h3>
 
-<h3 id="driver_account_alipay_get">修改绑定的支付宝账号</h3>
+<h4 id="driver_account_alipay_get">查询绑定的支付宝账号</h4>
+
+url:/api/driver/account_alipay/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|   
+|id|int|id|无|1|必填|   
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|name|char(100)|支付宝名称|无|   
+|state|bool|绑定状态|无|   
+
+```
+{
+    'data':{
+        'name':'哈哈镜是空的',
+        'state':false
+    }
+}
+```
+
+<h4 id="driver_account_alipay_info_get">获取绑定的支付宝账号信息</h4>
+
+url:/api/driver/account_alipayinfo/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|   
+|id|int|id|无|1|必填|   
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|params|char(100)|字符串信息|无|   
+
+```
+{
+    'data':{
+        'params':'qwdqwdqwdwd'
+    }
+}
+```
+
+<h4 id="driver_account_alipay_get">修改绑定的支付宝账号</h4>
 
 url:/api/driver/account_alipay/  
 method:post  
@@ -4783,8 +4836,9 @@ param:
 
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|   
-|id|int|id|无|1|必填|   
-|alipay_acoount|char(100)|账号|无|1|必填|   
+|id|int|用户id|无|1|必填|   
+|auth_code|char(100)|验证code|无|126134632|必填|   
+|user_id|char(100)|支付宝用户id|无|11463465|必填|   
 
 return:  
 
@@ -4892,7 +4946,8 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |money|float|提现金额|无|1|必填|  
-|via|char(100)|体现途径|alipay|alipay|必填|  
+|via|char(100)|提现途径|alipay|alipay|必填|  
+|name|char(100)|真实姓名|无|张三|必填|  
 
 return:  
 
