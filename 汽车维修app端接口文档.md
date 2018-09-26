@@ -47,7 +47,7 @@
     * [生成订单](#service_order_list_post)
     * [查询订单信息](#service_order_get)
     * [删除订单信息](#service_order_delete)
-    * [付款、完成、评论订单信息](#service_order_method_post)
+    * [查询交易状态、付款、完成、评论订单信息](#service_order_method_post)
     * [查询订单快递信息](#service_orderlogistics_get)
   - [违章记录信息](#service_rules)
     * [查询违章记录列表信息](#service_rules_list_get)
@@ -3610,6 +3610,9 @@ return:
 |total_price|float|总计费用|无|  
 |status|int|状态|order_status返回,0未支付，1正在支付，2支付成功，3支付失败重新支付，4支付超时|  
 |time|int|交易还剩多少秒|order_status返回|  
+|to|char(100)|商家的名字|order_status返回|  
+|order_code|char(100)|交易订单号|order_status返回|  
+|price|float|交易金额|order_status返回|  
 |params|char(1000)|交易码|用于手机端交易|  
 
 ```
@@ -3657,6 +3660,9 @@ return:
 |total_price|float|总计费用|无|  
 |status|int|状态|order_status返回,0未支付，1正在支付，2支付成功，3支付失败重新支付，4支付超时|  
 |time|int|交易还剩多少秒|order_status返回|  
+|to|char(100)|商家的名字|order_status返回|  
+|order_code|char(100)|交易订单号|order_status返回|  
+|price|float|交易金额|order_status返回|  
 |params|char(1000)|交易码|用于手机端交易|  
 
 ```
@@ -3877,7 +3883,7 @@ return:
 <h3 id="driver_order_certification_post">进行资格认证</h3>
 
 url:/api/driver/order_certification/  
-method:get  
+method:post  
 param:   
 
 |参数|类型|说明|备注|例子|是否必填|  
@@ -4838,7 +4844,7 @@ param:
 |---|---|---|---|---|---|   
 |id|int|用户id|无|1|必填|   
 |auth_code|char(100)|验证code|无|126134632|必填|   
-|user_id|char(100)|支付宝用户id|无|11463465|必填|   
+|alipay_id|char(100)|支付宝用户id|无|11463465|必填|   
 
 return:  
 
