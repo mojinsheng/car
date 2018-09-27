@@ -79,6 +79,7 @@
     * [查询维修信息](#maintain_maintain_get)
     * [删除维修订单信息](#maintain_maintain_delete)
     * [查询交易状态、付款、完成、评论维修订单信息](#maintain_maintain_method_post)
+    * [极光推送维修订单接单信息](#maintain_maintain_jpush_get)
   - [保养、维修订单列表信息](#maintain_list_get)  
  5. [年检](#survey)
   - [年检站信息](#survey_surveystation)
@@ -2898,6 +2899,28 @@ return:
 }
 ```
 
+<h4 id="maintain_maintain_jpush_get">极光推送维修订单接单信息</h4>
+
+手机端设置：登陆以后，把账号注册成别名，服务端面向别名发送信息
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|维修订单id|如果接单，则是订单id，反之为0|  
+|state|bool|是否接单|无|  
+|msg|char(100)|信息|无|  
+
+```
+{
+    'data':{
+        'id':0,
+        'state':false,
+        'msg':'失败'
+    }
+}
+```
+
 <h3 id="maintain_list_get">保养、维修订单列表信息</h3>
 
 url:/api/maintain/list/  
@@ -4783,6 +4806,9 @@ return:
 
 
 <h3 id="driver_account">账户</h3>
+
+支付宝绑定过程：
+使用“查询绑定的支付宝账号”接口查询绑定状态
 
 <h4 id="driver_account_alipay_get">查询绑定的支付宝账号</h4>
 
