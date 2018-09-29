@@ -78,7 +78,7 @@
     * [生成维修订单信息](#maintain_maintain_list_post)
     * [查询维修信息](#maintain_maintain_get)
     * [删除维修订单信息](#maintain_maintain_delete)
-    * [查询交易状态、付款、完成、评论维修订单信息](#maintain_maintain_method_post)
+    * [查询交易状态、修改维修项、付款、完成、评论维修订单信息](#maintain_maintain_method_post)
     * [极光推送维修订单接单信息](#maintain_maintain_jpush_get)
   - [保养、维修订单列表信息](#maintain_list_get)  
  5. [年检](#survey)
@@ -2253,10 +2253,14 @@ return:
 |order_id|char(100)|订单单号|无|  
 |oil_name|char(50)|机油名称|无|  
 |oil_L|int|升|无|  
+|oil_amount|int|数量|无|  
 |oil_price|float|原价|无|  
 |oil_new_price|float|特价|无|  
 |car_brand|char(100)|车辆品牌|无|  
 |car_code|char(10)|车牌号码|无|  
+|order_name|char(10)|订单名称|无|  
+|service_item|char(10)|服务项目|无|  
+|order_type|char(10)|订单类型|无|  
 |upkeeppic_set|list|汽修站提交的图片与附加信息对象数组|无|  
 
 upkeeppic_set：
@@ -2318,10 +2322,14 @@ upkeeppic_set：
         'order_id':'8927918238271',
         'oil_name':'没油',
         'oil_L':2,
+        'oil_amount':2,
         'oil_price':1,
         'oil_new_price':1,
         'car_brand':'玛萨拉蒂',
         'car_code':'粤A24351',
+        'order_name':'xxxx保养服务',
+        'service_item':'保养',
+        'order_type':'保养',
         'upkeeppic_set':[{
             'pic_url':'/asdfas.jpg',
             'note':'车钥匙'
@@ -2409,10 +2417,14 @@ return:
 |order_id|char(100)|订单单号|无|  
 |oil_name|char(50)|机油名称|无|  
 |oil_L|int|升|无|  
+|oil_amount|int|数量|无|  
 |oil_price|float|原价|无|  
 |oil_new_price|float|特价|无|  
 |car_brand|char(100)|车辆品牌|无|  
 |car_code|char(10)|车牌号码|无|  
+|order_name|char(10)|订单名称|无|  
+|service_item|char(10)|服务项目|无|  
+|order_type|char(10)|订单类型|无|  
 |upkeeppic_set|list|汽修站提交的图片与附加信息对象数组|无|  
 
 upkeeppic_set：
@@ -2474,10 +2486,14 @@ upkeeppic_set：
         'order_id':'8927918238271',
         'oil_name':'没油',
         'oil_L':2,
+        'oil_amount':2,
         'oil_price':1,
         'oil_new_price':1,
         'car_brand':'玛萨拉蒂',
         'car_code':'粤A24351',
+        'order_name':'xxxx保养服务',
+        'service_item':'保养',
+        'order_type':'保养',
         'upkeeppic_set':[{
             'pic_url':'/asdfas.jpg',
             'note':'车钥匙'
@@ -2548,8 +2564,7 @@ return:
 流程：  
 用户提交订单->维修厂接单->维修厂设定维修项->用户付款->维修厂点击开始维修->维修厂填写维修报告->维修厂点击维修结束->用户确认完成订单->用户评价  
 等待接单：用户提交订单，等待维修厂接单。  
-未支付：维修厂接单，用户付款后，结束此状态，进入下一个状态。  
-未支付：is_settings=false，此时用户还不能付款。维修厂设置维修项后，用户方可付款并选择维修项，结束此状态，进入下一个状态。  
+未支付：is_settings=0，此时用户还不能付款。维修厂设置维修项后，用户方可付款并选择维修项，结束此状态，进入下一个状态。  
 等待服务：用户付款以后进入此状态，然后维修厂点击开始维修，需要填写取车时间，结束此状态，进入下一个状态。  
 服务中：当is_maintain=0，则表示维修未完成，维修厂可以填写维修报告。当维修厂点击维修结束，is_maintain=1，表示维修完成，用户则可以选择完成订单，结束此状态，进入下一个状态。  
 已完成：用户已经确认完成订单，订单结束，可以开始评价，is_comment表示是否评价了。  
@@ -2602,6 +2617,9 @@ return:
 |car_type|char(100)|车型|无|  
 |deal_id|char(10)|交易单号|无|  
 |order_id|char(10)|订单单号|无|  
+|order_name|char(10)|订单名称|无|  
+|service_item|char(10)|服务项目|无|  
+|order_type|char(10)|订单类型|无|  
 |maintainpic_set|list|汽修站提交的图片与附加信息对象数组|无|  
 |maintainitem_set|list|汽修站给出的维修项信息对象数组|无|  
 |maintainitem_set_now|list|用户选择的维修项信息对象数组|无|  
@@ -2675,6 +2693,9 @@ maintainitem_set
         'car_code':'粤A88888',
         'deal_id':'182731725',
         'order_id':'8927918238271',
+        'order_name':'xxxx维修服务',
+        'service_item':'维修',
+        'order_type':'维修',
         'maintainpic_set':[{
             'pic_url':'/asdfas.jpg',
             'note':'车钥匙'
@@ -2709,7 +2730,7 @@ param:
 |latitude|float|纬度|无|23|必填|  
 |address|char(100)|地址|无|广州天河区|必填|  
 |subscribe_time|datetime|预约时间|无|2018-07-08 12:23:34|必填|  
-|n|text|内容|无|修理|必填|  
+|content|text|内容|无|修理|必填|  
 |number|int|数量|多少个文件|1|必填|  
 |pic1|文件流|图片|编号从1开始|(文件流)|选填|  
 
@@ -2775,7 +2796,12 @@ return:
 |car_type|char(100)|车型|无|  
 |deal_id|char(10)|交易单号|无|  
 |order_id|char(10)|订单单号|无|  
+|order_name|char(10)|订单名称|无|  
+|service_item|char(10)|服务项目|无|  
+|order_type|char(10)|订单类型|无|  
 |maintainpic_set|list|汽修站提交的图片与附加信息对象数组|无|  
+|maintainitem_set|list|汽修站给出的维修项信息对象数组|无|  
+|maintainitem_set_now|list|用户选择的维修项信息对象数组|无|  
 
 maintainpic_set:
 
@@ -2783,6 +2809,15 @@ maintainpic_set:
 |---|---|---|---|  
 |pic_url|char(100)|图片url|无|  
 |note|char(100)|备注|无|  
+
+maintainitem_set
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|id|无|  
+|name|char(100)|图片url|无|  
+|price|char(100)|备注|无|  
+
 ```
 {
     'data':
@@ -2837,9 +2872,22 @@ maintainpic_set:
         'car_code':'粤A88888',
         'deal_id':'182731725',
         'order_id':'8927918238271',
+        'order_name':'xxxx维修服务',
+        'service_item':'维修',
+        'order_type':'维修',
         'maintainpic_set':[{
             'pic_url':'/asdfas.jpg',
             'note':'车钥匙'
+        }],
+        'maintainpic_set':[{
+            'id':12,
+            'name':'车轮',
+            'price':123
+        }],
+        'maintainitem_set_now':[{
+            'id':12,
+            'name':'车轮',
+            'price':123
         }]
     }
 }
@@ -3624,10 +3672,10 @@ param:
 return:  
 
 ```
-如果是查询费用，data里面才会有结构返回
-1.参数中有年检站参数，会计算年检费用
-2.存在年检站参数、经纬度、套餐id，会计算基础费用
-3.存在套餐id、套餐项id列表，会计算套餐费用
+如果是查询费用，data里面才会有结构返回  
+1.参数中有年检站参数，会计算年检费用  
+2.存在年检站参数、经纬度、套餐id，会计算基础费用  
+3.存在套餐id、套餐项id列表，会计算套餐费用  
 ```
 
 |参数|类型|说明|备注|  
@@ -3654,7 +3702,7 @@ return:
 }
 ```
 
-<h4 id="survey_survey_behalfmethod_post">代驾年检订单操作信息-查询交易状态、取消、查询费用、支付、失败支付、确认还车</h4>
+<h4 id="survey_survey_behalfmethod_post">代驾年检订单操作信息-查询交易状态、取消、查询费用、支付、查询失败支付交易状态、失败支付、确认还车</h4>
 
 url:/api/survey/survey_behalfmethod/  
 method:post  
@@ -3663,13 +3711,13 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |id|int|id|查询费用不需要添加id|1|必填|   
-|method|char(20)|操作|order_status:查询交易状态，cancel：取消，get：查询费用，pay：支付，failure_pay：失败支付，return：确认还车|get|必填|  
+|method|char(20)|操作|order_status:查询交易状态，cancel：取消，get：查询费用，pay：支付，failure_pay_status：查询失败支付交易状态，failure_pay：失败支付，return：确认还车|get|必填|  
 |longitude|float|经度|无|123|选填|  
 |latitude|float|纬度|无|23|选填|  
 |surveystation_id|int|年检站id|无|1|选填|  
 |combo_id|int|套餐id|无|1|选填|  
 |comboitem_list|char(100)|套餐选项id|使用,拼接|1,2|选填|  
-|order_method|char(100)|支付方式|alipay：支付宝，weixin：微信|alipay|pay的时候必填|  
+|order_method|char(100)|支付方式|alipay：支付宝，weixin：微信|alipay|pay、failure_pay的时候必填|  
 
 return:  
 
@@ -3686,11 +3734,11 @@ return:
 |combo_price|float|套餐费用|无|  
 |survey_price|float|年检费用|无|  
 |total_price|float|总计费用|无|  
-|status|int|状态|order_status返回,0未支付，1正在支付，2支付成功，3支付失败重新支付，4支付超时|  
-|time|int|交易还剩多少秒|order_status返回|  
-|to|char(100)|商家的名字|order_status返回|  
-|order_code|char(100)|交易订单号|order_status返回|  
-|price|float|交易金额|order_status返回|  
+|status|int|状态|order_status、failure_pay_status返回,0未支付，1正在支付，2支付成功，3支付失败重新支付，4支付超时|  
+|time|int|交易还剩多少秒|order_status、failure_pay_status返回|  
+|to|char(100)|商家的名字|order_status、failure_pay_status返回|  
+|order_code|char(100)|交易订单号|order_status、failure_pay_status返回|  
+|price|float|交易金额|order_status、failure_pay_status返回|  
 |params|char(1000)|交易码|用于手机端交易|  
 
 ```
