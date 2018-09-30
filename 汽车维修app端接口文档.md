@@ -5032,6 +5032,7 @@ param:
 |---|---|---|---|---|---|  
 |money|float|提现金额|无|1|必填|  
 |via|char(100)|提现途径|alipay|alipay|必填|  
+|alipay_account|char(100)|支付宝账号|无|张三|必填|  
 |name|char(100)|真实姓名|无|张三|必填|  
 
 return:  
