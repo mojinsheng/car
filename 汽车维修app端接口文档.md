@@ -1716,6 +1716,7 @@ return:
 |update_time|datetime|修改时间|无|  
 |car_brand|char(100)|车辆品牌|无|  
 |car_code|char(100)|车牌号|无|  
+|car_pic_url|char(100)|车辆图片|无|  
 |amount|int|违章次数|无|  
 |score|int|扣分|无|  
 |price|float|罚款|无|  
@@ -1728,6 +1729,7 @@ return:
         'update_time':'2018-07-08 12:23:34',
         'car_brand':'玛萨拉蒂',
         'car_code':'粤A23456',
+        'car_pic_url':'/asdw.jpg',
         'amount':1,
         'score':1,
         'price':200
@@ -1753,7 +1755,8 @@ return:
 |create_time|datetime|创建时间|无|  
 |update_time|datetime|修改时间|无|  
 |car_brand|char(100)|车辆品牌|无|  
-|car_code|char(100)|车牌号|无|  
+|car_code|char(100)|车牌号|无| 
+|car_pic_url|char(100)|车辆图片|无|  
 |amount|int|违章次数|无|  
 |score|int|扣分|无|  
 |price|float|罚款|无|  
@@ -1766,6 +1769,7 @@ return:
         'update_time':'2018-07-08 12:23:34',
         'car_brand':'玛萨拉蒂',
         'car_code':'粤A23456',
+        'car_pic_url':'/asdw.jpg',
         'amount':1,
         'score':1,
         'price':200
@@ -2958,6 +2962,8 @@ return:
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
+|type|char(100)|类型|maintain_order|  
+|data|objects|额外数据|无|  
 |id|int|维修订单id|如果接单，则是订单id，反之为0|  
 |state|bool|是否接单|无|  
 |msg|char(100)|信息|无|  
@@ -2965,9 +2971,12 @@ return:
 ```
 {
     'data':{
-        'id':0,
-        'state':false,
-        'msg':'失败'
+        'type':'maintain_order',
+        'data':{
+            'id':0,
+            'state':false,
+            'msg':'失败'
+        }
     }
 }
 ```
