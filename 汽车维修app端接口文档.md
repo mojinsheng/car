@@ -366,6 +366,7 @@ return:
 |参数|类型|说明|备注|  
 |---|---|---|---|  
 |id|int|id|无|  
+|account|char(100)|帐号|无|  
 |phone|char(20)|电话号码|无|  
 |name|char(10)|昵称|无|  
 |pic_url|char(50)|照片url|/url,获取图片|  
@@ -375,6 +376,7 @@ return:
 {
     'data':{
         'id':1,
+        'account':'dasdasdas',
         'phone':'12345678998',
         'name':'admin',
         'pic':'/alsdfh.jpg',
@@ -3004,6 +3006,9 @@ return:
 |now_price|float|价格|无|  
 |state|int|状态|0:等待接单，1:未支付，2:等待服务，3:服务中，4:已完成|  
 |is_comment|bool|是否评论|无|  
+|is_setting|bool|是否已经设置了维修项|维修才有|  
+|is_maintain|bool|汽修厂是否完成维修|维修才有|  
+|is_upkeep|bool|汽修厂是否完成半阳|保养才有|  
 ```
 {
     'data':
@@ -3015,7 +3020,10 @@ return:
         'subscribe_time':'2018-07-08 12:23:34',
         'now_price':1,
         'state':1,
-        'is_comment':true
+        'is_comment':true,
+        'is_setting':true,
+        'is_maintain':true,
+        'is_upkeep':true,
     }]
 }
 ```
@@ -4843,7 +4851,7 @@ failurepic:
 <h4 id="ws_driver_listen">听单-服务端推送</h4>
 
 使用websocket连接  
-url:/api/driver/listen/<:user_id>/<:timestampe>/<:sign>/  
+url:/ws/driver/listen/<:user_id>/<:timestampe>/<:sign>/  
 param:   
 
 |参数|类型|说明|备注|例子|是否必填|  
