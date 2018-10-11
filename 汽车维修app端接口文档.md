@@ -3246,6 +3246,7 @@ return:
 |id|int|id|无|  
 |create_time|datetime|创建时间|无|  
 |update_time|datetime|修改时间|无|  
+|order_code|char(100)|订单id|无|  
 |name|char(20)|联系人|无|  
 |phone|char(20)|联系人电话|无|   
 |car_name|char(20)|车主姓名|无|  
@@ -3331,6 +3332,7 @@ failurepic:
         'id':1,
         'create_time':'2018-07-08 12:23:34',
         'update_time':'2018-07-08 12:23:34',
+        'order_code':'123413131',
         'name':'张三',
         'phone':'12345678998',
         'car_name':'张三',
@@ -3485,6 +3487,7 @@ return:
 |id|int|id|无|  
 |create_time|datetime|创建时间|无|  
 |update_time|datetime|修改时间|无|  
+|order_code|char(100)|订单id|无|  
 |name|char(20)|联系人|无|  
 |phone|char(20)|联系人电话|无|   
 |car_name|char(20)|车主姓名|无|  
@@ -3570,6 +3573,7 @@ failurepic:
         'id':1,
         'create_time':'2018-07-08 12:23:34',
         'update_time':'2018-07-08 12:23:34',
+        'order_code':'123413131',
         'name':'张三',
         'phone':'12345678998',
         'car_name':'张三',
@@ -4013,6 +4017,7 @@ return:
 |id|int|id|无|  
 |create_time|datetime|创建时间|无|  
 |update_time|datetime|修改时间|无|  
+|order_code|char(100)|订单id|无|  
 |name|char(20)|联系人|无|  
 |phone|char(20)|联系人电话|无|   
 |car_name|char(20)|车主姓名|无|  
@@ -4097,6 +4102,7 @@ failurepic:
         'id':1,
         'create_time':'2018-07-08 12:23:34',
         'update_time':'2018-07-08 12:23:34',
+        'order_code':'123413131',
         'name':'张三',
         'phone':'12345678998',
         'car_name':'张三',
@@ -4214,6 +4220,7 @@ return:
 |id|int|id|无|  
 |create_time|datetime|创建时间|无|  
 |update_time|datetime|修改时间|无|  
+|order_code|char(100)|订单id|无|  
 |name|char(20)|联系人|无|  
 |phone|char(20)|联系人电话|无|   
 |car_name|char(20)|车主姓名|无|  
@@ -4299,6 +4306,7 @@ failurepic:
         'id':1,
         'create_time':'2018-07-08 12:23:34',
         'update_time':'2018-07-08 12:23:34',
+        'order_code':'123413131',
         'name':'张三',
         'phone':'12345678998',
         'car_name':'张三',
@@ -4664,6 +4672,7 @@ return:
 |id|int|id|无|  
 |create_time|datetime|创建时间|无|  
 |update_time|datetime|修改时间|无|  
+|order_code|char(100)|订单id|无|  
 |name|char(20)|联系人|无|  
 |phone|char(20)|联系人电话|无|   
 |car_name|char(20)|车主姓名|无|  
@@ -4749,6 +4758,7 @@ failurepic:
         'id':1,
         'create_time':'2018-07-08 12:23:34',
         'update_time':'2018-07-08 12:23:34',
+        'order_code':'123413131',
         'name':'张三',
         'phone':'12345678998',
         'car_name':'张三',
