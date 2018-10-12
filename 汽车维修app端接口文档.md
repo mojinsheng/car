@@ -3732,13 +3732,13 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |id|int|id|查询费用不需要添加id|1|必填|   
-|method|char(20)|操作|order_status:查询交易状态，cancel：取消，get：查询费用，pay：支付，failure_pay_status：查询失败支付交易状态，failure_pay：失败支付，return：确认还车|get|必填|  
+|method|char(20)|操作|order_status:查询交易状态，cancel：取消，get：查询费用，pay：支付，order_status：查询失败支付交易状态，pay：失败支付，return：确认还车|get|必填|  
 |longitude|float|经度|无|123|选填|  
 |latitude|float|纬度|无|23|选填|  
 |surveystation_id|int|年检站id|无|1|选填|  
 |combo_id|int|套餐id|无|1|选填|  
 |comboitem_list|char(100)|套餐选项id|使用,拼接|1,2|选填|  
-|order_method|char(100)|支付方式|alipay：支付宝，weixin：微信|alipay|pay、failure_pay的时候必填|  
+|order_method|char(100)|支付方式|alipay：支付宝，weixin：微信|alipay|pay的时候必填|  
 
 return:  
 
@@ -3755,11 +3755,11 @@ return:
 |combo_price|float|套餐费用|无|  
 |survey_price|float|年检费用|无|  
 |total_price|float|总计费用|无|  
-|status|int|状态|order_status、failure_pay_status返回,0未支付，1正在支付，2支付成功，3支付失败重新支付，4支付超时|  
-|time|int|交易还剩多少秒|order_status、failure_pay_status返回|  
-|to|char(100)|商家的名字|order_status、failure_pay_status返回|  
-|order_code|char(100)|交易订单号|order_status、failure_pay_status返回|  
-|price|float|交易金额|order_status、failure_pay_status返回|  
+|status|int|状态|order_status返回,0未支付，1正在支付，2支付成功，3支付失败重新支付，4支付超时|  
+|time|int|交易还剩多少秒|order_status返回|  
+|to|char(100)|商家的名字|order_status返回|  
+|order_code|char(100)|交易订单号|order_status返回|  
+|price|float|交易金额|order_status返回|  
 |params|char(1000)|交易码|用于手机端交易|  
 
 ```
