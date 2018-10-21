@@ -8,6 +8,7 @@
  - [用户发短信](#login_message)
  - [登陆](#login_login)
  - [刷新token](#login_refresh)
+ - [退出](#login_exit)
  1. [个人中心](#user)
   - [用户信息](#user_user)
     * [查询自身信息](#user_user_get)
@@ -15,6 +16,8 @@
   - [车辆信息](#user_car)
     * [查询车辆二级地址信息](#user_caraddress_list_get)
     * [查询车辆品牌信息](#user_carbrand_list_get)
+    * [查询车辆车型信息](#user_cartype_list_get)
+    * [查询车辆款式信息](#user_carstyle_list_get)
     * [查询所有车辆信息](#user_car_list_get)
     * [添加车辆信息](#user_car_list_post)
     * [查询车辆信息](#user_car_get)
@@ -79,7 +82,9 @@
     * [查询维修信息](#maintain_maintain_get)
     * [删除维修订单信息](#maintain_maintain_delete)
     * [查询交易状态、修改维修项、付款、完成、评论维修订单信息](#maintain_maintain_method_post)
-    * [极光推送维修订单接单信息](#maintain_maintain_jpush_get)
+    * [极光推送维修订单接单信息](#maintain_maintain_jpush_order_get)
+    * [极光推送维修订单下发清单信息](#maintain_maintain_jpush_item_get)
+    * [极光推送维修订单完成信息](#maintain_maintain_jpush_finish_get)
   - [保养、维修订单列表信息](#maintain_list_get)  
  5. [年检](#survey)
   - [年检站信息](#survey_surveystation)
@@ -96,6 +101,7 @@
     * [代驾年检订单操作信息-取消、查询费用、支付、失败支付、确认还车](#survey_survey_behalfmethod_post)
     * [自驾咨询电话](#survey_survey_phone_get)
     * [年检须知](#survey_survey_info_get)
+    * [用户扣费标准](#survey_survey_usercancelinfo_get)
  6. [系统](#system)
   - [服务首页图片信息](#system_serviceimg_get)
   - [年检首页图片信息](#system_surveyimg_get) 
@@ -120,6 +126,7 @@
     * [确认换车](#driver_order_return_post)
     * [查询订单列表信息-服务端推送](#ws_driver_order)
     * [听单-服务端推送](#ws_driver_listen)
+    * [司机扣费标准](#driver_order_drivercancelinfo_get)
   - [账户](#driver_account)
     * [查询绑定的支付宝账号](#driver_account_alipay_get)
     * [获取绑定的支付宝账号信息](#driver_account_alipay_info_get)
@@ -128,6 +135,7 @@
     * [查询明细信息](#driver_account_get)
     * [明细操作信息-提现](#driver_account_method_post)
     * [用户余额查询](#driver_balance_get)
+    * [司机资料](#driver_driver_info_get)
 
 ```
 所有的后台返回值，都以这样子的结构返回
@@ -193,6 +201,7 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |phone|char(20)|电话号码|作为账号|12345678998|必填|  
+|name|char(20)|姓名|无|张三|必填|  
 |password|char(20)|密码|6-20，字母、数字、符号|123456789qwer|必填|  
 |message|char(10)|短信验证码|6位数字|123456|必填|  
 
@@ -215,6 +224,7 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |phone|char(20)|电话号码|作为账号|12345678998|必填|  
+|name|char(20)|姓名|无|张三|必填|  
 |password|char(20)|密码|6-20，字母、数字、符号|123456789qwer|必填|  
 |message|char(10)|短信验证码|6位数字|123456|必填|  
 
@@ -347,6 +357,27 @@ return:
 }
 ```
 
+<h3 id="login_exit">退出</h3>
+
+url:/api/login/exit/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+
+```
+{
+    'data':{
+    }
+}
+```
+
 <h2 id="user">个人中心</h2>
 
 <h3 id="user_user">用户信息</h3>
@@ -371,7 +402,9 @@ return:
 |name|char(10)|昵称|无|  
 |pic_url|char(50)|照片url|/url,获取图片|  
 |point|int|积分|无|  
+|score|int|司机评分|无|  
 |is_pass|bool|是否过审|无|  
+|is_driverinfo|bool|是否填写了司机信息|无|  
 ```
 {
     'data':{
@@ -381,7 +414,8 @@ return:
         'name':'admin',
         'pic':'/alsdfh.jpg',
         'point':20,
-        'is_pass':false
+        'is_pass':false,
+        'is_driverinfo':false
     }
 }
 ```
@@ -476,17 +510,60 @@ A:
 |---|---|---|---|  
 |id|int|id|无|  
 |name|char(100)|名称|无|  
-|cartype_set|list|车型对象列表|无|  
 
-cartype:
+```
+{
+    'data':
+    {
+        'A':[{
+            'id':1
+            'name':'阿斯顿马丁'
+        }],
+        'B':[],
+        'C':[],
+        ......
+    }
+}
+```
+
+<h4 id="user_cartype_list_get">查询车辆车型信息</h4>
+
+url:/api/user/cartype/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|车辆品牌id|无|1|必填|  
+
+return:  
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
 |id|int|id|无|  
 |name|char(100)|名称|无|  
-|carstyle_set|list|款式对象列表|无|  
 
-carstyle:
+```
+{
+    'data':
+    {
+        'id':1
+        'name':'阿斯顿马丁'
+    }
+}
+```
+
+<h4 id="user_carstyle_list_get">查询车辆款式信息</h4>
+
+url:/api/user/carstyle/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|车辆车型id|无|1|必填|  
+
+return:  
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
@@ -498,22 +575,9 @@ carstyle:
 {
     'data':
     {
-        'A':[{
-            'id':1
-            'name':'阿斯顿马丁',
-            'cartype_set':[{
-                'id':1,
-                'name':'Rapide',
-                'carstyle_set':[{
-                    'id':1,
-                    'name':'限量款',
-                    'year':'2016',
-                }]
-            }]
-        }],
-        'B':[],
-        'C':[],
-        ......
+        'id':1
+        'name':'阿斯顿马丁',
+        'year':1234
     }
 }
 ```
@@ -2237,7 +2301,6 @@ return:
 |longitude|float|经度|无|104|  
 |latitude|float|纬度|无|23|  
 |address|char(100)|地址|无|广州天河区|  
-|subscribe_time|datetime|预约时间|无|  
 |filter_price|float|过滤格|无|  
 |price|float|价格|无|  
 |discounts|float|优惠卷|无|  
@@ -2306,7 +2369,6 @@ upkeeppic_set：
         'longitude':123,
         'latitude':23,
         'address':'广州市越秀区',
-        'subscribe_time':'2018-07-08 12:23:34',
         'filter_price':1,
         'price':1,
         'discounts':1,
@@ -2356,7 +2418,6 @@ param:
 |car_id|int|汽车id|无|1|必填|  
 |name|char(20)|联系人|无|张三|必填|  
 |phone|char(20)|电话号码|无|12345678909|必填|  
-|subscribe_time|datetime|预约时间|无|2018-07-08 12:23:34|必填|  
 |longitude|float|经度|无|1|必填|  
 |latitude|float|纬度|无|1|必填|  
 |address|char(100)|地址|无|广州市越秀区|必填|  
@@ -2401,7 +2462,6 @@ return:
 |longitude|float|经度|无|104|  
 |latitude|float|纬度|无|23|  
 |address|char(100)|地址|无|广州天河区|  
-|subscribe_time|datetime|预约时间|无|  
 |filter_price|float|过滤格|无|  
 |price|float|价格|无|  
 |discounts|float|优惠卷|无|  
@@ -2470,7 +2530,6 @@ upkeeppic_set：
         'longitude':123,
         'latitude':23,
         'address':'广州市越秀区',
-        'subscribe_time':'2018-07-08 12:23:34',
         'filter_price':1,
         'price':1,
         'discounts':1,
@@ -2599,7 +2658,6 @@ return:
 |longitude|float|经度|无|104|  
 |latitude|float|纬度|无|23|  
 |address|char(100)|地址|无|广州天河区|  
-|subscribe_time|datetime|预约时间|无|  
 |content|text|内容|无|  
 |pic_url_list|list|图片列表|无|  
 |price|float|价格|无|  
@@ -2676,7 +2734,6 @@ maintainitem_set
         'latitude':'广州市越秀区',
         'address':'12345678998',
         'car_type':'12345678998',
-        'subscribe_time':'2018-07-08 12:23:34',
         'content':'修理',
         'pic_url_list':['/asda.jpg'],
         'price':1,
@@ -2735,7 +2792,6 @@ param:
 |longitude|float|经度|无|104|必填|  
 |latitude|float|纬度|无|23|必填|  
 |address|char(100)|地址|无|广州天河区|必填|  
-|subscribe_time|datetime|预约时间|无|2018-07-08 12:23:34|必填|  
 |content|text|内容|无|修理|必填|  
 |number|int|数量|多少个文件|1|必填|  
 |pic1|文件流|图片|编号从1开始|(文件流)|选填|  
@@ -2778,7 +2834,6 @@ return:
 |longitude|float|经度|无|104|  
 |latitude|float|纬度|无|23|  
 |address|char(100)|地址|无|广州天河区|  
-|subscribe_time|datetime|预约时间|无|  
 |content|text|内容|无|  
 |pic_url_list|list|图片列表|无|  
 |price|float|价格|无|  
@@ -2855,7 +2910,6 @@ maintainitem_set
         'latitude':'广州市越秀区',
         'address':'12345678998',
         'car_type':'12345678998',
-        'subscribe_time':'2018-07-08 12:23:34',
         'content':'修理',
         'pic_url_list':['/asda.jpg'],
         'price':1,
@@ -2956,7 +3010,7 @@ return:
 }
 ```
 
-<h4 id="maintain_maintain_jpush_get">极光推送维修订单接单信息</h4>
+<h4 id="maintain_maintain_jpush_order_get">极光推送维修订单接单信息</h4>
 
 手机端设置：登陆以后，把账号注册成别名，服务端面向别名发送信息
 
@@ -2983,6 +3037,56 @@ return:
 }
 ```
 
+<h4 id="maintain_maintain_jpush_item_get">极光推送维修订单下发清单信息</h4>
+
+手机端设置：登陆以后，把账号注册成别名，服务端面向别名发送信息
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|type|char(100)|类型|maintain_item|  
+|data|objects|额外数据|无|  
+|id|int|维修订单id|无|  
+|msg|char(100)|信息|无|  
+
+```
+{
+    'data':{
+        'type':'maintain_item',
+        'data':{
+            'id':0,
+            'msg':'失败'
+        }
+    }
+}
+```
+
+<h4 id="maintain_maintain_jpush_finish_get">极光推送维修订单完成信息</h4>
+
+手机端设置：登陆以后，把账号注册成别名，服务端面向别名发送信息
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|type|char(100)|类型|maintain_finish|  
+|data|objects|额外数据|无|  
+|id|int|维修订单id|无|  
+|msg|char(100)|信息|无|  
+
+```
+{
+    'data':{
+        'type':'maintain_finish',
+        'data':{
+            'id':0,
+            'msg':'失败'
+        }
+    }
+}
+```
+
 <h3 id="maintain_list_get">保养、维修订单列表信息</h3>
 
 url:/api/maintain/list/  
@@ -3002,7 +3106,7 @@ return:
 |order_name|char(100)|订单名称|无|  
 |order_pic_url|char(100)|图片url|无|  
 |type|char(50)|类型|upkeep:保养，maintain:维修|  
-|subscribe_time|datetime|预约时间|无|  
+|create_time|datetime|创建时间|无|  
 |now_price|float|价格|无|  
 |state|int|状态|0:等待接单，1:未支付，2:等待服务，3:服务中，4:已完成|  
 |is_comment|bool|是否评论|无|  
@@ -3017,7 +3121,7 @@ return:
         'order_name':'张三年检站维修服务',
         'order_pic_url':'www.asd.cn/dqwd.jpg',
         'type':'upkeep',
-        'subscribe_time':'2018-07-08 12:23:34',
+        'create_time':'2018-07-08 12:23:34',
         'now_price':1,
         'state':1,
         'is_comment':true,
@@ -3271,6 +3375,7 @@ return:
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
 |drive_user_phone|char(100)|接单用户联系电话|无|  
+|drive_user_score|int|司机评分|无|  
 |order_time|datetime|下单时间|无|  
 |receive_time|datetime|接单时间|无|  
 |get_time|datetime|取车时间|无|  
@@ -3282,13 +3387,14 @@ return:
 |get_confirm|object|取车图片-检车确认|无|  
 |get_car|object|取车图片-车身拍照|无|  
 |survey_upload|object|年检已过-上传照片|无|  
+|survey_fail_upload|object|年检未过-上传照片|无|  
 |return_confirm|object|还车图片-检车确认|无|  
 |return_car|object|还车图片-车身拍照|无|  
 |failure_list|list|失败信息对象列表|无|  
 
 
 
-get_confirm、get_car、survey_upload、return_confirm、return_car:  
+get_confirm、get_car、survey_upload、survey_fail_upload、return_confirm、return_car:  
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
@@ -3316,14 +3422,6 @@ failureitem：
 |---|---|---|---|  
 |name|char(100)|名称|无|  
 |price|float|费用|无|  
-|failurepic_list|list|图片对象列表|无|  
-
-failurepic:
-
-|参数|类型|说明|备注|  
-|---|---|---|---|  
-|pic_url|char(100)|图片url|无|  
-|note|char(100)|备注|无|  
 
 ```
 {
@@ -3373,6 +3471,7 @@ failurepic:
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
         'drive_user_phone':'12312',
+        'drive_user_score':1,
         'order_time':'2018-07-08 12:23:34',
         'receive_time':'2018-07-08 12:23:34',
         'get_time':'2018-07-08 12:23:34',
@@ -3397,6 +3496,13 @@ failurepic:
         },
         'survey_upload':{
             'name':'年检已过-上传照片',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'survey_fail_upload':{
+            'name':'年检未过-上传照片',
             'obj_list':[{
                 'pic_url':'www.aksdjha.cn/asdfa.jpg',
                 'note':'asfdasdfasd'
@@ -3512,6 +3618,7 @@ return:
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
 |drive_user_phone|char(100)|接单用户联系电话|无|  
+|drive_user_score|int|司机评分|无|  
 |order_time|datetime|下单时间|无|  
 |receive_time|datetime|接单时间|无|  
 |get_time|datetime|取车时间|无|  
@@ -3523,13 +3630,14 @@ return:
 |get_confirm|object|取车图片-检车确认|无|  
 |get_car|object|取车图片-车身拍照|无|  
 |survey_upload|object|年检已过-上传照片|无|  
+|survey_fail_upload|object|年检未过-上传照片|无|  
 |return_confirm|object|还车图片-检车确认|无|  
 |return_car|object|还车图片-车身拍照|无|  
 |failure_list|list|失败信息对象列表|无|  
 
 
 
-get_confirm、get_car、survey_upload、return_confirm、return_car:  
+get_confirm、get_car、survey_upload、survey_fail_upload、return_confirm、return_car:  
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
@@ -3614,6 +3722,7 @@ failurepic:
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
         'drive_user_phone':'12312',
+        'drive_user_score':1,
         'order_time':'2018-07-08 12:23:34',
         'receive_time':'2018-07-08 12:23:34',
         'get_time':'2018-07-08 12:23:34',
@@ -3638,6 +3747,13 @@ failurepic:
         },
         'survey_upload':{
             'name':'年检已过-上传照片',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'survey_fail_upload':{
+            'name':'年检未过-上传照片',
             'obj_list':[{
                 'pic_url':'www.aksdjha.cn/asdfa.jpg',
                 'note':'asfdasdfasd'
@@ -3739,6 +3855,7 @@ param:
 |combo_id|int|套餐id|无|1|选填|  
 |comboitem_list|char(100)|套餐选项id|使用,拼接|1,2|选填|  
 |order_method|char(100)|支付方式|alipay：支付宝，weixin：微信|alipay|pay的时候必填|  
+|score|int|评分|大于等于0，小于等于5|1|当method为return的时候必填|  
 
 return:  
 
@@ -3799,6 +3916,29 @@ param:
 <h4 id="survey_survey_info_get">年检须知</h4>
 
 url:/api/survey/survey_info/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|   
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|url|char(100)|页面url|无|  
+
+```
+{
+    'data':{
+        'url':'www.safad.con/sdad/'
+    }
+}
+```
+
+<h4 id="survey_survey_usercancelinfo_get">用户扣费标准</h4>
+
+url:/api/survey/survey_usercancelinfo/  
 method:get  
 param:   
 
@@ -4042,6 +4182,7 @@ return:
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
 |drive_user_phone|char(100)|接单用户联系电话|无|  
+|drive_user_score|int|司机评分|无|  
 |order_time|datetime|下单时间|无|  
 |receive_time|datetime|接单时间|无|  
 |get_time|datetime|取车时间|无|  
@@ -4053,13 +4194,14 @@ return:
 |get_confirm|object|取车图片-检车确认|无|  
 |get_car|object|取车图片-车身拍照|无|  
 |survey_upload|object|年检已过-上传照片|无|  
+|survey_fail_upload|object|年检未过-上传照片|无|  
 |return_confirm|object|还车图片-检车确认|无|  
 |return_car|object|还车图片-车身拍照|无|  
 |failure_list|list|失败信息对象列表|无|  
 
 
 
-get_confirm、get_car、survey_upload、return_confirm、return_car:  
+get_confirm、get_car、survey_upload、survey_fail_upload、return_confirm、return_car:  
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
@@ -4143,6 +4285,7 @@ failurepic:
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
         'drive_user_phone':'12312',
+        'drive_user_score':1,
         'order_time':'2018-07-08 12:23:34',
         'receive_time':'2018-07-08 12:23:34',
         'get_time':'2018-07-08 12:23:34',
@@ -4167,6 +4310,13 @@ failurepic:
         },
         'survey_upload':{
             'name':'年检已过-上传照片',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'survey_fail_upload':{
+            'name':'年检未过-上传照片',
             'obj_list':[{
                 'pic_url':'www.aksdjha.cn/asdfa.jpg',
                 'note':'asfdasdfasd'
@@ -4245,6 +4395,7 @@ return:
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
 |drive_user_phone|char(100)|接单用户联系电话|无|  
+|drive_user_score|int|司机评分|无|  
 |order_time|datetime|下单时间|无|  
 |receive_time|datetime|接单时间|无|  
 |get_time|datetime|取车时间|无|  
@@ -4256,13 +4407,14 @@ return:
 |get_confirm|object|取车图片-检车确认|无|  
 |get_car|object|取车图片-车身拍照|无|  
 |survey_upload|object|年检已过-上传照片|无|  
+|survey_fail_upload|object|年检未过-上传照片|无|  
 |return_confirm|object|还车图片-检车确认|无|  
 |return_car|object|还车图片-车身拍照|无|  
 |failure_list|list|失败信息对象列表|无|  
 
 
 
-get_confirm、get_car、survey_upload、return_confirm、return_car:  
+get_confirm、get_car、survey_upload、survey_fail_upload、return_confirm、return_car:  
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
@@ -4347,6 +4499,7 @@ failurepic:
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
         'drive_user_phone':'12312',
+        'drive_user_score':1,
         'order_time':'2018-07-08 12:23:34',
         'receive_time':'2018-07-08 12:23:34',
         'get_time':'2018-07-08 12:23:34',
@@ -4371,6 +4524,13 @@ failurepic:
         },
         'survey_upload':{
             'name':'年检已过-上传照片',
+            'obj_list':[{
+                'pic_url':'www.aksdjha.cn/asdfa.jpg',
+                'note':'asfdasdfasd'
+            }]
+        },
+        'survey_fail_upload':{
+            'name':'年检未过-上传照片',
             'obj_list':[{
                 'pic_url':'www.aksdjha.cn/asdfa.jpg',
                 'note':'asfdasdfasd'
@@ -4422,6 +4582,7 @@ return:
 |get_confirm|char(50)|取车图片-检车确认|无|  
 |get_car|char(50)|取车图片-车身拍照|无|  
 |survey_upload|char(50)|年检已过-上传照片|无|  
+|survey_fail_upload|char(50)|年检未过-上传照片|无|  
 |return_confirm|char(50)|还车图片-检车确认|无|  
 |return_car|char(50)|还车图片-车身拍照|无|  
 
@@ -4431,6 +4592,7 @@ return:
         'get_confirm':'取车图片-检车确认',
         'get_car':'取车图片-车身拍照',
         'survey_upload':'年检已过-上传照片',
+        'survey_fail_upload':'年检未过-上传照片',
         'return_confirm':'还车图片-检车确认',
         'return_car':'还车图片-车身拍照'
     }
@@ -4590,10 +4752,13 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |id|int|id|无|1|必填|  
-|number|int|数量|多少个文件、检查项id、备注，三者需要一同出现，缺少其一则会被认为没有|1|必填|  
+|number|int|数量|多少个文件、类型、备注，三者需要一同出现，缺少其一则会被认为没有|1|必填|  
 |pic1|文件流|图片|编号从1开始|(文件流)|选填|  
-|item_id1|int|检查项id|来自于年检检查项|1|选填|  
+|type1|char(100)|类型|survey_fail_upload:年检未过-上传照片|survey_fail_upload|选填|  
 |note1|char(100)|备注|无|车钥匙|选填|  
+|number_item|int|数量|多少个文件、检查项id、备注，三者需要一同出现，缺少其一则会被认为没有|1|必填| 
+|item_id1|int|检查项id|来自于年检检查项|1|选填|  
+|price1|float|检查项费用|用户自选|12|选填|  
 
 
 return:  
@@ -4697,6 +4862,7 @@ return:
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
 |drive_user_phone|char(100)|接单用户联系电话|无|  
+|drive_user_score|int|司机评分|无|  
 |order_time|datetime|下单时间|无|  
 |receive_time|datetime|接单时间|无|  
 |get_time|datetime|取车时间|无|  
@@ -4708,13 +4874,14 @@ return:
 |get_confirm|object|取车图片-检车确认|无|  
 |get_car|object|取车图片-车身拍照|无|  
 |survey_upload|object|年检已过-上传照片|无|  
+|survey_fail_upload|object|年检未过-上传照片|无|  
 |return_confirm|object|还车图片-检车确认|无|  
 |return_car|object|还车图片-车身拍照|无|  
 |failure_list|list|失败信息对象列表|无|  
 
 
 
-get_confirm、get_car、survey_upload、return_confirm、return_car:  
+get_confirm、get_car、survey_upload、survey_fail_upload、return_confirm、return_car:  
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
@@ -4799,6 +4966,7 @@ failurepic:
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
         'drive_user_phone':'12312',
+        'drive_user_score':1,
         'order_time':'2018-07-08 12:23:34',
         'receive_time':'2018-07-08 12:23:34',
         'get_time':'2018-07-08 12:23:34',
@@ -4884,6 +5052,28 @@ return:
 }
 ```
 
+<h4 id="driver_order_cancelinfo_get">司机扣费标准</h4>
+
+url:/api/driver/order_cancelinfo/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|   
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|url|char(100)|页面url|无|  
+
+```
+{
+    'data':{
+        'url':'www.safad.con/sdad/'
+    }
+}
+```
 
 <h3 id="driver_account">账户</h3>
 
@@ -4972,7 +5162,7 @@ param:
 
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
-|method|int|行为|0：提现，1：收入|1|可选|   
+|method|int|行为|0：提现，1：收入，2：罚款|1|可选|   
 
 return:  
 
@@ -4984,7 +5174,7 @@ return:
 |order_time|datetime|时间|无|  
 |start_address|char(100)|出发地点|无|  
 |end_address|char(100)|到达地点|无|  
-|method|int|行为|0：提现，1：收入|  
+|method|int|行为|0：提现，1：收入，2：罚款|  
 |via|char(100)|提现途径|alipay,weixin|  
 |cost|float|费用|无|  
 |survey|objects|年检订单|查看年检信息,如果是提现的话，这里为空|
@@ -5027,7 +5217,7 @@ return:
 |order_time|datetime|时间|无|  
 |start_address|char(100)|出发地点|无|  
 |end_address|char(100)|到达地点|无|  
-|method|int|行为|0：提现，1：收入|  
+|method|int|行为|0：提现，1：收入，2：罚款|  
 |via|char(100)|提现途径|alipay,weixin|  
 |cost|float|费用|无|  
 |survey|objects|年检订单|查看年检信息,如果是提现的话，这里为空|  
@@ -5095,6 +5285,38 @@ return:
     'data':
     {
         'balance':11231,
+    }
+}
+```
+
+<h4 id="driver_driver_info_get">司机资料</h4>
+
+url:/api/driver/driver_info/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|用户id|无|1|必填|   
+|name|char(100)|姓名|无|张三|必填|   
+|IDcard|char(100)|身份证号|1283651287468|1|必填|   
+|pic_idcard_front|文件流|身份证正面照|无|(文件流)|必填|  
+|pic_idcard_back|文件流|身份证反面照|无|(文件流)|必填|  
+|pic_driver|文件流|司机正面照|无|(文件流)|必填|  
+|pic_user|文件流|人证合一照|无|(文件流)|必填|  
+|pic_drive_front|文件流|驾驶证正面照|无|(文件流)|必填|  
+|pic_drive_back|文件流|驾驶证副页照|无|(文件流)|必填|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+
+```
+{
+    'data':
+    {
+
     }
 }
 ```
