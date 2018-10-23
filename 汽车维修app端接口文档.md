@@ -76,16 +76,23 @@
     * [查询保养信息](#maintain_upkeep_get)
     * [删除保养订单信息](#maintain_upkeep_delete)
     * [查询交易状态、付款、完成、评论保养订单信息](#maintain_upkeep_method_post)
+    * [查询保养售后列表信息](#maintain_upkeep_aftersales_list_get)
+    * [生成保养售后订单信息](#maintain_upkeep_aftersales_list_post)
+    * [查询保养售后信息](#maintain_upkeep_aftersales_get)
   - [维修](#maintain_maintain)
     * [查询维修列表信息](#maintain_maintain_list_get)
     * [生成维修订单信息](#maintain_maintain_list_post)
     * [查询维修信息](#maintain_maintain_get)
     * [删除维修订单信息](#maintain_maintain_delete)
     * [查询交易状态、修改维修项、付款、完成、评论维修订单信息](#maintain_maintain_method_post)
+    * [查询维修售后列表信息](#maintain_maintain_aftersales_list_get)
+    * [生成维修售后订单信息](#maintain_maintain_aftersales_list_post)
+    * [查询维修售后信息](#maintain_maintain_aftersales_get)
     * [极光推送维修订单接单信息](#maintain_maintain_jpush_order_get)
     * [极光推送维修订单下发清单信息](#maintain_maintain_jpush_item_get)
     * [极光推送维修订单完成信息](#maintain_maintain_jpush_finish_get)
   - [保养、维修订单列表信息](#maintain_list_get)  
+  - [保养、维修售后列表信息](#maintain_aftersales_list_get)  
  5. [年检](#survey)
   - [年检站信息](#survey_surveystation)
     * [查询年检站列表信息](#survey_surveystation_list_get)
@@ -110,8 +117,6 @@
   - [注册用户协议](#system_useragreement_get) 
  7. [司机端](#driver)
   - [订单](#driver_order)
-    * [查询资格信息](#driver_order_certification_get)
-    * [进行资格认证](#driver_order_certification_post)
     * [查询订单列表信息](#driver_order_list_get)
     * [查询订单信息](#driver_order_get)
     * [查询提交图片的类别名称信息](#driver_order_picname_get)
@@ -404,7 +409,7 @@ return:
 |point|int|积分|无|  
 |score|int|司机评分|无|  
 |is_pass|bool|是否过审|无|  
-|is_driverinfo|bool|是否填写了司机信息|无|  
+|is_driverinfo|int|0：未提交，1：正在审核，2：审核成功，3：审核失败|无|  
 ```
 {
     'data':{
@@ -3329,8 +3334,10 @@ comboitem_set:
 代驾：0-1-2-3-4-5-6-7-8  
 自驾：0-3-4-8  
 
-用户取消订单：代驾方面，“等待支付”、“等待接单”阶段可以取消订单，订单将被删除。自驾则是“等待支付”阶段可以取消订单，订单将被删除  
-司机取消订单：“等待取车”阶段可以取消订单，订单将回到“等待接单”  
+用户取消订单：
+ - 代驾方面，“等待支付”、“等待接单”、“等待取车”阶段可以取消订单，“等待支付”时取消订单将被删除，“等待接单”、“等待取车”时取消订单将变成已退款状态，“等待取车”存在超时扣钱情况。
+ - 自驾方面，“等待支付”、“等待年检”阶段可以取消订单，“等待支付”时取消订单将被删除，“等待年检”时取消订单将变成已退款状态，“等待年检”存在超时扣钱情况  
+司机取消订单：“等待取车”阶段可以取消订单，订单将回到“等待接单”，“等待接单”存在超时扣钱情况
 ```
 
 <h4 id="survey_survey_list_get">查询年检订单列表信息</h4>
@@ -4092,52 +4099,6 @@ return:
 <h2 id="driver">司机端</h2>
 
 <h3 id="driver_order">订单</h3>
-
-<h3 id="driver_order_certification_get">查询资格信息</h3>
-
-url:/api/driver/order_certification/  
-method:get  
-param:   
-
-|参数|类型|说明|备注|例子|是否必填|  
-|---|---|---|---|---|---|   
-|id|int|id|无|1|必填|   
-
-return:  
-
-|参数|类型|说明|备注|  
-|---|---|---|---|  
-|state|int|审核状态|0:未审核，1:正在审核，2:审核成功|  
-
-```
-{
-    'data':{
-        'state':0
-    }
-}
-```
-
-<h3 id="driver_order_certification_post">进行资格认证</h3>
-
-url:/api/driver/order_certification/  
-method:post  
-param:   
-
-|参数|类型|说明|备注|例子|是否必填|  
-|---|---|---|---|---|---|   
-|id|int|id|无|1|必填|   
-
-return:  
-
-|参数|类型|说明|备注|  
-|---|---|---|---|  
-
-```
-{
-    'data':{
-    }
-}
-```
 
 <h4 id="driver_order_list_get">查询订单列表信息</h4>
 
