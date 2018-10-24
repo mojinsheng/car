@@ -2628,6 +2628,129 @@ return:
 }
 ```
 
+<h4 id="maintain_upkeep_aftersales_list_get">查询保养售后列表信息</h4>
+
+url:/api/maintain/upkeep_aftersales/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|finish|int|是否完成|0表示所有，1表示未完成，2表示已完成|1|必填|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|id|无|  
+|order_id|char(100)|订单单号|无|  
+|car_code|char(100)|车辆号码|无|  
+|car_brand|char(100)|车辆型号|无|  
+|create_time|datetime|申请时间|无|  
+|state|int|状态|0:服务中，1:已完成|  
+|content|text|内容|无|  
+|upkeepaftersalespic_set|list|图片对象列表|无|  
+
+upkeepaftersalespic
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|pic_url|char(100)|图片url|无|  
+|note|char(100)|备注|无|  
+
+```
+{
+    'data':[{
+        'id':1,
+        'order_id':'qwdqwd',
+        'car_code':'wqdwq',
+        'car_brand':'asdqwdqw',
+        'create_time':'2018-03-03 12:34:56',
+        'state':0,
+        'content':'sqws',
+        'upkeepaftersalespic_set':[{
+            'pic_url':'dqwd',
+            'note':'dqwd'
+        }]
+    }]
+}
+```
+
+<h4 id="maintain_upkeep_aftersales_list_post">生成保养售后订单信息</h4>
+
+url:/api/maintain/upkeep_aftersales/  
+method:post  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|  
+|content|text|内容|无|萨达|选填|  
+|number|int|数量|多少个文件、备注，二者需要一同出现，缺少其一则会被认为没有|1|必填|  
+|pic1|文件流|图片|编号从1开始|(文件流)|选填|  
+|note1|char(100)|备注|无|车钥匙|选填|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+
+```
+{
+    'data':{
+
+    }
+}
+```
+
+<h4 id="maintain_upkeep_aftersales_get">查询保养售后信息</h4>
+
+url:/api/maintain/upkeep_aftersales/  
+method:get   
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|id|无|  
+|order_id|char(100)|订单单号|无|  
+|car_code|char(100)|车辆号码|无|  
+|car_brand|char(100)|车辆型号|无|  
+|create_time|datetime|申请时间|无|  
+|state|int|状态|0:服务中，1:已完成|  
+|content|text|内容|无|  
+|upkeepaftersalespic_set|list|图片对象列表|无|  
+
+upkeepaftersalespic
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|pic_url|char(100)|图片url|无|  
+|note|char(100)|备注|无|  
+
+```
+{
+    'data':{
+        'id':1,
+        'order_id':'qwdqwd',
+        'car_code':'wqdwq',
+        'car_brand':'asdqwdqw',
+        'create_time':'2018-03-03 12:34:56',
+        'state':0,
+        'content':'sqws',
+        'upkeepaftersalespic_set':[{
+            'pic_url':'dqwd',
+            'note':'dqwd'
+        }]
+    }
+}
+```
+
 <h3 id="maintain_maintain">维修</h3>
 
 ```
@@ -3015,6 +3138,130 @@ return:
 }
 ```
 
+
+<h4 id="maintain_maintain_aftersales_list_get">查询维修售后列表信息</h4>
+
+url:/api/maintain/maintain_aftersales/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|finish|int|是否完成|0表示所有，1表示未完成，2表示已完成|1|必填|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|id|无|  
+|order_id|char(100)|订单单号|无|  
+|car_code|char(100)|车辆号码|无|  
+|car_type|char(100)|车辆型号|无|  
+|create_time|datetime|申请时间|无|  
+|state|int|状态|0:服务中，1:已完成|  
+|content|text|内容|无|  
+|maintainaftersalespic_set|list|图片对象列表|无|  
+
+maintainaftersalespic:
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|pic_url|char(100)|图片url|无|  
+|note|char(100)|备注|无|  
+
+```
+{
+    'data':[{
+        'id':1,
+        'order_id':'qwdqwd',
+        'car_code':'wqdwq',
+        'car_type':'asdqwdqw',
+        'create_time':'2018-03-03 12:34:56',
+        'state':0,
+        'content':'sqws',
+        'maintainaftersalespic_set':[{
+            'pic_url':'dqwd',
+            'note':'dqwd'
+        }]
+    }]
+}
+```
+
+<h4 id="maintain_maintain_aftersales_list_post">生成维修售后订单信息</h4>
+
+url:/api/maintain/maintain_aftersales/  
+method:post  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|  
+|content|text|内容|无|萨达|选填|  
+|number|int|数量|多少个文件、备注，二者需要一同出现，缺少其一则会被认为没有|1|必填|  
+|pic1|文件流|图片|编号从1开始|(文件流)|选填|  
+|note1|char(100)|备注|无|车钥匙|选填|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+
+```
+{
+    'data':{
+
+    }
+}
+```
+
+<h4 id="maintain_maintain_aftersales_get">查询维修售后信息</h4>
+
+url:/api/maintain/maintain_aftersales/  
+method:get   
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|id|无|  
+|order_id|char(100)|订单单号|无|  
+|car_code|char(100)|车辆号码|无|  
+|car_type|char(100)|车辆型号|无|  
+|create_time|datetime|申请时间|无|  
+|state|int|状态|0:服务中，1:已完成|  
+|content|text|内容|无|  
+|maintainaftersalespic_set|list|图片对象列表|无|  
+
+maintainaftersalespic:
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|pic_url|char(100)|图片url|无|  
+|note|char(100)|备注|无|  
+
+```
+{
+    'data':{
+        'id':1,
+        'order_id':'qwdqwd',
+        'car_code':'wqdwq',
+        'car_type':'asdqwdqw',
+        'create_time':'2018-03-03 12:34:56',
+        'state':0,
+        'content':'sqws',
+        'maintainaftersalespic_set':[{
+            'pic_url':'dqwd',
+            'note':'dqwd'
+        }]
+    }
+}
+```
+
 <h4 id="maintain_maintain_jpush_order_get">极光推送维修订单接单信息</h4>
 
 手机端设置：登陆以后，把账号注册成别名，服务端面向别名发送信息
@@ -3118,6 +3365,46 @@ return:
 |is_setting|bool|是否已经设置了维修项|维修才有|  
 |is_maintain|bool|汽修厂是否完成维修|维修才有|  
 |is_upkeep|bool|汽修厂是否完成半阳|保养才有|  
+```
+{
+    'data':
+    [{
+        'id':1,
+        'order_name':'张三年检站维修服务',
+        'order_pic_url':'www.asd.cn/dqwd.jpg',
+        'type':'upkeep',
+        'create_time':'2018-07-08 12:23:34',
+        'now_price':1,
+        'state':1,
+        'is_comment':true,
+        'is_setting':true,
+        'is_maintain':true,
+        'is_upkeep':true,
+    }]
+}
+```
+
+<h3 id="maintain_aftersales_list_get">保养、维修售后列表信息</h3>
+
+url:/api/maintain/aftersales_list/  
+method:get  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|state|int|状态|-1:全部，0:未完成，1:已完成|1|必填|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|维修售后 or 保养守候id|区分需要依靠type|  
+|order_id|char(100)|订单单号|无|  
+|car_code|char(100)|车辆号码|无|  
+|car_type|char(100)|车辆型号|无|  
+|type|char(50)|类型|upkeep:保养，maintain:维修|  
+|create_time|datetime|申请时间|无|  
+|state|int|状态|0:服务中，1:已完成|  
 ```
 {
     'data':
