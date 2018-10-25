@@ -2325,17 +2325,13 @@ return:
 |comment_time|datetime|评论时间|无|  
 |deal_id|char(100)|交易单号|无|  
 |order_id|char(100)|订单单号|无|  
-|oil_name|char(50)|机油名称|无|  
-|oil_L|int|升|无|  
-|oil_amount|int|数量|无|  
-|oil_price|float|原价|无|  
-|oil_new_price|float|特价|无|  
 |car_brand|char(100)|车辆品牌|无|  
 |car_code|char(10)|车牌号码|无|  
 |order_name|char(10)|订单名称|无|  
 |service_item|char(10)|服务项目|无|  
 |order_type|char(10)|订单类型|无|  
 |upkeeppic_set|list|汽修站提交的图片与附加信息对象数组|无|  
+|upkeepoil_set|list|机油对象数组|无|  
 
 upkeeppic_set：
 
@@ -2343,6 +2339,17 @@ upkeeppic_set：
 |---|---|---|---|  
 |pic_url|char(100)|图片url|无|  
 |note|char(100)|备注|无|  
+
+upkeepoil_set：
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|id|无|  
+|oil_name|char(50)|机油名称|无|  
+|oil_L|int|升|无|  
+|oil_amount|int|数量|无|  
+|oil_price|float|原价|无|  
+|oil_new_price|float|特价|无|  
 
 ```
 {
@@ -2393,11 +2400,7 @@ upkeeppic_set：
         'comment_time':'2018-07-08 12:23:34',
         'deal_id':'182731725',
         'order_id':'8927918238271',
-        'oil_name':'没油',
-        'oil_L':2,
-        'oil_amount':2,
-        'oil_price':1,
-        'oil_new_price':1,
+        
         'car_brand':'玛萨拉蒂',
         'car_code':'粤A24351',
         'order_name':'xxxx保养服务',
@@ -2406,6 +2409,14 @@ upkeeppic_set：
         'upkeeppic_set':[{
             'pic_url':'/asdfas.jpg',
             'note':'车钥匙'
+        }],
+        'upkeepoil_set':[{
+            'id':1,
+            'oil_name':'没油',
+            'oil_L':2,
+            'oil_amount':2,
+            'oil_price':1,
+            'oil_new_price':1,
         }]
     }]
 }
@@ -2426,6 +2437,7 @@ param:
 |longitude|float|经度|无|1|必填|  
 |latitude|float|纬度|无|1|必填|  
 |address|char(100)|地址|无|广州市越秀区|必填|  
+|number|int|数量|多少个机油、机油数量，二者需要一同出现，缺少其一则会被认为没有|1|必填|  
 |oil_id|int|机油id|无|1|必填|  
 |oil_amount|int|数量|无|1|必填|  
 
@@ -2486,17 +2498,13 @@ return:
 |comment_time|datetime|评论时间|无|  
 |deal_id|char(100)|交易单号|无|  
 |order_id|char(100)|订单单号|无|  
-|oil_name|char(50)|机油名称|无|  
-|oil_L|int|升|无|  
-|oil_amount|int|数量|无|  
-|oil_price|float|原价|无|  
-|oil_new_price|float|特价|无|  
 |car_brand|char(100)|车辆品牌|无|  
 |car_code|char(10)|车牌号码|无|  
 |order_name|char(10)|订单名称|无|  
 |service_item|char(10)|服务项目|无|  
 |order_type|char(10)|订单类型|无|  
 |upkeeppic_set|list|汽修站提交的图片与附加信息对象数组|无|  
+|upkeepoil_set|list|机油对象数组|无|  
 
 upkeeppic_set：
 
@@ -2505,10 +2513,21 @@ upkeeppic_set：
 |pic_url|char(100)|图片url|无|  
 |note|char(100)|备注|无|  
 
+upkeepoil_set：
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|id|int|id|无|  
+|oil_name|char(50)|机油名称|无|  
+|oil_L|int|升|无|  
+|oil_amount|int|数量|无|  
+|oil_price|float|原价|无|  
+|oil_new_price|float|特价|无|  
+
 ```
 {
     'data':
-    {
+    [{
         'id':1,
         'create_time':'2018-07-08 12:23:34',
         'update_time':'2018-07-08 12:23:34',
@@ -2554,11 +2573,7 @@ upkeeppic_set：
         'comment_time':'2018-07-08 12:23:34',
         'deal_id':'182731725',
         'order_id':'8927918238271',
-        'oil_name':'没油',
-        'oil_L':2,
-        'oil_amount':2,
-        'oil_price':1,
-        'oil_new_price':1,
+        
         'car_brand':'玛萨拉蒂',
         'car_code':'粤A24351',
         'order_name':'xxxx保养服务',
@@ -2567,8 +2582,16 @@ upkeeppic_set：
         'upkeeppic_set':[{
             'pic_url':'/asdfas.jpg',
             'note':'车钥匙'
+        }],
+        'upkeepoil_set':[{
+            'id':1,
+            'oil_name':'没油',
+            'oil_L':2,
+            'oil_amount':2,
+            'oil_price':1,
+            'oil_new_price':1,
         }]
-    }
+    }]
 }
 ```
 
