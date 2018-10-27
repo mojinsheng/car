@@ -105,7 +105,7 @@
     * [提交年检订单信息](#survey_survey_list_post)
     * [查询年检订单信息](#survey_survey_get)
     * [自驾年检订单操作信息-取消、查询费用、支付、确认到达、完成订单](#survey_survey_selfmethod_post)
-    * [代驾年检订单操作信息-取消、查询费用、支付、失败支付、确认还车](#survey_survey_behalfmethod_post)
+    * [代驾年检订单操作信息-取消、查询费用、支付、失败支付、确认还车、评分](#survey_survey_behalfmethod_post)
     * [自驾咨询电话](#survey_survey_phone_get)
     * [年检须知](#survey_survey_info_get)
     * [用户扣费标准](#survey_survey_usercancelinfo_get)
@@ -551,10 +551,10 @@ return:
 ```
 {
     'data':
-    {
+    [{
         'id':1
         'name':'阿斯顿马丁'
-    }
+    }]
 }
 ```
 
@@ -579,11 +579,11 @@ return:
 ```
 {
     'data':
-    {
+    [{
         'id':1
         'name':'阿斯顿马丁',
         'year':1234
-    }
+    }]
 }
 ```
 
@@ -2437,9 +2437,9 @@ param:
 |longitude|float|经度|无|1|必填|  
 |latitude|float|纬度|无|1|必填|  
 |address|char(100)|地址|无|广州市越秀区|必填|  
-|number|int|数量|多少个机油、机油数量，二者需要一同出现，缺少其一则会被认为没有|1|必填|  
-|oil_id|int|机油id|无|1|必填|  
-|oil_amount|int|数量|无|1|必填|  
+|number|int|数量|多少个机油、机油数量|1|必填|  
+|oil_id_list|int|机油id集合，用,连接|无|1|必填|  
+|oil_amount_list|int|数量集合，用,连接|无|1|必填|  
 
 return:  
 
@@ -2711,7 +2711,6 @@ param:
 |content|text|内容|无|萨达|选填|  
 |number|int|数量|多少个文件、备注，二者需要一同出现，缺少其一则会被认为没有|1|必填|  
 |pic1|文件流|图片|编号从1开始|(文件流)|选填|  
-|note1|char(100)|备注|无|车钥匙|选填|  
 
 return:  
 
@@ -3222,7 +3221,6 @@ param:
 |content|text|内容|无|萨达|选填|  
 |number|int|数量|多少个文件、备注，二者需要一同出现，缺少其一则会被认为没有|1|必填|  
 |pic1|文件流|图片|编号从1开始|(文件流)|选填|  
-|note1|char(100)|备注|无|车钥匙|选填|  
 
 return:  
 
@@ -3688,6 +3686,7 @@ return:
 |total_price|float|总计费用|无|  
 |state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检成功，6.到达还车，7.已还车，8.已完成|  
 |survey_state|int|年检状态|0:还没有开始或是正在进行，1：成功，2：不成功，3：复查|  
+|is_comment|bool|是否评论|无|  
 |drive_user_id|int|接单用户id|无|  
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
@@ -3701,6 +3700,8 @@ return:
 |arrive_return_time|datetime|到达还车时间|无|  
 |return_time|datetime|还车时间|无|  
 |confirm_time|datetime|确认时间|无|  
+|cancel_time|datetime|取消时间|无|  
+|comment_time|datetime|评论时间|无|  
 |get_confirm|object|取车图片-检车确认|无|  
 |get_car|object|取车图片-车身拍照|无|  
 |survey_upload|object|年检已过-上传照片|无|  
@@ -3784,6 +3785,7 @@ failureitem：
         'total_price':1,
         'state':1,
         'survey_state':0,
+        'is_comment':0,
         'drive_user_id':1,
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
@@ -3797,6 +3799,8 @@ failureitem：
         'arrive_return_time':'2018-07-08 12:23:34',
         'return_time':'2018-07-08 12:23:34',
         'confirm_time':'2018-07-08 12:23:34',
+        'cancel_time':'2018-07-08 12:23:34',
+        'comment_time':'2018-07-08 12:23:34',
         'get_confirm':{
             'name':'取车图片-检车确认',
             'obj_list':[{
@@ -3931,6 +3935,7 @@ return:
 |total_price|float|总计费用|无|  
 |state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检成功，6.到达还车，7.已还车，8.已完成|  
 |survey_state|int|年检状态|0:还没有开始或是正在进行，1：成功，2：不成功，3：复查|  
+|is_comment|bool|是否评论|无|  
 |drive_user_id|int|接单用户id|无|  
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
@@ -3944,6 +3949,8 @@ return:
 |arrive_return_time|datetime|到达还车时间|无|  
 |return_time|datetime|还车时间|无|  
 |confirm_time|datetime|确认时间|无|  
+|cancel_time|datetime|取消时间|无|  
+|comment_time|datetime|评论时间|无|  
 |get_confirm|object|取车图片-检车确认|无|  
 |get_car|object|取车图片-车身拍照|无|  
 |survey_upload|object|年检已过-上传照片|无|  
@@ -4035,6 +4042,7 @@ failurepic:
         'total_price':1,
         'state':1,
         'survey_state':0,
+        'is_comment':0,
         'drive_user_id':1,
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
@@ -4048,6 +4056,8 @@ failurepic:
         'arrive_return_time':'2018-07-08 12:23:34',
         'return_time':'2018-07-08 12:23:34',
         'confirm_time':'2018-07-08 12:23:34',
+        'cancel_time':'2018-07-08 12:23:34',
+        'comment_time':'2018-07-08 12:23:34',
         'get_confirm':{
             'name':'取车图片-检车确认',
             'obj_list':[{
@@ -4156,7 +4166,7 @@ return:
 }
 ```
 
-<h4 id="survey_survey_behalfmethod_post">代驾年检订单操作信息-查询交易状态、取消、查询费用、支付、查询失败支付交易状态、失败支付、确认还车</h4>
+<h4 id="survey_survey_behalfmethod_post">代驾年检订单操作信息-查询交易状态、取消、查询费用、支付、查询失败支付交易状态、失败支付、确认还车、评分</h4>
 
 url:/api/survey/survey_behalfmethod/  
 method:post  
@@ -4165,7 +4175,7 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |id|int|id|查询费用不需要添加id|1|必填|   
-|method|char(20)|操作|order_status:查询交易状态，cancel：取消，get：查询费用，pay：支付，order_status：查询失败支付交易状态，pay：失败支付，return：确认还车|get|必填|  
+|method|char(20)|操作|order_status:查询交易状态，cancel：取消，get：查询费用，pay：支付，order_status：查询失败支付交易状态，pay：失败支付，return：确认还车，comment：评分|get|必填|  
 |longitude|float|经度|无|123|选填|  
 |latitude|float|纬度|无|23|选填|  
 |surveystation_id|int|年检站id|无|1|选填|  
@@ -4449,6 +4459,7 @@ return:
 |total_price|float|总计费用|无|  
 |state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检成功，6.到达还车，7.已还车，8.已完成|  
 |survey_state|int|年检状态|0:还没有开始或是正在进行，1：成功，2：不成功，3：复查|  
+|is_comment|bool|是否评论|无|  
 |drive_user_id|int|接单用户id|无|  
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
@@ -4462,6 +4473,8 @@ return:
 |arrive_return_time|datetime|到达还车时间|无|  
 |return_time|datetime|还车时间|无|  
 |confirm_time|datetime|确认时间|无|  
+|cancel_time|datetime|取消时间|无|  
+|comment_time|datetime|评论时间|无|  
 |get_confirm|object|取车图片-检车确认|无|  
 |get_car|object|取车图片-车身拍照|无|  
 |survey_upload|object|年检已过-上传照片|无|  
@@ -4552,6 +4565,7 @@ failurepic:
         'total_price':1,
         'state':1,
         'survey_state':0,
+        'is_comment':0,
         'drive_user_id':1,
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
@@ -4565,6 +4579,8 @@ failurepic:
         'arrive_return_time':'2018-07-08 12:23:34',
         'return_time':'2018-07-08 12:23:34',
         'confirm_time':'2018-07-08 12:23:34',
+        'cancel_time':'2018-07-08 12:23:34',
+        'comment_time':'2018-07-08 12:23:34',
         'get_confirm':{
             'name':'取车图片-检车确认',
             'obj_list':[{
@@ -4662,6 +4678,7 @@ return:
 |total_price|float|总计费用|无|  
 |state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检成功，6.到达还车，7.已还车，8.已完成|  
 |survey_state|int|年检状态|0:还没有开始或是正在进行，1：成功，2：不成功，3：复查|  
+|is_comment|bool|是否评论|无|  
 |drive_user_id|int|接单用户id|无|  
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
@@ -4675,6 +4692,8 @@ return:
 |arrive_return_time|datetime|到达还车时间|无|  
 |return_time|datetime|还车时间|无|  
 |confirm_time|datetime|确认时间|无|  
+|cancel_time|datetime|取消时间|无|  
+|comment_time|datetime|评论时间|无|  
 |get_confirm|object|取车图片-检车确认|无|  
 |get_car|object|取车图片-车身拍照|无|  
 |survey_upload|object|年检已过-上传照片|无|  
@@ -4766,6 +4785,7 @@ failurepic:
         'total_price':1,
         'state':1,
         'survey_state':0,
+        'is_comment':0,
         'drive_user_id':1,
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
@@ -4779,6 +4799,8 @@ failurepic:
         'arrive_return_time':'2018-07-08 12:23:34',
         'return_time':'2018-07-08 12:23:34',
         'confirm_time':'2018-07-08 12:23:34',
+        'cancel_time':'2018-07-08 12:23:34',
+        'comment_time':'2018-07-08 12:23:34',
         'get_confirm':{
             'name':'取车图片-检车确认',
             'obj_list':[{
@@ -5129,6 +5151,7 @@ return:
 |total_price|float|总计费用|无|  
 |state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检成功，6.到达还车，7.已还车，8.已完成|  
 |survey_state|int|年检状态|0:还没有开始或是正在进行，1：成功，2：不成功，3：复查|  
+|is_comment|bool|是否评论|无|  
 |drive_user_id|int|接单用户id|无|  
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
@@ -5142,6 +5165,8 @@ return:
 |arrive_return_time|datetime|到达还车时间|无|  
 |return_time|datetime|还车时间|无|  
 |confirm_time|datetime|确认时间|无|  
+|cancel_time|datetime|取消时间|无|  
+|comment_time|datetime|评论时间|无|  
 |get_confirm|object|取车图片-检车确认|无|  
 |get_car|object|取车图片-车身拍照|无|  
 |survey_upload|object|年检已过-上传照片|无|  
@@ -5233,6 +5258,7 @@ failurepic:
         'total_price':1,
         'state':1,
         'survey_state':0,
+        'is_comment':0,
         'drive_user_id':1,
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
@@ -5246,6 +5272,8 @@ failurepic:
         'arrive_return_time':'2018-07-08 12:23:34',
         'return_time':'2018-07-08 12:23:34',
         'confirm_time':'2018-07-08 12:23:34',
+        'cancel_time':'2018-07-08 12:23:34',
+        'comment_time':'2018-07-08 12:23:34',
         'get_confirm':{
             'name':'取车图片-检车确认',
             'obj_list':[{
