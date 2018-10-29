@@ -79,6 +79,7 @@
     * [查询保养售后列表信息](#maintain_upkeep_aftersales_list_get)
     * [生成保养售后订单信息](#maintain_upkeep_aftersales_list_post)
     * [查询保养售后信息](#maintain_upkeep_aftersales_get)
+    * [完成保养售后订单信息](#maintain_upkeep_aftersales_method_post)
   - [维修](#maintain_maintain)
     * [查询维修列表信息](#maintain_maintain_list_get)
     * [生成维修订单信息](#maintain_maintain_list_post)
@@ -88,6 +89,7 @@
     * [查询维修售后列表信息](#maintain_maintain_aftersales_list_get)
     * [生成维修售后订单信息](#maintain_maintain_aftersales_list_post)
     * [查询维修售后信息](#maintain_maintain_aftersales_get)
+    * [完成维修售后订单信息](#maintain_maintain_aftersales_method_post)
     * [极光推送维修订单接单信息](#maintain_maintain_jpush_order_get)
     * [极光推送维修订单下发清单信息](#maintain_maintain_jpush_item_get)
     * [极光推送维修订单完成信息](#maintain_maintain_jpush_finish_get)
@@ -2438,8 +2440,8 @@ param:
 |latitude|float|纬度|无|1|必填|  
 |address|char(100)|地址|无|广州市越秀区|必填|  
 |number|int|数量|多少个机油、机油数量|1|必填|  
-|oil_id_list|int|机油id集合，用,连接|无|1|必填|  
-|oil_amount_list|int|数量集合，用,连接|无|1|必填|  
+|oil_id_list|char(100)|机油id集合，用,连接|无|1,2|必填|  
+|oil_amount_list|char(1000)|数量集合，用,连接|无|1,2|必填|  
 
 return:  
 
@@ -2671,10 +2673,9 @@ return:
 |car_brand|char(100)|车辆型号|无|  
 |create_time|datetime|申请时间|无|  
 |state|int|状态|0:服务中，1:已完成|  
-|content|text|内容|无|  
-|upkeepaftersalespic_set|list|图片对象列表|无|  
+|pic_set|list|图片对象列表|无|  
 
-upkeepaftersalespic
+pic
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
@@ -2690,8 +2691,7 @@ upkeepaftersalespic
         'car_brand':'asdqwdqw',
         'create_time':'2018-03-03 12:34:56',
         'state':0,
-        'content':'sqws',
-        'upkeepaftersalespic_set':[{
+        'pic_set':[{
             'pic_url':'dqwd',
             'note':'dqwd'
         }]
@@ -2745,10 +2745,9 @@ return:
 |car_brand|char(100)|车辆型号|无|  
 |create_time|datetime|申请时间|无|  
 |state|int|状态|0:服务中，1:已完成|  
-|content|text|内容|无|  
-|upkeepaftersalespic_set|list|图片对象列表|无|  
+|pic_set|list|图片对象列表|无|  
 
-upkeepaftersalespic
+pic
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
@@ -2757,18 +2756,40 @@ upkeepaftersalespic
 
 ```
 {
-    'data':{
+    'data':[{
         'id':1,
         'order_id':'qwdqwd',
         'car_code':'wqdwq',
         'car_brand':'asdqwdqw',
         'create_time':'2018-03-03 12:34:56',
         'state':0,
-        'content':'sqws',
-        'upkeepaftersalespic_set':[{
+        'pic_set':[{
             'pic_url':'dqwd',
             'note':'dqwd'
         }]
+    }]
+}
+```
+
+<h4 id="maintain_upkeep_aftersales_method_post">完成保养售后订单信息</h4>
+
+url:/api/maintain/upkeep_aftersales_method/  
+method:post  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
+|method|char(20)|操作|finish:完成|finish|必填|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+
+```
+{
+    'data':{
     }
 }
 ```
@@ -3181,10 +3202,9 @@ return:
 |car_type|char(100)|车辆型号|无|  
 |create_time|datetime|申请时间|无|  
 |state|int|状态|0:服务中，1:已完成|  
-|content|text|内容|无|  
-|maintainaftersalespic_set|list|图片对象列表|无|  
+|pic_set|list|图片对象列表|无|  
 
-maintainaftersalespic:
+pic:
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
@@ -3200,8 +3220,7 @@ maintainaftersalespic:
         'car_type':'asdqwdqw',
         'create_time':'2018-03-03 12:34:56',
         'state':0,
-        'content':'sqws',
-        'maintainaftersalespic_set':[{
+        'pic_set':[{
             'pic_url':'dqwd',
             'note':'dqwd'
         }]
@@ -3255,10 +3274,9 @@ return:
 |car_type|char(100)|车辆型号|无|  
 |create_time|datetime|申请时间|无|  
 |state|int|状态|0:服务中，1:已完成|  
-|content|text|内容|无|  
-|maintainaftersalespic_set|list|图片对象列表|无|  
+|pic_set|list|图片对象列表|无|  
 
-maintainaftersalespic:
+pic:
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
@@ -3267,18 +3285,40 @@ maintainaftersalespic:
 
 ```
 {
-    'data':{
+    'data':[{
         'id':1,
         'order_id':'qwdqwd',
         'car_code':'wqdwq',
         'car_type':'asdqwdqw',
         'create_time':'2018-03-03 12:34:56',
         'state':0,
-        'content':'sqws',
-        'maintainaftersalespic_set':[{
+        'pic_set':[{
             'pic_url':'dqwd',
             'note':'dqwd'
         }]
+    }]
+}
+```
+
+<h4 id="maintain_maintain_aftersales_method_post">完成维修售后订单信息</h4>
+
+url:/api/maintain/maintain_aftersales_method/  
+method:post  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|无|1|必填|   
+|method|char(20)|操作|finish:完成|finish|必填|  
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+
+```
+{
+    'data':{
     }
 }
 ```
@@ -3848,11 +3888,7 @@ failureitem：
             'price':123,
             'failureitem_list':[{
                 'name':'名称',
-                'price':'费用',
-                'failurepic_list':[{
-                    'pic_url':'www.aksdjha.cn/asdfa.jpg',
-                    'note':'asfdasdfasd'
-                }]
+                'price':'费用'
             }]
         }]
     }]
@@ -3989,14 +4025,6 @@ failureitem：
 |---|---|---|---|  
 |name|char(100)|名称|无|  
 |price|float|费用|无|  
-|failurepic_list|list|图片对象列表|无|  
-
-failurepic:
-
-|参数|类型|说明|备注|  
-|---|---|---|---|  
-|pic_url|char(100)|图片url|无|  
-|note|char(100)|备注|无|  
 
 ```
 {
@@ -4105,11 +4133,7 @@ failurepic:
             'price':123,
             'failureitem_list':[{
                 'name':'名称',
-                'price':'费用',
-                'failurepic_list':[{
-                    'pic_url':'www.aksdjha.cn/asdfa.jpg',
-                    'note':'asfdasdfasd'
-                }]
+                'price':'费用'
             }]
         }]
     }]
@@ -4182,7 +4206,7 @@ param:
 |combo_id|int|套餐id|无|1|选填|  
 |comboitem_list|char(100)|套餐选项id|使用,拼接|1,2|选填|  
 |order_method|char(100)|支付方式|alipay：支付宝，weixin：微信|alipay|pay的时候必填|  
-|score|int|评分|大于等于0，小于等于5|1|当method为return的时候必填|  
+|score|int|评分|大于等于0，小于等于5|1|当method为comment的时候必填|  
 
 return:  
 
@@ -4512,14 +4536,6 @@ failureitem：
 |---|---|---|---|  
 |name|char(100)|名称|无|  
 |price|float|费用|无|  
-|failurepic_list|list|图片对象列表|无|  
-
-failurepic:
-
-|参数|类型|说明|备注|  
-|---|---|---|---|  
-|pic_url|char(100)|图片url|无|  
-|note|char(100)|备注|无|  
 
 ```
 {
@@ -4628,11 +4644,7 @@ failurepic:
             'price':123,
             'failureitem_list':[{
                 'name':'名称',
-                'price':'费用',
-                'failurepic_list':[{
-                    'pic_url':'www.aksdjha.cn/asdfa.jpg',
-                    'note':'asfdasdfasd'
-                }]
+                'price':'费用'
             }]
         }]
     }]
@@ -4732,14 +4744,6 @@ failureitem：
 |---|---|---|---|  
 |name|char(100)|名称|无|  
 |price|float|费用|无|  
-|failurepic_list|list|图片对象列表|无|  
-
-failurepic:
-
-|参数|类型|说明|备注|  
-|---|---|---|---|  
-|pic_url|char(100)|图片url|无|  
-|note|char(100)|备注|无|  
 
 ```
 {
@@ -4848,11 +4852,7 @@ failurepic:
             'price':123,
             'failureitem_list':[{
                 'name':'名称',
-                'price':'费用',
-                'failurepic_list':[{
-                    'pic_url':'www.aksdjha.cn/asdfa.jpg',
-                    'note':'asfdasdfasd'
-                }]
+                'price':'费用'
             }]
         }]
     }]
@@ -5049,7 +5049,7 @@ param:
 |pic1|文件流|图片|编号从1开始|(文件流)|选填|  
 |type1|char(100)|类型|survey_fail_upload:年检未过-上传照片|survey_fail_upload|选填|  
 |note1|char(100)|备注|无|车钥匙|选填|  
-|number_item|int|数量|多少个文件、检查项id、备注，三者需要一同出现，缺少其一则会被认为没有|1|必填| 
+|number_item|int|数量|多少个检查项id、价格，二者需要一同出现，缺少其一则会被认为没有|1|必填| 
 |item_id1|int|检查项id|来自于年检检查项|1|选填|  
 |price1|float|检查项费用|用户自选|12|选填|  
 
@@ -5205,14 +5205,6 @@ failureitem：
 |---|---|---|---|  
 |name|char(100)|名称|无|  
 |price|float|费用|无|  
-|failurepic_list|list|图片对象列表|无|  
-
-failurepic:
-
-|参数|类型|说明|备注|  
-|---|---|---|---|  
-|pic_url|char(100)|图片url|无|  
-|note|char(100)|备注|无|  
 
 ```
 {
@@ -5314,11 +5306,7 @@ failurepic:
             'price':123,
             'failureitem_list':[{
                 'name':'名称',
-                'price':'费用',
-                'failurepic_list':[{
-                    'pic_url':'www.aksdjha.cn/asdfa.jpg',
-                    'note':'asfdasdfasd'
-                }]
+                'price':'费用'
             }]
         }]
     }]
