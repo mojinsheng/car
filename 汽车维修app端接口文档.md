@@ -2670,10 +2670,10 @@ return:
 |id|int|id|无|  
 |order_id|char(100)|订单单号|无|  
 |car_code|char(100)|车辆号码|无|  
-|car_brand|char(100)|车辆型号|无|  
+|car_type|char(100)|车辆型号|无|  
 |create_time|datetime|申请时间|无|  
 |state|int|状态|0:服务中，1:已完成|  
-|pic_set|list|图片对象列表|无|  
+|pic_list|list|图片对象列表|无|  
 
 pic
 
@@ -2688,10 +2688,10 @@ pic
         'id':1,
         'order_id':'qwdqwd',
         'car_code':'wqdwq',
-        'car_brand':'asdqwdqw',
+        'car_type':'asdqwdqw',
         'create_time':'2018-03-03 12:34:56',
         'state':0,
-        'pic_set':[{
+        'pic_list':[{
             'pic_url':'dqwd',
             'note':'dqwd'
         }]
@@ -2742,10 +2742,10 @@ return:
 |id|int|id|无|  
 |order_id|char(100)|订单单号|无|  
 |car_code|char(100)|车辆号码|无|  
-|car_brand|char(100)|车辆型号|无|  
+|car_type|char(100)|车辆型号|无|  
 |create_time|datetime|申请时间|无|  
 |state|int|状态|0:服务中，1:已完成|  
-|pic_set|list|图片对象列表|无|  
+|pic_list|list|图片对象列表|无|  
 
 pic
 
@@ -2760,10 +2760,10 @@ pic
         'id':1,
         'order_id':'qwdqwd',
         'car_code':'wqdwq',
-        'car_brand':'asdqwdqw',
+        'car_type':'asdqwdqw',
         'create_time':'2018-03-03 12:34:56',
         'state':0,
-        'pic_set':[{
+        'pic_list':[{
             'pic_url':'dqwd',
             'note':'dqwd'
         }]
@@ -3202,7 +3202,7 @@ return:
 |car_type|char(100)|车辆型号|无|  
 |create_time|datetime|申请时间|无|  
 |state|int|状态|0:服务中，1:已完成|  
-|pic_set|list|图片对象列表|无|  
+|pic_list|list|图片对象列表|无|  
 
 pic:
 
@@ -3220,7 +3220,7 @@ pic:
         'car_type':'asdqwdqw',
         'create_time':'2018-03-03 12:34:56',
         'state':0,
-        'pic_set':[{
+        'pic_list':[{
             'pic_url':'dqwd',
             'note':'dqwd'
         }]
@@ -3274,7 +3274,7 @@ return:
 |car_type|char(100)|车辆型号|无|  
 |create_time|datetime|申请时间|无|  
 |state|int|状态|0:服务中，1:已完成|  
-|pic_set|list|图片对象列表|无|  
+|pic_list|list|图片对象列表|无|  
 
 pic:
 
@@ -3292,7 +3292,7 @@ pic:
         'car_type':'asdqwdqw',
         'create_time':'2018-03-03 12:34:56',
         'state':0,
-        'pic_set':[{
+        'pic_list':[{
             'pic_url':'dqwd',
             'note':'dqwd'
         }]
