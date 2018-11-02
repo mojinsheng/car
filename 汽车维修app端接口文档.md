@@ -2332,6 +2332,7 @@ return:
 |order_name|char(10)|订单名称|无|  
 |service_item|char(10)|服务项目|无|  
 |order_type|char(10)|订单类型|无|  
+|project_material|char(500)|项目材料|无|  
 |upkeeppic_set|list|汽修站提交的图片与附加信息对象数组|无|  
 |upkeepoil_set|list|机油对象数组|无|  
 
@@ -2402,12 +2403,12 @@ upkeepoil_set：
         'comment_time':'2018-07-08 12:23:34',
         'deal_id':'182731725',
         'order_id':'8927918238271',
-        
         'car_brand':'玛萨拉蒂',
         'car_code':'粤A24351',
         'order_name':'xxxx保养服务',
         'service_item':'保养',
         'order_type':'保养',
+        'project_material':'xxxxxxxx',
         'upkeeppic_set':[{
             'pic_url':'/asdfas.jpg',
             'note':'车钥匙'
@@ -2505,6 +2506,7 @@ return:
 |order_name|char(10)|订单名称|无|  
 |service_item|char(10)|服务项目|无|  
 |order_type|char(10)|订单类型|无|  
+|project_material|char(500)|项目材料|无|  
 |upkeeppic_set|list|汽修站提交的图片与附加信息对象数组|无|  
 |upkeepoil_set|list|机油对象数组|无|  
 
@@ -2575,12 +2577,12 @@ upkeepoil_set：
         'comment_time':'2018-07-08 12:23:34',
         'deal_id':'182731725',
         'order_id':'8927918238271',
-        
         'car_brand':'玛萨拉蒂',
         'car_code':'粤A24351',
         'order_name':'xxxx保养服务',
         'service_item':'保养',
         'order_type':'保养',
+        'project_material':'xxxxxxxx',
         'upkeeppic_set':[{
             'pic_url':'/asdfas.jpg',
             'note':'车钥匙'
@@ -2855,6 +2857,7 @@ return:
 |order_name|char(10)|订单名称|无|  
 |service_item|char(10)|服务项目|无|  
 |order_type|char(10)|订单类型|无|  
+|project_material|char(500)|项目材料|无|  
 |maintainpic_set|list|汽修站提交的图片与附加信息对象数组|无|  
 |maintainitem_set|list|汽修站给出的维修项信息对象数组|无|  
 |maintainitem_set_now|list|用户选择的维修项信息对象数组|无|  
@@ -2930,6 +2933,7 @@ maintainitem_set
         'order_name':'xxxx维修服务',
         'service_item':'维修',
         'order_type':'维修',
+        'project_material':'xxxxxxxx',
         'maintainpic_set':[{
             'pic_url':'/asdfas.jpg',
             'note':'车钥匙'
@@ -3031,6 +3035,7 @@ return:
 |order_name|char(10)|订单名称|无|  
 |service_item|char(10)|服务项目|无|  
 |order_type|char(10)|订单类型|无|  
+|project_material|char(500)|项目材料|无|  
 |maintainpic_set|list|汽修站提交的图片与附加信息对象数组|无|  
 |maintainitem_set|list|汽修站给出的维修项信息对象数组|无|  
 |maintainitem_set_now|list|用户选择的维修项信息对象数组|无|  
@@ -3106,6 +3111,7 @@ maintainitem_set
         'order_name':'xxxx维修服务',
         'service_item':'维修',
         'order_type':'维修',
+        'project_material':'xxxxxxxx',
         'maintainpic_set':[{
             'pic_url':'/asdfas.jpg',
             'note':'车钥匙'
