@@ -3755,11 +3755,11 @@ return:
 |confirm_time|datetime|确认时间|无|  
 |cancel_time|datetime|取消时间|无|  
 |comment_time|datetime|评论时间|无|  
-|get_confirm|object|取车图片-检车确认|无|  
+|get_confirm|object|取车图片-车损照片|无|  
 |get_car|object|取车图片-车身拍照|无|  
 |survey_upload|object|年检已过-上传照片|无|  
 |survey_fail_upload|object|年检未过-上传照片|无|  
-|return_confirm|object|还车图片-检车确认|无|  
+|return_confirm|object|还车图片-车损照片|无|  
 |return_car|object|还车图片-车身拍照|无|  
 |failure_list|list|失败信息对象列表|无|  
 
@@ -3856,7 +3856,7 @@ failureitem：
         'cancel_time':'2018-07-08 12:23:34',
         'comment_time':'2018-07-08 12:23:34',
         'get_confirm':{
-            'name':'取车图片-检车确认',
+            'name':'取车图片-车损照片',
             'obj_list':[{
                 'pic_url':'www.aksdjha.cn/asdfa.jpg',
                 'note':'asfdasdfasd'
@@ -3884,7 +3884,7 @@ failureitem：
             }]
         },
         'return_confirm':{
-            'name':'还车图片-检车确认',
+            'name':'还车图片-车损照片',
             'obj_list':[{
                 'pic_url':'www.aksdjha.cn/asdfa.jpg',
                 'note':'asfdasdfasd'
@@ -4002,11 +4002,11 @@ return:
 |confirm_time|datetime|确认时间|无|  
 |cancel_time|datetime|取消时间|无|  
 |comment_time|datetime|评论时间|无|  
-|get_confirm|object|取车图片-检车确认|无|  
+|get_confirm|object|取车图片-车损照片|无|  
 |get_car|object|取车图片-车身拍照|无|  
 |survey_upload|object|年检已过-上传照片|无|  
 |survey_fail_upload|object|年检未过-上传照片|无|  
-|return_confirm|object|还车图片-检车确认|无|  
+|return_confirm|object|还车图片-车损照片|无|  
 |return_car|object|还车图片-车身拍照|无|  
 |failure_list|list|失败信息对象列表|无|  
 
@@ -4103,7 +4103,7 @@ failureitem：
         'cancel_time':'2018-07-08 12:23:34',
         'comment_time':'2018-07-08 12:23:34',
         'get_confirm':{
-            'name':'取车图片-检车确认',
+            'name':'取车图片-车损照片',
             'obj_list':[{
                 'pic_url':'www.aksdjha.cn/asdfa.jpg',
                 'note':'asfdasdfasd'
@@ -4131,7 +4131,7 @@ failureitem：
             }]
         },
         'return_confirm':{
-            'name':'还车图片-检车确认',
+            'name':'还车图片-车损照片',
             'obj_list':[{
                 'pic_url':'www.aksdjha.cn/asdfa.jpg',
                 'note':'asfdasdfasd'
@@ -4320,7 +4320,7 @@ return:
 ```
 {
     'data':{
-        'url':'www.safad.con/sdad/'
+        'url':'http://www.nolasthope.cn/survey/surveyinfo/'
     }
 }
 ```
@@ -4343,7 +4343,7 @@ return:
 ```
 {
     'data':{
-        'url':'www.safad.con/sdad/'
+        'url':'http://www.nolasthope.cn/survey/surveyusercancelinfo/'
     }
 }
 ```
@@ -4475,7 +4475,7 @@ return:
 ```
 {
     'data':{
-        'url':'www.safad.con/sdad/'
+        'url':'http://www.nolasthope.cn/system/aboutus/'
     }
 }
 ```
@@ -4498,7 +4498,7 @@ return:
 ```
 {
     'data':{
-        'url':'www.safad.con/sdad/'
+        'url':'http://www.nolasthope.cn/system/useragreement/'
     }
 }
 ```
@@ -4563,11 +4563,11 @@ return:
 |confirm_time|datetime|确认时间|无|  
 |cancel_time|datetime|取消时间|无|  
 |comment_time|datetime|评论时间|无|  
-|get_confirm|object|取车图片-检车确认|无|  
+|get_confirm|object|取车图片-车损照片|无|  
 |get_car|object|取车图片-车身拍照|无|  
 |survey_upload|object|年检已过-上传照片|无|  
 |survey_fail_upload|object|年检未过-上传照片|无|  
-|return_confirm|object|还车图片-检车确认|无|  
+|return_confirm|object|还车图片-车损照片|无|  
 |return_car|object|还车图片-车身拍照|无|  
 |failure_list|list|失败信息对象列表|无|  
 
@@ -4663,7 +4663,7 @@ failureitem：
         'cancel_time':'2018-07-08 12:23:34',
         'comment_time':'2018-07-08 12:23:34',
         'get_confirm':{
-            'name':'取车图片-检车确认',
+            'name':'取车图片-车损照片',
             'obj_list':[{
                 'pic_url':'www.aksdjha.cn/asdfa.jpg',
                 'note':'asfdasdfasd'
@@ -4691,7 +4691,7 @@ failureitem：
             }]
         },
         'return_confirm':{
-            'name':'还车图片-检车确认',
+            'name':'还车图片-车损照片',
             'obj_list':[{
                 'pic_url':'www.aksdjha.cn/asdfa.jpg',
                 'note':'asfdasdfasd'
@@ -4772,11 +4772,11 @@ return:
 |confirm_time|datetime|确认时间|无|  
 |cancel_time|datetime|取消时间|无|  
 |comment_time|datetime|评论时间|无|  
-|get_confirm|object|取车图片-检车确认|无|  
+|get_confirm|object|取车图片-车损照片|无|  
 |get_car|object|取车图片-车身拍照|无|  
 |survey_upload|object|年检已过-上传照片|无|  
 |survey_fail_upload|object|年检未过-上传照片|无|  
-|return_confirm|object|还车图片-检车确认|无|  
+|return_confirm|object|还车图片-车损照片|无|  
 |return_car|object|还车图片-车身拍照|无|  
 |failure_list|list|失败信息对象列表|无|  
 
@@ -4873,7 +4873,7 @@ failureitem：
         'cancel_time':'2018-07-08 12:23:34',
         'comment_time':'2018-07-08 12:23:34',
         'get_confirm':{
-            'name':'取车图片-检车确认',
+            'name':'取车图片-车损照片',
             'obj_list':[{
                 'pic_url':'www.aksdjha.cn/asdfa.jpg',
                 'note':'asfdasdfasd'
@@ -4901,7 +4901,7 @@ failureitem：
             }]
         },
         'return_confirm':{
-            'name':'还车图片-检车确认',
+            'name':'还车图片-车损照片',
             'obj_list':[{
                 'pic_url':'www.aksdjha.cn/asdfa.jpg',
                 'note':'asfdasdfasd'
@@ -4939,21 +4939,21 @@ return:
 
 |参数|类型|说明|备注|  
 |---|---|---|---|  
-|get_confirm|char(50)|取车图片-检车确认|无|  
+|get_confirm|char(50)|取车图片-车损照片|无|  
 |get_car|char(50)|取车图片-车身拍照|无|  
 |survey_upload|char(50)|年检已过-上传照片|无|  
 |survey_fail_upload|char(50)|年检未过-上传照片|无|  
-|return_confirm|char(50)|还车图片-检车确认|无|  
+|return_confirm|char(50)|还车图片-车损照片|无|  
 |return_car|char(50)|还车图片-车身拍照|无|  
 
 ```
 {
     'data':{
-        'get_confirm':'取车图片-检车确认',
+        'get_confirm':'取车图片-车损照片',
         'get_car':'取车图片-车身拍照',
         'survey_upload':'年检已过-上传照片',
         'survey_fail_upload':'年检未过-上传照片',
-        'return_confirm':'还车图片-检车确认',
+        'return_confirm':'还车图片-车损照片',
         'return_car':'还车图片-车身拍照'
     }
 }
@@ -5043,7 +5043,7 @@ param:
 |id|int|id|无|1|必填|  
 |number|int|数量|多少个文件、类型、备注，三者需要一同出现，缺少其一则会被认为没有|1|必填|  
 |pic1|文件流|图片|编号从1开始|(文件流)|选填|  
-|type1|char(100)|类型|get_confirm:取车图片-检车确认,get_car:取车图片-车身拍照|get_confirm|选填|  
+|type1|char(100)|类型|get_confirm:取车图片-车损照片,get_car:取车图片-车身拍照|get_confirm|选填|  
 |note1|char(100)|备注|无|车钥匙|选填|  
 
 return:  
@@ -5164,7 +5164,7 @@ param:
 |id|int|id|无|1|必填|  
 |number|int|数量|多少个文件、类型、备注，三者需要一同出现，缺少其一则会被认为没有|1|必填|  
 |pic1|文件流|图片|编号从1开始|(文件流)|选填|  
-|type1|char(100)|类型|return_confirm:还车图片-检车确认,return_car:还车图片-车身拍照|return_confirm|选填|  
+|type1|char(100)|类型|return_confirm:还车图片-车损照片,return_car:还车图片-车身拍照|return_confirm|选填|  
 |note1|char(100)|备注|无|车钥匙|选填|  
 
 return:  
@@ -5235,11 +5235,11 @@ return:
 |confirm_time|datetime|确认时间|无|  
 |cancel_time|datetime|取消时间|无|  
 |comment_time|datetime|评论时间|无|  
-|get_confirm|object|取车图片-检车确认|无|  
+|get_confirm|object|取车图片-车损照片|无|  
 |get_car|object|取车图片-车身拍照|无|  
 |survey_upload|object|年检已过-上传照片|无|  
 |survey_fail_upload|object|年检未过-上传照片|无|  
-|return_confirm|object|还车图片-检车确认|无|  
+|return_confirm|object|还车图片-车损照片|无|  
 |return_car|object|还车图片-车身拍照|无|  
 |failure_list|list|失败信息对象列表|无|  
 
@@ -5336,7 +5336,7 @@ failureitem：
         'cancel_time':'2018-07-08 12:23:34',
         'comment_time':'2018-07-08 12:23:34',
         'get_confirm':{
-            'name':'取车图片-检车确认',
+            'name':'取车图片-车损照片',
             'obj_list':[{
                 'pic_url':'www.aksdjha.cn/asdfa.jpg',
                 'note':'asfdasdfasd'
@@ -5357,7 +5357,7 @@ failureitem：
             }]
         },
         'return_confirm':{
-            'name':'还车图片-检车确认',
+            'name':'还车图片-车损照片',
             'obj_list':[{
                 'pic_url':'www.aksdjha.cn/asdfa.jpg',
                 'note':'asfdasdfasd'
@@ -5426,7 +5426,7 @@ return:
 ```
 {
     'data':{
-        'url':'www.safad.con/sdad/'
+        'url':'http://www.nolasthope.cn/driver/ordercancelinfo/'
     }
 }
 ```
