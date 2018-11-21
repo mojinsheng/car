@@ -106,11 +106,13 @@
     * [查询年检订单列表信息](#survey_survey_list_get)
     * [提交年检订单信息](#survey_survey_list_post)
     * [查询年检订单信息](#survey_survey_get)
-    * [自驾年检订单操作信息-取消、查询费用、支付、确认到达、完成订单](#survey_survey_selfmethod_post)
+    * [自驾年检订单操作信息-取消、查询费用、支付、确认到达(完成订单)](#survey_survey_selfmethod_post)
     * [代驾年检订单操作信息-取消、查询费用、支付、失败支付、确认还车、评分](#survey_survey_behalfmethod_post)
+    * [年检投诉](#survey_survey_feedback_post)
     * [自驾咨询电话](#survey_survey_phone_get)
     * [年检须知](#survey_survey_info_get)
     * [用户扣费标准](#survey_survey_usercancelinfo_get)
+    * [极光推送年检订单接单信息](#survey_survey_jpush_grab_get)
  6. [系统](#system)
   - [服务首页图片信息](#system_serviceimg_get)
   - [年检首页图片信息](#system_surveyimg_get) 
@@ -195,9 +197,9 @@ or
 |user_id|int|用户id|登陆成功后返回|1|必填|  
 |timestamp|char(50)|时间戳|app自己生成|1|必填|  
 |sign|char(50)|签名|md5(token+timestamp)|asdadsa|必填|  
-|system|char(50)|系统|android,ios|ios|选填|  
-|app_type|char(50)|用户端类型|user,driver|user|选填|  
-|version|char(50)|版本|xx.yyzz|1.0000|选填|  
+|system|char(50)|系统|android,ios|ios|必填|  
+|app_type|char(50)|用户端类型|user,driver|user|必填|  
+|version|char(50)|版本|xx.yyzz|1.0000|必填|  
 
 <h3 id="login_register">用户注册</h3>
 
@@ -3591,6 +3593,7 @@ return:
 |update_time|datetime|修改时间|无|  
 |name|char(50)|名称|无|  
 |detail|char(100)|套餐详情|无|  
+|is_failure|bool|是否可以失败|无|  
 |comboitem_set|list|套餐内容|无|
 
 comboitem_set:  
@@ -3612,6 +3615,7 @@ comboitem_set:
         'update_time':'2018-07-08 12:23:34',
         'name':'a套餐',
         'detail':'不要钱',
+        'is_failure':true,
         'comboitem_set':[{
             'id':1,
             'create_time':'2018-07-08 12:23:34',
@@ -3642,6 +3646,7 @@ return:
 |update_time|datetime|修改时间|无|  
 |name|char(50)|名称|无|  
 |detail|char(100)|套餐详情|无|  
+|is_failure|bool|是否可以失败|无|  
 |comboitem_set|list|套餐内容|无|  
 
 comboitem_set:  
@@ -3663,6 +3668,7 @@ comboitem_set:
         'update_time':'2018-07-08 12:23:34',
         'name':'a套餐',
         'detail':'不要钱',
+        'is_failure':true,
         'comboitem_set':[{
             'id':1,
             'create_time':'2018-07-08 12:23:34',
@@ -3686,7 +3692,7 @@ comboitem_set:
 开始年检：3.等待年检，4.正在年检，5.年检成功  
 检完还车：6.到达还车，7.已还车，8.已完成  
 代驾：0-1-2-3-4-5-6-7-8  
-自驾：0-3-4-8  
+自驾：0-3-8  
 
 用户取消订单：
  - 代驾方面，“等待支付”、“等待接单”、“等待取车”阶段可以取消订单，“等待支付”时取消订单将被删除，“等待接单”、“等待取车”时取消订单将变成已退款状态，“等待取车”存在超时扣钱情况。
@@ -3733,6 +3739,7 @@ return:
 |state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检成功，6.到达还车，7.已还车，8.已完成|  
 |survey_state|int|年检状态|0:还没有开始或是正在进行，1：成功，2：不成功，3：复查|  
 |is_comment|bool|是否评论|无|  
+|is_feedback|bool|是否投诉|无|  
 |drive_user_id|int|接单用户id|无|  
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
@@ -3832,6 +3839,7 @@ failureitem：
         'state':1,
         'survey_state':0,
         'is_comment':0,
+        'is_feedback':true,
         'drive_user_id':1,
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
@@ -3978,6 +3986,7 @@ return:
 |state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检成功，6.到达还车，7.已还车，8.已完成|  
 |survey_state|int|年检状态|0:还没有开始或是正在进行，1：成功，2：不成功，3：复查|  
 |is_comment|bool|是否评论|无|  
+|is_feedback|bool|是否投诉|无|  
 |drive_user_id|int|接单用户id|无|  
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
@@ -4077,6 +4086,7 @@ failureitem：
         'state':1,
         'survey_state':0,
         'is_comment':0,
+        'is_feedback':true,
         'drive_user_id':1,
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
@@ -4146,7 +4156,7 @@ failureitem：
 }
 ```
 
-<h4 id="survey_survey_selfmethod_post">自驾年检订单操作信息-查询交易状态、取消、查询费用、支付、确认到达、完成订单</h4>
+<h4 id="survey_survey_selfmethod_post">自驾年检订单操作信息-查询交易状态、取消、查询费用、支付、确认到达(完成订单)</h4>
 
 url:/api/survey/survey_selfmethod/  
 method:post  
@@ -4155,7 +4165,7 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |id|int|id|查询费用不需要添加id|1|必填|   
-|method|char(20)|操作|order_status:查询交易状态，cancel：取消，get：查询费用，pay：支付，survey：确认到达，finish：完成订单|get|必填|  
+|method|char(20)|操作|order_status:查询交易状态，cancel：取消，get：查询费用，pay：支付，survey：确认到达|get|必填|  
 |longitude|float|经度|无|123|选填|  
 |latitude|float|纬度|无|23|选填|  
 |surveystation_id|int|年检站id|无|1|选填|  
@@ -4247,6 +4257,28 @@ return:
 }
 ```
 
+<h4 id="survey_survey_feedback_post">年检投诉</h4>
+
+url:/api/survey/survey_feedback/  
+method:post  
+param:   
+
+|参数|类型|说明|备注|例子|是否必填|  
+|---|---|---|---|---|---|  
+|id|int|id|id|1|必填|   
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|   
+
+```
+{
+    'data':{
+    }
+}
+```
+
 <h4 id="survey_survey_phone_get">自驾咨询电话</h4>
 
 url:/api/survey/survey_phone/  
@@ -4312,6 +4344,31 @@ return:
 {
     'data':{
         'url':'www.safad.con/sdad/'
+    }
+}
+```
+
+<h4 id="survey_survey_jpush_grab_get">极光推送年检订单接单信息</h4>
+
+手机端设置：登陆以后，把账号注册成别名，服务端面向别名发送信息
+
+return:  
+
+|参数|类型|说明|备注|  
+|---|---|---|---|  
+|type|char(100)|类型|survey_grab|  
+|data|objects|额外数据|无|  
+|id|int|年检订单id|无|  
+|msg|char(100)|信息|无|  
+
+```
+{
+    'data':{
+        'type':'survey_grab',
+        'data':{
+            'id':0,
+            'msg':'失败'
+        }
     }
 }
 ```
@@ -4490,6 +4547,7 @@ return:
 |state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检成功，6.到达还车，7.已还车，8.已完成|  
 |survey_state|int|年检状态|0:还没有开始或是正在进行，1：成功，2：不成功，3：复查|  
 |is_comment|bool|是否评论|无|  
+|is_feedback|bool|是否投诉|无|  
 |drive_user_id|int|接单用户id|无|  
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
@@ -4588,6 +4646,7 @@ failureitem：
         'state':1,
         'survey_state':0,
         'is_comment':0,
+        'is_feedback':true,
         'drive_user_id':1,
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
@@ -4697,6 +4756,7 @@ return:
 |state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检成功，6.到达还车，7.已还车，8.已完成|  
 |survey_state|int|年检状态|0:还没有开始或是正在进行，1：成功，2：不成功，3：复查|  
 |is_comment|bool|是否评论|无|  
+|is_feedback|bool|是否投诉|无|  
 |drive_user_id|int|接单用户id|无|  
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
@@ -4796,6 +4856,7 @@ failureitem：
         'state':1,
         'survey_state':0,
         'is_comment':0,
+        'is_feedback':true,
         'drive_user_id':1,
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
@@ -5158,6 +5219,7 @@ return:
 |state|int|状态|0.等待支付，1.等待接单，2.等待取车，3.等待年检，4.正在年检，5.年检成功，6.到达还车，7.已还车，8.已完成|  
 |survey_state|int|年检状态|0:还没有开始或是正在进行，1：成功，2：不成功，3：复查|  
 |is_comment|bool|是否评论|无|  
+|is_feedback|bool|是否投诉|无|  
 |drive_user_id|int|接单用户id|无|  
 |drive_user_pic_url|char(100)|接单用户头像url|无|  
 |drive_user_name|char(100)|接单用户名称|无|  
@@ -5257,6 +5319,7 @@ failureitem：
         'state':1,
         'survey_state':0,
         'is_comment':0,
+        'is_feedback':true,
         'drive_user_id':1,
         'drive_user_pic_url':'http://www.adsa.cn/sjdk.jpg',
         'drive_user_name':'李四',
