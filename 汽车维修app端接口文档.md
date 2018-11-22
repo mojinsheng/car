@@ -5276,6 +5276,8 @@ param:
 |user_id|int|用户id|登陆成功后返回|1|必填|  
 |timestamp|char(50)|时间戳|app自己生成|1|必填|  
 |sign|char(50)|签名|md5(token+timestamp)|asdadsa|必填|  
+|longitude|float|经度|必填|23|必填|    
+|latitude|float|纬度|必填|123|必填|    
 
 return:  
 
