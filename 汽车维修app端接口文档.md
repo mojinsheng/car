@@ -3434,6 +3434,8 @@ return:
 |is_setting|bool|是否已经设置了维修项|维修才有|  
 |is_maintain|bool|汽修厂是否完成维修|维修才有|  
 |is_upkeep|bool|汽修厂是否完成半阳|保养才有|  
+|garage|object|汽修厂|查询汽修厂信息|  
+
 ```
 {
     'data':
@@ -3449,6 +3451,24 @@ return:
         'is_setting':true,
         'is_maintain':true,
         'is_upkeep':true,
+        'garage':{
+            'id':1,
+            'create_time':'2018-07-08 12:23:34',
+            'update_time':'2018-07-08 12:23:34',
+            'name':'1',
+            'user_name':'1',
+            'longitude':223,
+            'latitude':322,
+            'address':'广州越秀区',
+            'mobile_phone':'12345678998',
+            'phone':'020-8888888',
+            'filter_price':88,
+            'popular':1,
+            'score':1,
+            'pic_url':'asdla.jpg',
+            'distance':10,
+            'type':0
+        }
     }]
 }
 ```
@@ -4266,6 +4286,9 @@ param:
 |参数|类型|说明|备注|例子|是否必填|  
 |---|---|---|---|---|---|  
 |id|int|id|id|1|必填|   
+|number|int|数量|多少个文件、备注，二者需要一同出现，缺少其一则会被认为没有|1|必填|  
+|pic1|文件流|图片|编号从1开始|(文件流)|选填|  
+|note1|char(100)|备注|无|车钥匙|选填|  
 
 return:  
 
