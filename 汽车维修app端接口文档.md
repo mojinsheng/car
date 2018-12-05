@@ -2317,7 +2317,8 @@ return:
 |state|int|状态|0:等待接单（不会出现，系统自动接单）1:未支付，2:等待服务，3:服务中，4:已完成|  
 |is_delete|bool|删除状态|无|  
 |is_comment|bool|评论状态|无|  
-|is_upkeep|bool|维修状态|无|  
+|is_upkeep|bool|保养状态|无|  
+|is_aftersales|bool|可否售后|无|  
 |score|int|评分|大于等于0，小于等于5|  
 |order_time|datetime|下单时间|无|  
 |start_order_time|datetime|接单时间|无|  
@@ -2394,6 +2395,7 @@ upkeepoil_set：
         'is_delete':true,
         'is_comment':false,
         'is_upkeep':false,
+        'is_aftersales':false,
         'score':1,
         'order_time':'2018-07-08 12:23:34',
         'start_order_time':'2018-07-08 12:23:34',
@@ -2491,7 +2493,8 @@ return:
 |state|int|状态|0:等待接单（不会出现，系统自动接单）1:未支付，2:等待服务，3:服务中，4:已完成|  
 |is_delete|bool|删除状态|无|  
 |is_comment|bool|评论状态|无|  
-|is_upkeep|bool|维修状态|无|  
+|is_upkeep|bool|保养状态|无|  
+|is_aftersales|bool|可否售后|无|  
 |score|int|评分|大于等于0，小于等于5|  
 |order_time|datetime|下单时间|无|  
 |start_order_time|datetime|接单时间|无|  
@@ -2568,6 +2571,7 @@ upkeepoil_set：
         'is_delete':true,
         'is_comment':false,
         'is_upkeep':false,
+        'is_aftersales':false,
         'score':1,
         'order_time':'2018-07-08 12:23:34',
         'start_order_time':'2018-07-08 12:23:34',
@@ -2842,6 +2846,7 @@ return:
 |is_delete|bool|删除状态|无|  
 |is_comment|bool|评论状态|无|  
 |is_maintain|bool|维修状态|无|  
+|is_aftersales|bool|可否售后|无|  
 |is_setting|bool|是否设置维修清单|无|  
 |score|int|评分|大于等于0，小于等于5|  
 |order_time|datetime|下单时间|无|  
@@ -2919,6 +2924,7 @@ maintainitem_set
         'is_delete':true,
         'is_comment':false,
         'is_maintain':false,
+        'is_aftersales':false,
         'is_setting':false,
         'score':1,
         'order_time':'2018-07-08 12:23:34',
@@ -3020,6 +3026,7 @@ return:
 |is_delete|bool|删除状态|无|  
 |is_comment|bool|评论状态|无|  
 |is_maintain|bool|维修状态|无|  
+|is_aftersales|bool|可否售后|无|  
 |is_setting|bool|是否设置维修清单|无|  
 |score|int|评分|大于等于0，小于等于5|  
 |order_time|datetime|下单时间|无|  
@@ -3097,6 +3104,7 @@ maintainitem_set
         'is_delete':true,
         'is_comment':false,
         'is_maintain':false,
+        'is_aftersales':false,
         'is_setting':false,
         'score':1,
         'order_time':'2018-07-08 12:23:34',
@@ -3434,6 +3442,7 @@ return:
 |is_setting|bool|是否已经设置了维修项|维修才有|  
 |is_maintain|bool|汽修厂是否完成维修|维修才有|  
 |is_upkeep|bool|汽修厂是否完成半阳|保养才有|  
+|is_aftersales|bool|可否售后|无|  
 |garage|object|汽修厂|查询汽修厂信息|  
 
 ```
@@ -3451,6 +3460,7 @@ return:
         'is_setting':true,
         'is_maintain':true,
         'is_upkeep':true,
+        'is_aftersales':false,
         'garage':{
             'id':1,
             'create_time':'2018-07-08 12:23:34',
@@ -5268,7 +5278,7 @@ return:
 <h4 id="ws_driver_order">查询订单列表信息-服务端推送</h4>
 
 使用websocket连接  
-url:/ws/driver/order/<:user_id>/<:timestampe>/<:sign>/  
+url:/ws/driver/order/<:user_id>/<:timestampe>/<:sign>/<:longitude>/<:latitude>/  
 param:   
 
 |参数|类型|说明|备注|例子|是否必填|  
